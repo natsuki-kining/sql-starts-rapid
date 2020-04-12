@@ -1,0 +1,88 @@
+# Project Stuff
+#*/src/test/
+.settings
+.project
+*.bak
+mvn.result.txt
+*/target
+*/test-output
+
+**/.settings
+**/.springBeans
+**/.factorypath
+**/*.bak
+**/.classpath
+**/.project
+**/.checkstyle
+**/*.log
+#**/*.properties
+**/bin
+!**/Config_Mas.properties
+!**/Extra.properties
+!**/log4j.properties
+/sirap-email
+/sirap-zoo
+/temp
+zoo.txt
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# =========================
+# Operating System Files
+# =========================
+
+# OSX
+# =========================
+
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+*.svn-base
+.svn/wc.db
+.idea/workspace.xml
+.idea/workspace.xml
+
+# gradle
+.gradle
+build
+gradle
+
+# idea
+.idea
+*.iml
+/.metadata/
+*/build/tmp/
+*/out/production/
+**/target/
+
