@@ -1,4 +1,4 @@
-package com.natsuki_kining.ssr.generator;
+package com.natsuki_kining.ssr.sql.generator;
 
 /**
  *

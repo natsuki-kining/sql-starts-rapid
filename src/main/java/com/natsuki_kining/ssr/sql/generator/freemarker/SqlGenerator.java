@@ -1,4 +1,4 @@
-package com.natsuki_kining.ssr.generator.freemarker;
+package com.natsuki_kining.ssr.sql.generator.freemarker;
 
 import com.natsuki_kining.ssr.beans.SSRDynamicQueryVO;
 import com.natsuki_kining.ssr.beans.SSRDynamicSqlVO;
