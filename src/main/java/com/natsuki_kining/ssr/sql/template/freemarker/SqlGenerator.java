@@ -1,6 +1,6 @@
-package com.natsuki_kining.ssr.sql.generator.freemarker;
+package com.natsuki_kining.ssr.sql.template.freemarker;
 
-import com.natsuki_kining.ssr.beans.SSRDynamicQueryVO;
+import com.natsuki_kining.ssr.beans.QueryParams;
 import com.natsuki_kining.ssr.beans.SSRDynamicSqlVO;
 import com.natsuki_kining.ssr.exception.SSRException;
 import freemarker.cache.StringTemplateLoader;
@@ -21,19 +21,19 @@ import java.util.Map;
  **/
 public class SqlGenerator {
 
-    public int queryCount(SSRDynamicQueryVO vo) {
+    public int queryCount(QueryParams vo) {
         Map<String, Object> queryMap = getQueryMap(vo);
 //        return queryCount(queryMap);
         return 0;
     }
 
-    public List<Map<String,Object>> query(SSRDynamicQueryVO vo) {
+    public List<Map<String,Object>> query(QueryParams vo) {
         Map<String, Object> queryMap = getQueryMap(vo);
 //        return query(queryMap);
         return null;
     }
 
-    public Map<String,Object> queryPage(SSRDynamicQueryVO vo) {
+    public Map<String,Object> queryPage(QueryParams vo) {
         Map<String, Object> queryMap = getQueryMap(vo);
 
         int pageEnd = vo.getPageNo() * vo.getPageSize();
@@ -54,23 +54,23 @@ public class SqlGenerator {
         return data;
     }
 
-    private Map<String, Object> getQueryMap(SSRDynamicQueryVO vo) {
+    private Map<String, Object> getQueryMap(QueryParams vo) {
         String sql = getSql(vo);
         Map<String,Object> queryMap = new HashMap();
         queryMap.put("sql",sql);
-        if (vo.getQueryData() != null){
-            queryMap.putAll(vo.getQueryData());
+        if (vo.getParams() != null){
+            queryMap.putAll(vo.getParams());
         }
         return queryMap;
     }
 
-    private String getSql(SSRDynamicQueryVO vo) {
+    private String getSql(QueryParams vo) {
         try (StringWriter stringWriter = new StringWriter();) {
             SSRDynamicSqlVO mmDepBiVO = new SSRDynamicSqlVO();
-            mmDepBiVO.setQueryCode(vo.getQueryCode());
+            mmDepBiVO.setQueryCode(vo.getCode());
             List<SSRDynamicSqlVO> mmDepBiVOS = null;//queryVOList(mmDepBiVO);
             if (mmDepBiVOS == null || mmDepBiVOS.size() == 0) {
-                throw new SSRException("根据queryCode：" + vo.getQueryCode() + "，找不到对应的sql。");
+                throw new SSRException("根据queryCode：" + vo.getCode() + "，找不到对应的sql。");
             }
             String querySqlFreemarker = mmDepBiVOS.get(0).getSqlFreemarker();
 
@@ -81,7 +81,7 @@ public class SqlGenerator {
             configuration.setDefaultEncoding("UTF-8");
 
             Template template = new Template(templateName, querySqlFreemarker, configuration);
-            template.process(vo.getQueryData(), stringWriter);
+            template.process(vo.getParams(), stringWriter);
             stringWriter.flush();
             String querySql = stringWriter.toString();
             String orderBySql = getOrderBy(vo);
@@ -92,27 +92,20 @@ public class SqlGenerator {
         }
     }
 
-    private String getOrderBy(SSRDynamicQueryVO vo){
-        if (vo.getSortNames().size() == 0){
+    private String getOrderBy(QueryParams vo){
+        Map<String, String> sortMap = vo.getSort();
+        if (sortMap.size() == 0){
             return "";
         }
         StringBuilder orderBy = new StringBuilder(" ORDER BY ");
-        if (vo.getSortNames().size() == vo.getSortTypes().size()) {
-            for(int i = 0,len = vo.getSortNames().size(); i < len; i++) {
-                orderBy.append(vo.getSortNames().get(i)+" "+vo.getSortTypes().get(i));
-                if (i != len -1){
-                    orderBy.append(",");
-                }
-            }
-        } else {
-            for(int i = 0,len = vo.getSortNames().size(); i < len; i++) {
-                orderBy.append(vo.getSortNames().get(i));
-                if (i != len -1){
-                    orderBy.append(",");
-                }
-            }
-        }
-
-        return orderBy.toString();
+        sortMap.forEach((k,v)->{
+            orderBy.append(k);
+            orderBy.append(" ");
+            orderBy.append(v);
+            orderBy.append(",");
+        });
+        String sort = orderBy.substring(0, orderBy.length() - 1);
+        return sort;
     }
+
 }

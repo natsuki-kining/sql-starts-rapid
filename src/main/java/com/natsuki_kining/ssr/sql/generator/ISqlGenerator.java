@@ -1,5 +1,7 @@
 package com.natsuki_kining.ssr.sql.generator;
 
+import com.natsuki_kining.ssr.beans.QueryParams;
+
 /**
  *
  *
@@ -7,5 +9,7 @@ package com.natsuki_kining.ssr.sql.generator;
  * @Date 2020-4-12 23:03:53
  * @Version 1.0.0
  **/
-public class ISqlGenerator {
+public interface ISqlGenerator {
+
+    String getSql(QueryParams queryParams);
 }
