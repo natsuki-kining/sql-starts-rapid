@@ -1,7 +1,7 @@
 package com.natsuki_kining.ssr.test;
 
 import com.natsuki_kining.ssr.beans.QueryParams;
-import com.natsuki_kining.ssr.query.Query;
+import com.natsuki_kining.ssr.query.QuerySql;
 
 /**
  * TODO
@@ -11,9 +11,9 @@ import com.natsuki_kining.ssr.query.Query;
  **/
 public class TestQuery {
 
-    private static Query<QueryParams> q;
+    private static QuerySql q;
 
     public static void main(String[] args) {
-        QueryParams queryParams = q.query();
+        q.query(null,null);
     }
 }

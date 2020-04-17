@@ -3,7 +3,6 @@ package com.natsuki_kining.ssr.beans;
 import lombok.Data;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,8 +19,9 @@ public class QueryParams {
     private Map<String, String> sort;
     private int pageNo = 1;
     private int pageSize = 10;
-
-    private int initialCapacity = 0;
+    private transient int pageEnd;
+    private transient int pageStart;
+    private transient int initialCapacity = 0;
 
     public String getCode() {
         if (code == null){
@@ -53,8 +53,18 @@ public class QueryParams {
 
     public int getPageSize() {
         if(pageSize<1){
-            pageSize = 1;
+            pageSize = 10;
         }
         return pageSize;
+    }
+
+    public int getPageEnd() {
+        pageEnd = getPageNo() * getPageSize();
+        return pageEnd;
+    }
+
+    public int getPageStart() {
+        pageStart = getPageEnd() - getPageSize();
+        return pageStart;
     }
 }
