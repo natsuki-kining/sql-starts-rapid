@@ -6,7 +6,7 @@ package com.natsuki_kining.ssr.intercept;
  * @Author : natsuki_kining
  * @Date : 2020/4/13 23:39
  */
-public interface ISSRIntercept {
+public interface SSRIntercept {
 
 
 }

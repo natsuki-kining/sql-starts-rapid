@@ -2,15 +2,13 @@ package com.natsuki_kining.ssr.intercept;
 
 import com.natsuki_kining.ssr.beans.QueryParams;
 
-import java.util.Map;
-
 /**
  * 查询拦截器
  *
  * @Author : natsuki_kining
  * @Date : 2020/4/13 23:39
  */
-public interface IQueryIntercept extends ISSRIntercept {
+public interface QueryIntercept extends SSRIntercept {
 
     /**
      * 预处理回调方法，实现处理器的预处理（如检查参数）
@@ -26,7 +24,7 @@ public interface IQueryIntercept extends ISSRIntercept {
      * @param queryParams 查询参数
      * @param sql 查询sql
      */
-    default void queryBefore(QueryParams queryParams,StringBuilder sql){
+    default void queryBefore(QueryParams queryParams,String sql){
 
     }
 

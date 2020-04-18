@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * TODO
+ * 查询结果
  *
  * @Author natsuki_kining
  * @Date 2020/4/16 20:02

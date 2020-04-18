@@ -5,14 +5,14 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 /**
- * TODO
+ * mybatis查询实现
  *
  * @Author : natsuki_kining
  * @Date : 2020/4/17 18:00
  */
-@ConditionalOnProperty(prefix = "ssr", name = "orm.type", havingValue = "hibernate")
+@ConditionalOnProperty(prefix = "ssr", name = "orm.type", havingValue = "mybatis")
 @Component
-public class HibernateDao implements Dao {
+public class QueryMybatisDao implements QueryDao {
     public Object query(QueryParams queryParams, String sql) {
         return null;
     }
