@@ -1,7 +1,9 @@
 package com.natsuki_kining.ssr.proxy;
 
 import com.natsuki_kining.ssr.beans.QueryParams;
-import com.natsuki_kining.ssr.intercept.QueryIntercept;
+import com.natsuki_kining.ssr.beans.SSRDynamicSql;
+import com.natsuki_kining.ssr.intercept.QueryJavaIntercept;
+import com.natsuki_kining.ssr.intercept.QueryScriptIntercept;
 import com.natsuki_kining.ssr.query.QueryDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -23,8 +25,11 @@ import java.lang.reflect.Proxy;
 @Scope("prototype")
 public class JdkProxy implements InvocationHandler,SSRProxy {
 
-    @Autowired(required = false)
-    private QueryIntercept intercept;
+    @Autowired
+    private QueryJavaIntercept intercept;
+
+    @Autowired
+    private QueryScriptIntercept script;
 
     //上一次的查询结果，目前只存在一个上一次的查询结果，后面如果改造成多线程再修改。
     private static Object preData;
@@ -42,22 +47,29 @@ public class JdkProxy implements InvocationHandler,SSRProxy {
 
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         QueryParams queryParams = (QueryParams) args[0];
-        String sql = (String) args[0];
+        SSRDynamicSql dynamicSql = (SSRDynamicSql) args[0];
 
         //调用拦截器的预处理方法判断是否需要往下执行
-        boolean preHandle = intercept.preHandle(queryParams);
+        boolean preHandle = intercept.preHandle(queryParams,dynamicSql);
         if (!preHandle){
             return null;
         }
 
+        boolean scriptPreHandle = script.preHandle(queryParams,dynamicSql);
+        if (!scriptPreHandle){
+            return null;
+        }
+
         //调用拦截器的查询前方法
-        intercept.queryBefore(queryParams,sql);
+        intercept.queryBefore(queryParams,dynamicSql);
+        script.queryBefore(queryParams,dynamicSql);
 
         //查询
         Object queryData = method.invoke(this.target, args);
 
         //调用拦截器的查询后方法
-        queryData = intercept.queryAfter(queryParams, sql, queryData, preData);
+        queryData = intercept.queryAfter(queryParams, dynamicSql, queryData, preData);
+        queryData = script.queryAfter(queryParams, dynamicSql, queryData, preData);
 
         //保存处理结果
         preData = queryData;

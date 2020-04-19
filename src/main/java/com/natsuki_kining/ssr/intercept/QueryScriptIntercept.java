@@ -8,4 +8,14 @@ package com.natsuki_kining.ssr.intercept;
  */
 public interface QueryScriptIntercept extends QueryIntercept {
 
+    String paramsName = "ssrParams";
+    String resultName = "ssrResult";
+
+    /**
+     * 执行脚本
+     * @param script 执行的脚本
+     * @param ssrParams 传入脚本的参数
+     * @return 执行的结果
+     */
+    <T> T executeScript(String script,Object ssrParams);
 }

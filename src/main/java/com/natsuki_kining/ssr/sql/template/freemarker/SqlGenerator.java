@@ -1,7 +1,7 @@
 package com.natsuki_kining.ssr.sql.template.freemarker;
 
 import com.natsuki_kining.ssr.beans.QueryParams;
-import com.natsuki_kining.ssr.beans.SSRDynamicSqlVO;
+import com.natsuki_kining.ssr.beans.SSRDynamicSql;
 import com.natsuki_kining.ssr.exception.SSRException;
 import freemarker.cache.StringTemplateLoader;
 import freemarker.template.Configuration;
@@ -66,13 +66,13 @@ public class SqlGenerator {
 
     private String getSql(QueryParams vo) {
         try (StringWriter stringWriter = new StringWriter();) {
-            SSRDynamicSqlVO mmDepBiVO = new SSRDynamicSqlVO();
+            SSRDynamicSql mmDepBiVO = new SSRDynamicSql();
             mmDepBiVO.setQueryCode(vo.getCode());
-            List<SSRDynamicSqlVO> mmDepBiVOS = null;//queryVOList(mmDepBiVO);
+            List<SSRDynamicSql> mmDepBiVOS = null;//queryVOList(mmDepBiVO);
             if (mmDepBiVOS == null || mmDepBiVOS.size() == 0) {
                 throw new SSRException("根据queryCode：" + vo.getCode() + "，找不到对应的sql。");
             }
-            String querySqlFreemarker = mmDepBiVOS.get(0).getSqlFreemarker();
+            String querySqlFreemarker = mmDepBiVOS.get(0).getSqlTemplate();
 
             String templateName = "query-sql-freemarker";
             Configuration configuration = new Configuration();

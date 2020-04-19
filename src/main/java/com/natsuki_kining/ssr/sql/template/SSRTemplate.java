@@ -5,7 +5,7 @@ import com.natsuki_kining.ssr.beans.QueryParams;
 import java.io.IOException;
 
 /**
- * TODO
+ * 模板接口
  *
  * @Author natsuki_kining
  * @Date 2020/4/16 20:02

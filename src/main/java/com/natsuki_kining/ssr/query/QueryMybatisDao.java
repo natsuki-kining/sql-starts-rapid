@@ -1,6 +1,7 @@
 package com.natsuki_kining.ssr.query;
 
 import com.natsuki_kining.ssr.beans.QueryParams;
+import com.natsuki_kining.ssr.beans.SSRDynamicSql;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Component;
 @ConditionalOnProperty(prefix = "ssr", name = "orm.type", havingValue = "mybatis")
 @Component
 public class QueryMybatisDao implements QueryDao {
-    public Object query(QueryParams queryParams, String sql) {
+    public Object query(QueryParams queryParams, SSRDynamicSql dynamicSql) {
         return null;
     }
 }
