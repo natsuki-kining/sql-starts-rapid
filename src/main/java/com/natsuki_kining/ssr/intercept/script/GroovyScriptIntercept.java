@@ -1,5 +1,8 @@
 package com.natsuki_kining.ssr.intercept.script;
 
+import com.natsuki_kining.ssr.intercept.QueryScriptIntercept;
+import groovy.lang.Binding;
+import groovy.lang.GroovyShell;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
@@ -11,5 +14,15 @@ import org.springframework.stereotype.Component;
  */
 @ConditionalOnProperty(prefix = "ssr", name = "script.type", havingValue = "groovy")
 @Component
-public class GroovyScriptIntercept {
+public class GroovyScriptIntercept implements QueryScriptIntercept {
+
+    @Override
+    public <T> T executeScript(String script, Object ssrParams) {
+        Binding binding = new Binding();
+        binding.setVariable(paramsName, ssrParams);
+        GroovyShell shell = new GroovyShell(binding);
+        shell.evaluate(script);
+        return (T) binding.getVariable(resultName);
+    }
+
 }

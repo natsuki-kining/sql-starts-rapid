@@ -26,8 +26,8 @@ public interface QueryIntercept extends SSRIntercept {
      * @param queryParams 查询参数
      * @param dynamicSql 查询sql、脚本等
      */
-    default void queryBefore(QueryParams queryParams, SSRDynamicSql dynamicSql){
-
+    default QueryParams queryBefore(QueryParams queryParams, SSRDynamicSql dynamicSql){
+        return queryParams;
     }
 
     /**
