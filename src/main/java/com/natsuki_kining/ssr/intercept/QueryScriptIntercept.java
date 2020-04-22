@@ -24,7 +24,7 @@ public interface QueryScriptIntercept extends QueryIntercept {
         if (StringUtils.isBlank(preScript)){
             return true;
         }
-        return executeScript(preScript,queryParams);
+        return convert(executeScript(preScript,queryParams));
     }
 
     @Override
@@ -33,7 +33,7 @@ public interface QueryScriptIntercept extends QueryIntercept {
         if (StringUtils.isBlank(beforeScript)){
             return queryParams;
         }
-        return executeScript(beforeScript,queryParams);
+        return convert(executeScript(beforeScript,queryParams));
     }
 
     @Override
@@ -49,11 +49,15 @@ public interface QueryScriptIntercept extends QueryIntercept {
         return executeScript(beforeScript,scriptParam);
     }
 
+    default <T> T convert(Object obj){
+        return (T) obj;
+    }
+
     /**
      * 执行脚本
      * @param script 执行的脚本
      * @param ssrParams 传入脚本的参数
      * @return 执行的结果
      */
-    <T> T executeScript(String script,Object ssrParams);
+    Object executeScript(String script,Object ssrParams);
 }

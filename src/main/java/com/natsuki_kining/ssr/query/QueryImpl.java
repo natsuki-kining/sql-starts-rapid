@@ -23,8 +23,9 @@ public class QueryImpl implements Query {
     @Autowired
     private SSRProxy proxy;
 
-    public Object query(QueryParams queryParams, SSRDynamicSql dynamicSql) {
-        Object queryData = proxy.getInstance(dao).query(queryParams, dynamicSql);
-        return queryData;
+    @Override
+    public <T> T query(QueryParams queryParams, SSRDynamicSql dynamicSql) {
+        return proxy.getInstance(dao).query(queryParams, dynamicSql);
     }
+
 }

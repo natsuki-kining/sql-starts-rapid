@@ -14,7 +14,9 @@ import org.springframework.stereotype.Component;
 @ConditionalOnProperty(prefix = "ssr", name = "orm.type", havingValue = "hibernate")
 @Component
 public class QueryHibernateDao implements QueryDao {
+
     public Object query(QueryParams queryParams, SSRDynamicSql dynamicSql) {
         return null;
     }
+
 }
