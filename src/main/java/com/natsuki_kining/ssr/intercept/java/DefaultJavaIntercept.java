@@ -1,5 +1,7 @@
 package com.natsuki_kining.ssr.intercept.java;
 
+import com.natsuki_kining.ssr.beans.QueryParams;
+import com.natsuki_kining.ssr.beans.SSRDynamicSql;
 import com.natsuki_kining.ssr.intercept.QueryJavaIntercept;
 import org.springframework.stereotype.Component;
 
@@ -15,4 +17,18 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class DefaultJavaIntercept implements QueryJavaIntercept {
+
+    @Override
+    public boolean preHandle(QueryParams queryParams, SSRDynamicSql dynamicSql) {
+        return true;
+    }
+
+    @Override
+    public void queryBefore(QueryParams queryParams, SSRDynamicSql dynamicSql) {
+    }
+
+    @Override
+    public Object queryAfter(QueryParams queryParams, SSRDynamicSql dynamicSql, Object queryData, Object preData) {
+        return queryData;
+    }
 }

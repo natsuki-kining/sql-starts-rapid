@@ -21,15 +21,15 @@ import javax.script.ScriptException;
 public class JavaScriptIntercept implements QueryScriptIntercept {
 
     @Override
-    public <T> T executeScript(String script,Object ssrParams) {
+    public Object executeScript(String script,Object ssrParams) {
         ScriptEngineManager manager = new ScriptEngineManager();
         ScriptEngine engine = manager.getEngineByName("javascript");
         engine.put(paramsName, ssrParams);
         engine.getBindings(ScriptContext.ENGINE_SCOPE);
-        T result = null;
+        Object result = null;
         try {
             engine.eval(script);
-            result = (T) engine.get(resultName);
+            result = engine.get(resultName);
         } catch (ScriptException e) {
             e.printStackTrace();
             throw new SSRException(e.getMessage(),e);

@@ -1,6 +1,7 @@
 package com.natsuki_kining.ssr.test.script;
 
 import com.natsuki_kining.ssr.beans.QueryParams;
+import com.natsuki_kining.ssr.beans.QueryResult;
 import com.natsuki_kining.ssr.intercept.QueryScriptIntercept;
 import com.natsuki_kining.ssr.intercept.script.JavaScriptIntercept;
 import org.junit.Test;
@@ -25,7 +26,7 @@ public class JavaScriptTest {
         String script = "ssrResult = ssrParams + 1";
         int ssrParams = 2;
         //只能是double类型接收
-        double ssrResult = scriptIntercept.executeScript(script, ssrParams);
+        int ssrResult = scriptIntercept.convert(scriptIntercept.executeScript(script, ssrParams),Integer.class);
         System.out.println(ssrResult);
 
 
@@ -70,8 +71,14 @@ public class JavaScriptTest {
         System.out.println(params == result2);
 
         //返回自定义类型
-        String script3 = "ssrResult = {count:11,pageSize:10,pageNo:1}";
-        Map result3 = scriptIntercept.executeScript(script3, params);
-        System.out.println(result3.get("count"));
+        String script3 = "ssrResult = {count:11,pageSize:10,pageNo:1,data:['1','2','3']}";
+        QueryResult queryResult3 = scriptIntercept.convert(scriptIntercept.executeScript(script3, params),QueryResult.class);
+        System.out.println("result1:"+queryResult3.getData().get(0));
+    }
+
+    @Test
+    public void test(){
+        String n = "3.0";
+        System.out.println(Integer.parseInt(n));
     }
 }

@@ -17,18 +17,14 @@ public interface QueryIntercept extends SSRIntercept {
      * @param dynamicSql 查询sql、脚本等
      * @return true表示继续流程（如调用下一个拦截器或处理器）；false表示流程中断(比如检查提交的参数不符合要求)
      */
-    default boolean preHandle(QueryParams queryParams, SSRDynamicSql dynamicSql){
-        return true;
-    }
+    boolean preHandle(QueryParams queryParams, SSRDynamicSql dynamicSql);
 
     /**
      * 查询之前对参数和sql的一些处理
      * @param queryParams 查询参数
      * @param dynamicSql 查询sql、脚本等
      */
-    default QueryParams queryBefore(QueryParams queryParams, SSRDynamicSql dynamicSql){
-        return queryParams;
-    }
+    void queryBefore(QueryParams queryParams, SSRDynamicSql dynamicSql);
 
     /**
      * 查询之后
@@ -38,7 +34,5 @@ public interface QueryIntercept extends SSRIntercept {
      * @param preData 上一步执行的结果
      * @return 查询处理后的数据
      */
-    default Object queryAfter(QueryParams queryParams,SSRDynamicSql dynamicSql,Object queryData,Object preData){
-        return queryData;
-    }
+    Object queryAfter(QueryParams queryParams,SSRDynamicSql dynamicSql,Object queryData,Object preData);
 }

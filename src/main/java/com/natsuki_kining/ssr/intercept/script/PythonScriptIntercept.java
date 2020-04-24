@@ -17,12 +17,12 @@ import org.springframework.stereotype.Component;
 public class PythonScriptIntercept implements QueryScriptIntercept {
 
     @Override
-    public <T> T executeScript(String script, Object ssrParams) {
+    public Object executeScript(String script, Object ssrParams) {
         PythonInterpreter interpreter = new PythonInterpreter();
         interpreter.set(paramsName,ssrParams);
         interpreter.exec(script);
         PyObject pyObject = interpreter.get(resultName);
-        return (T) pyObject;
+        return pyObject;
     }
 
 }

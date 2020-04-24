@@ -17,12 +17,12 @@ import org.springframework.stereotype.Component;
 public class GroovyScriptIntercept implements QueryScriptIntercept {
 
     @Override
-    public <T> T executeScript(String script, Object ssrParams) {
+    public Object executeScript(String script, Object ssrParams) {
         Binding binding = new Binding();
         binding.setVariable(paramsName, ssrParams);
         GroovyShell shell = new GroovyShell(binding);
         shell.evaluate(script);
-        return (T) binding.getVariable(resultName);
+        return binding.getVariable(resultName);
     }
 
 }

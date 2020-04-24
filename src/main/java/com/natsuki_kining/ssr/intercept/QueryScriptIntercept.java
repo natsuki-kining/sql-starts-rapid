@@ -1,5 +1,6 @@
 package com.natsuki_kining.ssr.intercept;
 
+import com.alibaba.fastjson.JSON;
 import com.natsuki_kining.ssr.beans.QueryParams;
 import com.natsuki_kining.ssr.beans.SSRDynamicSql;
 import org.apache.commons.lang3.StringUtils;
@@ -24,16 +25,15 @@ public interface QueryScriptIntercept extends QueryIntercept {
         if (StringUtils.isBlank(preScript)){
             return true;
         }
-        return convert(executeScript(preScript,queryParams));
+        return (boolean) executeScript(preScript,queryParams);
     }
 
     @Override
-    default QueryParams queryBefore(QueryParams queryParams, SSRDynamicSql dynamicSql) {
+    default void queryBefore(QueryParams queryParams, SSRDynamicSql dynamicSql) {
         String beforeScript = dynamicSql.getPreScript();
-        if (StringUtils.isBlank(beforeScript)){
-            return queryParams;
+        if (StringUtils.isNotBlank(beforeScript)){
+            executeScript(beforeScript,queryParams);
         }
-        return convert(executeScript(beforeScript,queryParams));
     }
 
     @Override
@@ -49,8 +49,13 @@ public interface QueryScriptIntercept extends QueryIntercept {
         return executeScript(beforeScript,scriptParam);
     }
 
-    default <T> T convert(Object obj){
-        return (T) obj;
+    default <T> T queryAfter(QueryParams queryParams, SSRDynamicSql dynamicSql, Object queryData, Object preData,Class<T> clazz) {
+        return convert(queryAfter(queryParams,dynamicSql,queryData,preData),clazz);
+    }
+
+    default <T> T convert(Object obj,Class<T> clazz){
+        T t = (T) JSON.parseObject(JSON.toJSONString(obj), clazz);
+        return t;
     }
 
     /**
@@ -59,5 +64,5 @@ public interface QueryScriptIntercept extends QueryIntercept {
      * @param ssrParams 传入脚本的参数
      * @return 执行的结果
      */
-    Object executeScript(String script,Object ssrParams);
+    <T> T executeScript(String script,Object ssrParams);
 }
