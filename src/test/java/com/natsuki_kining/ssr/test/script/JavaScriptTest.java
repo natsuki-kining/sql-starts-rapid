@@ -21,31 +21,27 @@ public class JavaScriptTest {
      * 测试基础数据类型
      */
     @Test
-    public void baseDataType(){
+    public void baseDataType() {
         QueryScriptIntercept scriptIntercept = new JavaScriptIntercept();
         String script = "ssrResult = ssrParams + 1";
         int ssrParams = 2;
-        //只能是double类型接收
-        int ssrResult = scriptIntercept.convert(scriptIntercept.executeScript(script, ssrParams),Integer.class);
+        int ssrResult = scriptIntercept.executeScript(script, ssrParams, Integer.class);
         System.out.println(ssrResult);
 
 
         String script2 = "ssrResult = ssrParams > 1";
         int ssrParams2 = 2;
-        //只能是double类型接收
-        Object ssrResult2 =  scriptIntercept.executeScript(script2, ssrParams2);
+        boolean ssrResult2 = scriptIntercept.executeScript(script2, ssrParams2, Boolean.class);
         System.out.println(ssrResult2);
 
         String script3 = "if(ssrParams > 1){ssrResult = false}else{ssrResult = true}";
         int ssrParams3 = 2;
-        //只能是double类型接收
-        Object ssrResult3 =  scriptIntercept.executeScript(script3, ssrParams3);
+        Object ssrResult3 = scriptIntercept.executeScript(script3, ssrParams3);
         System.out.println(ssrResult3);
 
         String charScript = "ssrResult = ssrParams + 1";
         char charSsrParams = 'a';
-        //只能是double类型接收
-        Object charResult =  scriptIntercept.executeScript(charScript, charSsrParams);
+        Object charResult = scriptIntercept.executeScript(charScript, charSsrParams);
         System.out.println(charResult);
     }
 
@@ -53,32 +49,27 @@ public class JavaScriptTest {
      * 传对象跟接收对象类型
      */
     @Test
-    public void objectType(){
+    public void objectType() {
         QueryScriptIntercept scriptIntercept = new JavaScriptIntercept();
         QueryParams params = new QueryParams();
         params.setCode("query-user");
-        Map<String,Object> paramMap = new HashMap<>();
-        paramMap.put("name","zhangsan");
-        paramMap.put("age",18);
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("name", "zhangsan");
+        paramMap.put("age", 18);
         params.setParams(paramMap);
 
         String script = "ssrResult = ssrParams";
-        QueryParams result = scriptIntercept.executeScript(script, params);
+        QueryParams result = scriptIntercept.executeScript(script, params, QueryParams.class);
         System.out.println(params == result);
 
         String script2 = "ssrParams.code='query-user-list';ssrResult = ssrParams;";
-        QueryParams result2 = scriptIntercept.executeScript(script2, params);
+        QueryParams result2 = scriptIntercept.executeScript(script2, params, QueryParams.class);
         System.out.println(params == result2);
 
         //返回自定义类型
         String script3 = "ssrResult = {count:11,pageSize:10,pageNo:1,data:['1','2','3']}";
-        QueryResult queryResult3 = scriptIntercept.convert(scriptIntercept.executeScript(script3, params),QueryResult.class);
-        System.out.println("result1:"+queryResult3.getData().get(0));
+        QueryResult queryResult3 = scriptIntercept.executeScript(script3, params, QueryResult.class);
+        System.out.println("result1:" + queryResult3.getData().get(0));
     }
 
-    @Test
-    public void test(){
-        String n = "3.0";
-        System.out.println(Integer.parseInt(n));
-    }
 }

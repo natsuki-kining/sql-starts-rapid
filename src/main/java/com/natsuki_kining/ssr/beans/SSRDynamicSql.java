@@ -34,7 +34,7 @@ public class SSRDynamicSql {
 	private String queryType;
     
 	/**
-	 * 执行sql 的freemarker
+	 * sql模板
 	 */
 	private String sqlTemplate;
 
