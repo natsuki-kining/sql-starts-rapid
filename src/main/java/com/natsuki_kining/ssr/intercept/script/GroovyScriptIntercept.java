@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  */
 @ConditionalOnProperty(prefix = "ssr", name = "script.type", havingValue = "groovy")
 @Component
-public class GroovyScriptIntercept implements QueryScriptIntercept {
+public class GroovyScriptIntercept extends QueryScriptIntercept {
 
     @Override
     public Object executeScript(String script, Object ssrParams) {

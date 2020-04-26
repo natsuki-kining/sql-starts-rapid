@@ -1,6 +1,7 @@
 package com.natsuki_kining.ssr.test.script;
 
 import com.natsuki_kining.ssr.beans.QueryParams;
+import com.natsuki_kining.ssr.beans.QueryResult;
 import com.natsuki_kining.ssr.intercept.QueryScriptIntercept;
 import com.natsuki_kining.ssr.intercept.script.PythonScriptIntercept;
 import org.junit.Test;
@@ -69,9 +70,10 @@ public class PythonScriptTest {
         System.out.println(params == result2);
 
         //返回自定义类型
-//        String script3 = "ssrResult = {count:11,pageSize:10,pageNo:1,data:['1','2','3']}";
-//        QueryResult queryResult3 = scriptIntercept.executeScript(script3, params,QueryResult.class);
-//        System.out.println("result1:"+queryResult3.getData().get(0));
+        String script3 = "class SsrResultTest: \n\tpass\n\nssrResult = SsrResultTest()\nssrResult.count=11\nssrResult.pageSize=10\nssrResult.pageNo=1\nssrResult.data=['a','b','c','d']";
+        QueryResult queryResult3 = scriptIntercept.executeScript(script3, params,QueryResult.class);
+        System.out.println("result.count:"+queryResult3.getCount());
+        System.out.println("result.data:"+queryResult3.getData().get(0));
     }
 
 }

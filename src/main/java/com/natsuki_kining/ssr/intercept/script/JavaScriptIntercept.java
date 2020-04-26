@@ -18,7 +18,7 @@ import javax.script.ScriptException;
  */
 @ConditionalOnProperty(prefix = "ssr", name = "script.type", havingValue = "javaScript")
 @Component
-public class JavaScriptIntercept implements QueryScriptIntercept {
+public class JavaScriptIntercept extends QueryScriptIntercept {
 
     @Override
     public Object executeScript(String script,Object ssrParams) {
@@ -37,4 +37,13 @@ public class JavaScriptIntercept implements QueryScriptIntercept {
         return result;
     }
 
+//    @Override
+//    public <T> T convert(Object obj, Class<T> clazz) {
+//        if (obj instanceof ScriptObjectMirror){
+//            T o = (T)((ScriptObjectMirror) obj).wrapAsJSONCompatible(obj, clazz);
+//            System.out.println(o);
+//            return o;
+//        }
+//        return super.convert(obj,clazz);
+//    }
 }

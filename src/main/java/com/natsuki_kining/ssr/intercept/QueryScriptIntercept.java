@@ -14,13 +14,13 @@ import java.util.Map;
  * @Author : natsuki_kining
  * @Date : 2020/4/13 23:39
  */
-public interface QueryScriptIntercept extends QueryIntercept {
+public abstract class QueryScriptIntercept implements QueryIntercept {
 
-    String paramsName = "ssrParams";
-    String resultName = "ssrResult";
+    protected String paramsName = "ssrParams";
+    protected String resultName = "ssrResult";
 
     @Override
-    default boolean preHandle(QueryParams queryParams, SSRDynamicSql dynamicSql) {
+    public boolean preHandle(QueryParams queryParams, SSRDynamicSql dynamicSql) {
         String preScript = dynamicSql.getPreScript();
         if (StringUtils.isBlank(preScript)) {
             return true;
@@ -29,7 +29,7 @@ public interface QueryScriptIntercept extends QueryIntercept {
     }
 
     @Override
-    default void queryBefore(QueryParams queryParams, SSRDynamicSql dynamicSql) {
+    public void queryBefore(QueryParams queryParams, SSRDynamicSql dynamicSql) {
         String beforeScript = dynamicSql.getPreScript();
         if (StringUtils.isNotBlank(beforeScript)) {
             executeScript(beforeScript, queryParams);
@@ -37,7 +37,7 @@ public interface QueryScriptIntercept extends QueryIntercept {
     }
 
     @Override
-    default Object queryAfter(QueryParams queryParams, SSRDynamicSql dynamicSql, Object queryData, Object preData) {
+    public Object queryAfter(QueryParams queryParams, SSRDynamicSql dynamicSql, Object queryData, Object preData) {
         String beforeScript = dynamicSql.getPreScript();
         if (StringUtils.isBlank(beforeScript)) {
             return queryData;
@@ -56,7 +56,7 @@ public interface QueryScriptIntercept extends QueryIntercept {
      * @param <T> 泛型
      * @return 转换后的值
      */
-    default <T> T convert(Object obj, Class<T> clazz) {
+    public <T> T convert(Object obj, Class<T> clazz) {
         if (baseNumberType(clazz)) {
             Object value = null;
             Number number = (Number) obj;
@@ -86,7 +86,7 @@ public interface QueryScriptIntercept extends QueryIntercept {
      * @param clazz
      * @return
      */
-    default boolean baseNumberType(Class<?> clazz) {
+    protected boolean baseNumberType(Class<?> clazz) {
         return clazz == Integer.class
                 || clazz == Short.class
                 || clazz == Long.class
@@ -100,7 +100,7 @@ public interface QueryScriptIntercept extends QueryIntercept {
      * @param clazz
      * @return
      */
-    default boolean baseOtherType(Class<?> clazz) {
+    protected boolean baseOtherType(Class<?> clazz) {
         return clazz == Boolean.class
                 || clazz == Character.class
                 || clazz == String.class;
@@ -112,7 +112,7 @@ public interface QueryScriptIntercept extends QueryIntercept {
      * @param object
      * @return
      */
-    default boolean equalsType(Class<?> clazz, Object object) {
+    protected boolean equalsType(Class<?> clazz, Object object) {
         return object.getClass() == clazz;
     }
 
@@ -122,7 +122,7 @@ public interface QueryScriptIntercept extends QueryIntercept {
      * @param object
      * @return
      */
-    default boolean baseType(Class<?> clazz, Object object) {
+    protected boolean baseType(Class<?> clazz, Object object) {
         return baseNumberType(clazz) || baseOtherType(clazz) || equalsType(clazz, object);
     }
 
@@ -133,7 +133,7 @@ public interface QueryScriptIntercept extends QueryIntercept {
      * @param ssrParams 传入脚本的参数
      * @return 执行的结果
      */
-    Object executeScript(String script, Object ssrParams);
+    public abstract Object executeScript(String script, Object ssrParams);
 
     /**
      * 将执行脚本的结果数据转成成需要的对象
@@ -144,7 +144,7 @@ public interface QueryScriptIntercept extends QueryIntercept {
      * @param <T>       转换的泛型
      * @return
      */
-    default <T> T executeScript(String script, Object ssrParams, Class<T> clazz) {
+    public <T> T executeScript(String script, Object ssrParams, Class<T> clazz) {
         return convert(executeScript(script, ssrParams), clazz);
     }
 }

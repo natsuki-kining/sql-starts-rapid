@@ -67,7 +67,7 @@ public class JavaScriptTest {
         System.out.println(params == result2);
 
         //返回自定义类型
-        String script3 = "ssrResult = {count:11,pageSize:10,pageNo:1,data:['1','2','3']}";
+        String script3 = "var ArrayList = Java.type('java.util.ArrayList'); var charts = new ArrayList();charts.add('a'); charts.add('b');charts.add('c');ssrResult = {count:11,pageSize:10,pageNo:1,data:charts}";
         QueryResult queryResult3 = scriptIntercept.executeScript(script3, params, QueryResult.class);
         System.out.println("result1:" + queryResult3.getData().get(0));
     }

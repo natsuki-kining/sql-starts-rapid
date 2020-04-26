@@ -16,19 +16,7 @@ import org.springframework.stereotype.Component;
  * @Date : 2020/4/18 20:55
  */
 @Component
-public class DefaultJavaIntercept implements QueryJavaIntercept {
+public class DefaultJavaIntercept extends QueryJavaIntercept {
 
-    @Override
-    public boolean preHandle(QueryParams queryParams, SSRDynamicSql dynamicSql) {
-        return true;
-    }
 
-    @Override
-    public void queryBefore(QueryParams queryParams, SSRDynamicSql dynamicSql) {
-    }
-
-    @Override
-    public Object queryAfter(QueryParams queryParams, SSRDynamicSql dynamicSql, Object queryData, Object preData) {
-        return queryData;
-    }
 }
