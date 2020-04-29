@@ -34,8 +34,6 @@ public class GroovyScriptTest {
         double ssrResult1Plus = scriptIntercept.executeScript(script1Plus, ssrParams1Plus, Double.class);
         System.out.println(ssrResult1Plus);
 
-
-
         String script2 = "ssrResult = ssrParams > 1";
         int ssrParams2 = 2;
         boolean ssrResult2 = scriptIntercept.executeScript(script2, ssrParams2, Boolean.class);

@@ -1,4 +1,4 @@
-package com.natsuki_kining.ssr.data.db;
+package com.natsuki_kining.ssr.data.dao;
 
 import com.natsuki_kining.ssr.data.SSRData;
 
