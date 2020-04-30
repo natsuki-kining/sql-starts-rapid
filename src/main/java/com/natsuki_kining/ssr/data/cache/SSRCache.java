@@ -1,6 +1,5 @@
 package com.natsuki_kining.ssr.data.cache;
 
-import com.natsuki_kining.ssr.beans.SSRDynamicSql;
 import com.natsuki_kining.ssr.data.SSRAbstractData;
 import com.natsuki_kining.ssr.data.SSRData;
 

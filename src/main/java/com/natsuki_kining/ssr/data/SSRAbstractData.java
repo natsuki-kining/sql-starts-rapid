@@ -11,8 +11,8 @@ import com.natsuki_kining.ssr.beans.SSRDynamicSql;
 public abstract class SSRAbstractData implements SSRData {
 
     @Override
-    public SSRDynamicSql save(SSRDynamicSql dynamicSql) {
-        return null;
+    public boolean save(SSRDynamicSql dynamicSql) {
+        return true;
     }
 
     @Override
