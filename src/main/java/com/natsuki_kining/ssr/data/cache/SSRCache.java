@@ -1,6 +1,5 @@
 package com.natsuki_kining.ssr.data.cache;
 
-import com.natsuki_kining.ssr.data.SSRAbstractData;
 import com.natsuki_kining.ssr.data.SSRData;
 
 /**
@@ -9,6 +8,6 @@ import com.natsuki_kining.ssr.data.SSRData;
  * @Author : natsuki_kining
  * @Date : 2020/4/27 20:50
  */
-public abstract class SSRCache extends SSRAbstractData implements SSRData {
+public interface SSRCache extends SSRData {
 
 }

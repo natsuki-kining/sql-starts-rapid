@@ -15,6 +15,6 @@ public interface Query {
      * 查询
      * @return
      */
-    <T> T query(QueryParams queryParams, SSRDynamicSql dynamicSql);
+    <T> T query(QueryParams queryParams);
 
 }

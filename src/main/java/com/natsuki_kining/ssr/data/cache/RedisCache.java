@@ -4,6 +4,8 @@ import com.natsuki_kining.ssr.beans.SSRDynamicSql;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -13,9 +15,11 @@ import org.springframework.stereotype.Component;
  * @Author : natsuki_kining
  * @Date : 2020/4/27 20:59
  */
-@Component
 @Slf4j
-public class RedisCache extends SSRCache {
+@Primary
+@Component
+@ConditionalOnProperty(prefix = "ssr", name = "cache.type", havingValue = "redis")
+public class RedisCache implements SSRCache {
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
@@ -25,17 +29,4 @@ public class RedisCache extends SSRCache {
         return StringUtils.isBlank(code) ? null : (SSRDynamicSql) redisTemplate.opsForValue().get(code);
     }
 
-    @Override
-    public boolean save(SSRDynamicSql dynamicSql) {
-        if (dynamicSql == null){
-            return false;
-        }
-        try{
-            redisTemplate.opsForValue().set(dynamicSql.getQueryCode(),dynamicSql);
-            return true;
-        }catch (Exception e){
-            log.error(e.getMessage(),e);
-            return false;
-        }
-    }
 }

@@ -1,6 +1,6 @@
 package com.natsuki_kining.ssr.proxy;
 
-import com.natsuki_kining.ssr.query.QueryDao;
+import com.natsuki_kining.ssr.query.orm.QueryORM;
 
 /**
  * 代理接口
@@ -12,5 +12,5 @@ import com.natsuki_kining.ssr.query.QueryDao;
  */
 public interface SSRProxy {
 
-    QueryDao getInstance(QueryDao target);
+    QueryORM getInstance(QueryORM target);
 }

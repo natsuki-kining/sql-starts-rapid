@@ -10,7 +10,6 @@ import com.natsuki_kining.ssr.beans.SSRDynamicSql;
  */
 public interface SSRData {
 
-    boolean save(SSRDynamicSql dynamicSql);
-
     SSRDynamicSql get(String code);
+
 }

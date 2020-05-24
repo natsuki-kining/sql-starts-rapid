@@ -1,7 +1,6 @@
 package com.natsuki_kining.ssr.data.dao;
 
 import com.natsuki_kining.ssr.beans.QueryParams;
-import com.natsuki_kining.ssr.beans.SSRDynamicSql;
 
 /**
  * 返回自定义查询sql
@@ -11,8 +10,8 @@ import com.natsuki_kining.ssr.beans.SSRDynamicSql;
  **/
 public class MyBatisSelectProvider {
 
-    public String getSql(QueryParams queryParams, SSRDynamicSql dynamicSql){
-        return dynamicSql.getSqlTemplate();
+    public String getSql(String sql, QueryParams queryParams){
+        return sql;
     }
 
 }

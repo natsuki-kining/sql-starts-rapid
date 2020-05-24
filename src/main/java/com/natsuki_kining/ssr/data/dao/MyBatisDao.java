@@ -12,9 +12,9 @@ import org.apache.ibatis.annotations.SelectProvider;
  * @Date 2020/4/29 20:08
  **/
 @Mapper
-public interface MyBatisDao {
+public interface MyBatisDao extends SSRDao {
 
     @SelectProvider(type = MyBatisSelectProvider.class,method = "getSql")
-    public Object select(QueryParams queryParams, SSRDynamicSql dynamicSql);
+    Object select(String sql, QueryParams queryParams);
 
 }
