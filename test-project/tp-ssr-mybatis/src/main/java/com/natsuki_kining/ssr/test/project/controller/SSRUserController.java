@@ -33,8 +33,4 @@ public class SSRUserController {
         return userService.insertUser(user);
     }
 
-    @PostMapping("query")
-    public Object query(@RequestBody QueryParams queryParams){
-        return query.query(queryParams);
-    }
 }
