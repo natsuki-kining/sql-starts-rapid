@@ -1,7 +1,6 @@
 package com.natsuki_kining.ssr.query;
 
 import com.natsuki_kining.ssr.beans.QueryParams;
-import com.natsuki_kining.ssr.beans.SSRDynamicSql;
 
 /**
  * 查询接口
@@ -15,6 +14,9 @@ public interface Query {
      * 查询
      * @return
      */
-    <T> T query(QueryParams queryParams);
+    Object query(QueryParams queryParams);
+
+    <T> T query(QueryParams queryParams, Class<T> clazz);
+
 
 }

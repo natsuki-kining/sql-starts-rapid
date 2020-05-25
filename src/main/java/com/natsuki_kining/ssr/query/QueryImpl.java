@@ -30,9 +30,14 @@ public class QueryImpl implements Query {
     private ObjectFactory<SSRProxy> proxy;
 
     @Override
-    public <T> T query(QueryParams queryParams) {
+    public Object query(QueryParams queryParams) {
         SSRDynamicSql ssrDynamicSql = data.get(queryParams.getCode());
         return proxy.getObject().getInstance(orm).query(ssrDynamicSql, queryParams);
+    }
+
+    @Override
+    public <T> T query(QueryParams queryParams, Class<T> clazz) {
+        return (T) query(queryParams);
     }
 
 

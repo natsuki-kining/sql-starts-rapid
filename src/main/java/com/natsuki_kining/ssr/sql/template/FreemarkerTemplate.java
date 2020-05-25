@@ -5,6 +5,7 @@ import com.natsuki_kining.ssr.exception.SSRException;
 import freemarker.cache.StringTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+import org.springframework.stereotype.Component;
 
 import java.io.StringWriter;
 
@@ -14,6 +15,7 @@ import java.io.StringWriter;
  * @Author natsuki_kining
  * @Date 2020/4/16 20:02
  **/
+@Component
 public class FreemarkerTemplate implements SSRTemplate {
 
     @Override

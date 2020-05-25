@@ -1,7 +1,8 @@
-package com.natsuki_kining.ssr.data.dao;
+package com.natsuki_kining.ssr.data.dao.mapper;
 
 import com.natsuki_kining.ssr.beans.QueryParams;
-import com.natsuki_kining.ssr.beans.SSRDynamicSql;
+import com.natsuki_kining.ssr.data.dao.SSRDao;
+import com.natsuki_kining.ssr.data.dao.mapper.MyBatisSelectProvider;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.SelectProvider;
 

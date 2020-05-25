@@ -1,4 +1,4 @@
-package com.natsuki_kining.ssr.data.dao;
+package com.natsuki_kining.ssr.data.dao.mapper;
 
 import com.natsuki_kining.ssr.beans.QueryParams;
 
