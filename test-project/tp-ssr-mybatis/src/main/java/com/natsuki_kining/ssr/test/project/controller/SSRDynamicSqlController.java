@@ -7,6 +7,9 @@ import com.natsuki_kining.ssr.test.project.service.SSRDynamicSqlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * TODO
  *
@@ -35,6 +38,7 @@ public class SSRDynamicSqlController {
 
     @PostMapping("query")
     public Object query(@RequestBody QueryParams queryParams){
-        return query.query(queryParams);
+        List<Map> result = this.query.query(queryParams);
+        return result;
     }
 }
