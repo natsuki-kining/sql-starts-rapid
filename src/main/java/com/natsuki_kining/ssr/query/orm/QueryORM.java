@@ -3,6 +3,9 @@ package com.natsuki_kining.ssr.query.orm;
 import com.natsuki_kining.ssr.beans.QueryParams;
 import com.natsuki_kining.ssr.beans.SSRDynamicSql;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 查询数据库接口
  *
@@ -15,11 +18,10 @@ import com.natsuki_kining.ssr.beans.SSRDynamicSql;
  */
 public interface QueryORM {
 
-    /**
-     * 查询
-     * @return
-     */
-    <T> T query(SSRDynamicSql dynamicSql, QueryParams queryParams);
+
+    List<Map> selectList(SSRDynamicSql dynamicSql, QueryParams queryParams);
+
+    <E> List<E> selectList(SSRDynamicSql dynamicSql, QueryParams queryParams,Class<E> returnType);
 
     /**
      * 格式化sql

@@ -3,6 +3,9 @@ package com.natsuki_kining.ssr.data.dao;
 import com.natsuki_kining.ssr.beans.QueryParams;
 import com.natsuki_kining.ssr.data.SSRData;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * dao 接口
  *
@@ -11,6 +14,8 @@ import com.natsuki_kining.ssr.data.SSRData;
  */
 public interface SSRDao extends SSRData {
 
-    Object select(String sql, QueryParams queryParams);
+    List<Map> selectList(String sql, QueryParams queryParams);
+
+    <E> List<E> selectList(String sql, QueryParams queryParams, Class<E> returnType);
 
 }

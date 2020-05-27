@@ -9,6 +9,9 @@ import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 查询的实现类
  *
@@ -30,14 +33,14 @@ public class QueryImpl implements Query {
     private ObjectFactory<SSRProxy> proxy;
 
     @Override
-    public Object query(QueryParams queryParams) {
-        SSRDynamicSql ssrDynamicSql = data.get(queryParams.getCode());
-        return proxy.getObject().getInstance(orm).query(ssrDynamicSql, queryParams);
+    public List<Map> query(QueryParams queryParams) {
+        return query(queryParams,Map.class);
     }
 
     @Override
-    public <T> T query(QueryParams queryParams, Class<T> clazz) {
-        return (T) query(queryParams);
+    public <T> List<T> query(QueryParams queryParams, Class<T> clazz) {
+        SSRDynamicSql ssrDynamicSql = data.get(queryParams.getCode());
+        return proxy.getObject().getInstance(orm).selectList(ssrDynamicSql, queryParams,clazz);
     }
 
 

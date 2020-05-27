@@ -2,6 +2,9 @@ package com.natsuki_kining.ssr.query;
 
 import com.natsuki_kining.ssr.beans.QueryParams;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 查询接口
  *
@@ -14,9 +17,8 @@ public interface Query {
      * 查询
      * @return
      */
-    Object query(QueryParams queryParams);
+    List<Map> query(QueryParams queryParams);
 
-    <T> T query(QueryParams queryParams, Class<T> clazz);
-
+    <E> List<E> query(QueryParams queryParams, Class<E> clazz);
 
 }
