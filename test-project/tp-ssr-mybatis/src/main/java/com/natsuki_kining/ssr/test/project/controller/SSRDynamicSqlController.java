@@ -41,4 +41,11 @@ public class SSRDynamicSqlController {
         List<Map> result = this.query.query(queryParams);
         return result;
     }
+
+    @PostMapping("queryUser")
+    public Object queryUser(@RequestBody QueryParams queryParams) throws ClassNotFoundException {
+        Class<?> aClass = Class.forName("com.natsuki_kining.ssr.test.project.entity.SSRUser");
+        List<?> result = this.query.query(queryParams,aClass);
+        return result;
+    }
 }
