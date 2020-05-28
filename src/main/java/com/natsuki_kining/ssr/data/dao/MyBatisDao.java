@@ -1,5 +1,6 @@
 package com.natsuki_kining.ssr.data.dao;
 
+import com.natsuki_kining.ssr.annotation.TableFieldName;
 import com.natsuki_kining.ssr.beans.QueryParams;
 import com.natsuki_kining.ssr.beans.SSRDynamicSql;
 import com.natsuki_kining.ssr.exception.SSRException;
@@ -52,8 +53,8 @@ public class MyBatisDao implements SSRDao {
         List<SSRDynamicSql> list = select(sql, params, SSRDynamicSql.class);
         if (list != null && list.size() > 0) {
             SSRDynamicSql ssrDynamicSql = list.get(0);
-            if (StringUtils.isBlank(ssrDynamicSql.getSqlTemplate())){
-                throw new SSRException("查询的sql模板为空");
+            if (StringUtils.isBlank(ssrDynamicSql.getSqlTemplate())) {
+                throw new SSRException("根据" + code + "查询的sql模板为空，请检查code是否正确。");
             }
             return ssrDynamicSql;
         }
@@ -69,20 +70,20 @@ public class MyBatisDao implements SSRDao {
     /**
      * 查询
      *
-     * @param sql 查询sql
-     * @param params 查询参数
+     * @param sql        查询sql
+     * @param params     查询参数
      * @param resultType 返回类型
-     * @param <E> 返回类型泛型
+     * @param <E>        返回类型泛型
      * @return 查询结果集
      */
     private <E> List<E> select(String sql, Map<String, Object> params, Class<E> resultType) {
         String mapperId = sql;
         if (!configuration.hasStatement(mapperId, false)) {
             List<ResultMap> resultMaps = new ArrayList<>();
-            if (Map.class == resultType){
+            if (Map.class == resultType) {
                 resultMaps.add(new ResultMap.Builder(configuration, "id", resultType, new ArrayList<>(0)).build());
-            }else{
-                addResultMapper(resultMaps,resultType);
+            } else {
+                addResultMapper(resultMaps, resultType);
             }
             SqlSource sqlSource = languageDriver.createSqlSource(configuration, sql, Map.class);
             MappedStatement mappedStatement = new MappedStatement.Builder(configuration, mapperId, sqlSource, SqlCommandType.SELECT)
@@ -93,26 +94,32 @@ public class MyBatisDao implements SSRDao {
         return sqlSession.selectList(mapperId, params);
     }
 
-    private void addResultMapper(List<ResultMap> resultMaps,Class<?> resultType){
+    private void addResultMapper(List<ResultMap> resultMaps, Class<?> resultType) {
         Field[] fields = resultType.getDeclaredFields();
         List<ResultMapping> resultMappingList = new ArrayList<ResultMapping>(fields.length);
         ResultMapping resultMapping = null;
+        StringBuilder stringBuilder = null;
         for (Field field : fields) {
-            String column = field.getName();
+            String property = field.getName();
             Class<?> fieldType = field.getType();
-
-            char[] chars = column.toCharArray();
-            StringBuilder stringBuilder = new StringBuilder();
-            for (char aChar : chars) {
-                if (Character.isUpperCase(aChar)){
-                    stringBuilder.append("_");
-                    stringBuilder.append(aChar);
-                }else{
-                    stringBuilder.append(aChar);
+            String column = null;
+            if (field.isAnnotationPresent(TableFieldName.class)) {
+                TableFieldName tableFieldName = field.getAnnotation(TableFieldName.class);
+                column = tableFieldName.value();
+            } else {
+                char[] chars = property.toCharArray();
+                stringBuilder = new StringBuilder();
+                for (char aChar : chars) {
+                    if (Character.isUpperCase(aChar)) {
+                        stringBuilder.append("_");
+                        stringBuilder.append(aChar);
+                    } else {
+                        stringBuilder.append(aChar);
+                    }
                 }
+                column = stringBuilder.toString().toUpperCase();
             }
-            String fieldName = stringBuilder.toString().toUpperCase();
-            resultMapping = new ResultMapping.Builder(configuration, column, fieldName, fieldType).build();
+            resultMapping = new ResultMapping.Builder(configuration, property, column, fieldType).build();
             resultMappingList.add(resultMapping);
         }
         resultMaps.add(new ResultMap.Builder(configuration, "id", resultType, resultMappingList).build());

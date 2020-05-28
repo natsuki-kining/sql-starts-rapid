@@ -24,10 +24,7 @@ import java.lang.reflect.Proxy;
 public class JdkProxy implements InvocationHandler,SSRProxy {
 
     @Autowired
-    private QueryJavaIntercept intercept;
-
-    @Autowired
-    private QueryScriptIntercept script;
+    private ProxyConfig proxyConfig;
 
     //上一次的查询结果，目前只存在一个上一次的查询结果，后面如果改造成多线程再修改。
     private static Object preData;
@@ -48,31 +45,71 @@ public class JdkProxy implements InvocationHandler,SSRProxy {
         QueryParams queryParams = (QueryParams) args[1];
 
         //调用拦截器的预处理方法判断是否需要往下执行
-        boolean preHandle = intercept.preHandle(queryParams,dynamicSql);
+        boolean preHandle = preHandle(queryParams,dynamicSql);
         if (!preHandle){
             return null;
         }
 
-        boolean scriptPreHandle = script.preHandle(queryParams,dynamicSql);
-        if (!scriptPreHandle){
-            return null;
-        }
-
         //调用拦截器的查询前方法
-        intercept.queryBefore(queryParams,dynamicSql);
-        script.queryBefore(queryParams,dynamicSql);
+        queryBefore(queryParams,dynamicSql);
 
         //查询
         Object queryData = method.invoke(this.target, args);
 
         //调用拦截器的查询后方法
-        queryData = intercept.queryAfter(queryParams, dynamicSql, queryData, preData);
-        queryData = script.queryAfter(queryParams, dynamicSql, queryData, preData);
+        queryData = queryAfter(queryParams, dynamicSql, queryData, preData);
 
         //保存处理结果
         preData = queryData;
 
         return queryData;
+    }
+
+    private Object queryAfter(QueryParams queryParams, SSRDynamicSql dynamicSql, Object queryData, Object preData) {
+        QueryJavaIntercept javaMasterIntercept = proxyConfig.getJavaMasterIntercept();
+        if (javaMasterIntercept != null){
+            queryData = javaMasterIntercept.queryAfter(queryParams, dynamicSql, queryData, preData);
+        }
+        QueryJavaIntercept queryCodeIntercept = proxyConfig.getJavaIntercept(dynamicSql.getQueryCode());
+        if (queryCodeIntercept != null){
+            queryData = queryCodeIntercept.queryAfter(queryParams, dynamicSql, queryData, preData);
+        }
+        QueryScriptIntercept scriptIntercept = proxyConfig.getScriptIntercept();
+        if (scriptIntercept != null){
+            queryData = scriptIntercept.queryAfter(queryParams, dynamicSql, queryData, preData);
+        }
+        return queryData;
+    }
+
+    private void queryBefore(QueryParams queryParams, SSRDynamicSql dynamicSql) {
+        QueryJavaIntercept javaMasterIntercept = proxyConfig.getJavaMasterIntercept();
+        if (javaMasterIntercept != null){
+            javaMasterIntercept.queryBefore(queryParams, dynamicSql);
+        }
+        QueryJavaIntercept queryCodeIntercept = proxyConfig.getJavaIntercept(dynamicSql.getQueryCode());
+        if (queryCodeIntercept != null){
+            queryCodeIntercept.queryBefore(queryParams, dynamicSql);
+        }
+        QueryScriptIntercept scriptIntercept = proxyConfig.getScriptIntercept();
+        if (scriptIntercept != null){
+            scriptIntercept.queryBefore(queryParams, dynamicSql);
+        }
+    }
+
+    private boolean preHandle(QueryParams queryParams, SSRDynamicSql dynamicSql) {
+        QueryJavaIntercept javaMasterIntercept = proxyConfig.getJavaMasterIntercept();
+        if (javaMasterIntercept != null && !javaMasterIntercept.preHandle(queryParams, dynamicSql)){
+            return false;
+        }
+        QueryJavaIntercept queryCodeIntercept = proxyConfig.getJavaIntercept(dynamicSql.getQueryCode());
+        if (queryCodeIntercept != null && !queryCodeIntercept.preHandle(queryParams, dynamicSql)){
+            return false;
+        }
+        QueryScriptIntercept scriptIntercept = proxyConfig.getScriptIntercept();
+        if (scriptIntercept != null && !scriptIntercept.preHandle(queryParams, dynamicSql)){
+            return false;
+        }
+        return true;
     }
 
 }
