@@ -4,18 +4,19 @@
 <mapper namespace="com.natsuki_kining.ssr.test.project.mapper.SSRUserMapper">
 
     <resultMap id="SSRUserMapper" type="com.natsuki_kining.ssr.test.project.entity.SSRUser">
-        <result column="id" jdbcType="INTEGER" property="id" />
-        <result column="NAME" jdbcType="VARCHAR" property="name" />
-        <result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
-        <result column="CODE" jdbcType="VARCHAR" property="code" />
-        <result column="PASSWORD" jdbcType="VARCHAR" property="password" />
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="NAME" jdbcType="VARCHAR" property="name"/>
+        <result column="USER_NAME" jdbcType="VARCHAR" property="userName"/>
+        <result column="CODE" jdbcType="VARCHAR" property="code"/>
+        <result column="PASSWORD" jdbcType="VARCHAR" property="password"/>
     </resultMap>
 
     <select id="get" resultMap="SSRUserMapper">
         select * from SSR_USER where id = #{id}
     </select>
 
-    <insert id="insertUser" parameterType="com.natsuki_kining.ssr.test.project.entity.SSRUser" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertUser" parameterType="com.natsuki_kining.ssr.test.project.entity.SSRUser" useGeneratedKeys="true"
+            keyProperty="id">
         insert into SSR_USER (NAME,USER_NAME,CODE,PASSWORD)
                          values
                          (#{name},#{userName},#{code},#{password})

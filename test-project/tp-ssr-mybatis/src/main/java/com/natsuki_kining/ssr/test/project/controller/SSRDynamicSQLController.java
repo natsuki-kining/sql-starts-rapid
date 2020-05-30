@@ -1,9 +1,9 @@
 package com.natsuki_kining.ssr.test.project.controller;
 
 import com.natsuki_kining.ssr.beans.QueryParams;
-import com.natsuki_kining.ssr.beans.SSRDynamicSql;
+import com.natsuki_kining.ssr.beans.SSRDynamicSQL;
 import com.natsuki_kining.ssr.query.Query;
-import com.natsuki_kining.ssr.test.project.service.SSRDynamicSqlService;
+import com.natsuki_kining.ssr.test.project.service.SSRDynamicSQLService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,26 +18,26 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("dynamicSql")
-public class SSRDynamicSqlController {
+public class SSRDynamicSQLController {
 
     @Autowired
-    private SSRDynamicSqlService dynamicSqlService;
+    private SSRDynamicSQLService dynamicSqlService;
 
     @Autowired
     private Query query;
 
     @GetMapping("get/{id}")
-    public SSRDynamicSql get(@PathVariable("id") String id){
+    public SSRDynamicSQL get(@PathVariable("id") String id) {
         return dynamicSqlService.get(id);
     }
 
     @PostMapping("insert")
-    public Integer insert(@RequestBody SSRDynamicSql dynamicSql){
-        return dynamicSqlService.insertUser(dynamicSql);
+    public Integer insert(@RequestBody SSRDynamicSQL dynamicSql) {
+        return dynamicSqlService.insertSSRDynamicSQL(dynamicSql);
     }
 
     @PostMapping("query")
-    public Object query(@RequestBody QueryParams queryParams){
+    public Object query(@RequestBody QueryParams queryParams) {
         List<Map> result = this.query.query(queryParams);
         return result;
     }
@@ -45,7 +45,7 @@ public class SSRDynamicSqlController {
     @PostMapping("queryUser")
     public Object queryUser(@RequestBody QueryParams queryParams) throws ClassNotFoundException {
         Class<?> aClass = Class.forName("com.natsuki_kining.ssr.test.project.entity.SSRUser");
-        List<?> result = this.query.query(queryParams,aClass);
+        List<?> result = this.query.query(queryParams, aClass);
         return result;
     }
 }

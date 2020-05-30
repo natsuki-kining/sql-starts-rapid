@@ -1,7 +1,7 @@
 package com.natsuki_kining.ssr.test.project.service;
 
-import com.natsuki_kining.ssr.beans.SSRDynamicSql;
-import com.natsuki_kining.ssr.test.project.mapper.SSRDynamicSqlMapper;
+import com.natsuki_kining.ssr.beans.SSRDynamicSQL;
+import com.natsuki_kining.ssr.test.project.mapper.SSRDynamicSQLMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,17 +14,17 @@ import java.util.UUID;
  * @Date : 2020/5/24 10:21
  */
 @Service
-public class SSRDynamicSqlService {
+public class SSRDynamicSQLService {
 
     @Autowired
-    private SSRDynamicSqlMapper ssrDynamicSqlMapper;
-    
-    public int insertUser(SSRDynamicSql dynamicSql){
+    private SSRDynamicSQLMapper ssrDynamicSqlMapper;
+
+    public int insertSSRDynamicSQL(SSRDynamicSQL dynamicSql) {
         dynamicSql.setId(UUID.randomUUID().toString());
-        return ssrDynamicSqlMapper.insertUser(dynamicSql);
+        return ssrDynamicSqlMapper.insertSSRDynamicSQL(dynamicSql);
     }
-    
-    public SSRDynamicSql get(String id){
+
+    public SSRDynamicSQL get(String id) {
         return ssrDynamicSqlMapper.get(id);
     }
 

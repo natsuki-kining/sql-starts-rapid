@@ -1,34 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.natsuki_kining.ssr.test.project.mapper.SSRDynamicSqlMapper">
+<mapper namespace="com.natsuki_kining.ssr.test.project.mapper.SSRDynamicSQLMapper">
 
     <resultMap id="SSRDynamicSqlMapper" type="com.natsuki_kining.ssr.beans.SSRDynamicSQL">
-        <result column="ID" jdbcType="VARCHAR" property="id" />
-        <result column="QUERY_CODE" jdbcType="VARCHAR" property="queryCode" />
-        <result column="QUERY_NAME" jdbcType="VARCHAR" property="queryName" />
-        <result column="QUERY_TYPE" jdbcType="VARCHAR" property="queryType" />
-        <result column="SQL_TEMPLATE" jdbcType="VARCHAR" property="sqlTemplate" />
-        <result column="PRE_SCRIPT" jdbcType="VARCHAR" property="preScript" />
-        <result column="BEFORE_SCRIPT" jdbcType="VARCHAR" property="beforeScript" />
-        <result column="AFTER_SCRIPT" jdbcType="VARCHAR" property="afterScript" />
-        <result column="VERSION" jdbcType="INTEGER" property="version" />
-        <result column="DEL_FLAG" jdbcType="INTEGER" property="delFlag" />
-        <result column="ORDER_NUM" jdbcType="INTEGER" property="orderNum" />
-        <result column="CREATE_NAME" jdbcType="VARCHAR" property="createName" />
-        <result column="CREATE_Id" jdbcType="VARCHAR" property="createId" />
-        <result column="CREATE_TIME" jdbcType="DATE" property="createTime" />
-        <result column="UPDATE_NAME" jdbcType="VARCHAR" property="updateName" />
-        <result column="UPDATE_Id" jdbcType="VARCHAR" property="updateId" />
-        <result column="UPDATE_TIME" jdbcType="DATE" property="updateTime" />
-        <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+        <result column="ID" jdbcType="VARCHAR" property="id"/>
+        <result column="QUERY_CODE" jdbcType="VARCHAR" property="queryCode"/>
+        <result column="QUERY_NAME" jdbcType="VARCHAR" property="queryName"/>
+        <result column="QUERY_TYPE" jdbcType="VARCHAR" property="queryType"/>
+        <result column="SQL_TEMPLATE" jdbcType="VARCHAR" property="sqlTemplate"/>
+        <result column="PRE_SCRIPT" jdbcType="VARCHAR" property="preScript"/>
+        <result column="BEFORE_SCRIPT" jdbcType="VARCHAR" property="beforeScript"/>
+        <result column="AFTER_SCRIPT" jdbcType="VARCHAR" property="afterScript"/>
+        <result column="VERSION" jdbcType="INTEGER" property="version"/>
+        <result column="DEL_FLAG" jdbcType="INTEGER" property="delFlag"/>
+        <result column="ORDER_NUM" jdbcType="INTEGER" property="orderNum"/>
+        <result column="CREATE_NAME" jdbcType="VARCHAR" property="createName"/>
+        <result column="CREATE_Id" jdbcType="VARCHAR" property="createId"/>
+        <result column="CREATE_TIME" jdbcType="DATE" property="createTime"/>
+        <result column="UPDATE_NAME" jdbcType="VARCHAR" property="updateName"/>
+        <result column="UPDATE_Id" jdbcType="VARCHAR" property="updateId"/>
+        <result column="UPDATE_TIME" jdbcType="DATE" property="updateTime"/>
+        <result column="REMARK" jdbcType="VARCHAR" property="remark"/>
     </resultMap>
 
     <select id="get" resultMap="SSRDynamicSqlMapper">
         select * from SSR_DYNAMIC_SQL where id = #{id}
     </select>
 
-    <insert id="insertUser" parameterType="com.natsuki_kining.ssr.beans.SSRDynamicSQL" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertUser" parameterType="com.natsuki_kining.ssr.beans.SSRDynamicSQL" useGeneratedKeys="true"
+            keyProperty="id">
         insert into `SSR_DYNAMIC_SQL`(`ID`,`QUERY_CODE`,`QUERY_NAME`,`QUERY_TYPE`,
                                     `SQL_TEMPLATE`,`PRE_SCRIPT`,`BEFORE_SCRIPT`,
                                     `AFTER_SCRIPT`,`VERSION`,`DEL_FLAG`,`ORDER_NUM`,
@@ -40,8 +41,6 @@
                 #{createName},#{createId},#{createTime},
                 #{updateName},#{updateId},#{updateTime},#{remark})
     </insert>
-
-
 
 
 </mapper>

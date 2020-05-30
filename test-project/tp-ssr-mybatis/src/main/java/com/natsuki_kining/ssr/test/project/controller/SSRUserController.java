@@ -1,6 +1,5 @@
 package com.natsuki_kining.ssr.test.project.controller;
 
-import com.natsuki_kining.ssr.beans.QueryParams;
 import com.natsuki_kining.ssr.query.Query;
 import com.natsuki_kining.ssr.test.project.entity.SSRUser;
 import com.natsuki_kining.ssr.test.project.service.SSRUserService;
@@ -24,12 +23,12 @@ public class SSRUserController {
     private Query query;
 
     @GetMapping("get/{id}")
-    public SSRUser get(@PathVariable("id") Integer id){
+    public SSRUser get(@PathVariable("id") Integer id) {
         return userService.get(id);
     }
 
     @PostMapping("insert")
-    public Integer insert(@RequestBody SSRUser user){
+    public Integer insert(@RequestBody SSRUser user) {
         return userService.insertUser(user);
     }
 

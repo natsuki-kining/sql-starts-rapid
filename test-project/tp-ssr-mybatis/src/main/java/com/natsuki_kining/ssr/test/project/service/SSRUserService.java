@@ -17,11 +17,11 @@ public class SSRUserService {
     @Autowired
     private SSRUserMapper userMapper;
 
-    public SSRUser get(Integer id){
+    public SSRUser get(Integer id) {
         return userMapper.get(id);
     }
 
-    public Integer insertUser(SSRUser user){
+    public Integer insertUser(SSRUser user) {
         return userMapper.insertUser(user);
     }
 }
