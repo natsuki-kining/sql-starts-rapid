@@ -1,10 +1,8 @@
 package com.natsuki_kining.ssr.query;
 
 import com.natsuki_kining.ssr.beans.QueryParams;
-import com.natsuki_kining.ssr.beans.SSRDynamicSql;
-import com.natsuki_kining.ssr.data.SSRData;
+import com.natsuki_kining.ssr.data.dao.QueryORM;
 import com.natsuki_kining.ssr.proxy.SSRProxy;
-import com.natsuki_kining.ssr.query.orm.QueryORM;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,10 +25,9 @@ public class QueryImpl implements Query {
     private QueryORM orm;
 
     @Autowired
-    private SSRData data;
-
-    @Autowired
     private ObjectFactory<SSRProxy> proxy;
+
+    private String proxySQL = "proxySQL";
 
     @Override
     public List<Map> query(QueryParams queryParams) {
@@ -39,8 +36,7 @@ public class QueryImpl implements Query {
 
     @Override
     public <T> List<T> query(QueryParams queryParams, Class<T> clazz) {
-        SSRDynamicSql ssrDynamicSql = data.get(queryParams.getCode());
-        return proxy.getObject().getInstance(orm).selectList(ssrDynamicSql, queryParams,clazz);
+        return proxy.getObject().getInstance(orm).selectList(proxySQL,queryParams,clazz);
     }
 
 

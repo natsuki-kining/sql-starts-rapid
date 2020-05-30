@@ -1,6 +1,6 @@
 package com.natsuki_kining.ssr.data.cache;
 
-import com.natsuki_kining.ssr.beans.SSRDynamicSql;
+import com.natsuki_kining.ssr.beans.SSRDynamicSQL;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Primary;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 public class MemCache implements SSRCache {
 
     @Override
-    public SSRDynamicSql get(String code) {
+    public SSRDynamicSQL getSSRDynamicSQL(String code) {
         return null;
     }
 

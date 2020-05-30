@@ -16,13 +16,13 @@ import java.io.StringWriter;
  * @Date 2020/4/16 20:02
  **/
 @Component
-public class FreemarkerTemplate implements SSRTemplate {
+public class FreemarkerTemplate implements SQLTemplate {
 
     @Override
-    public String formatSql(String templateSql, QueryParams queryParams) {
+    public String formatSQL(String templateSql, QueryParams queryParams) {
         try (StringWriter stringWriter = new StringWriter();) {
             String templateName = "query-sql-freemarker";
-            Configuration configuration = new Configuration();
+            Configuration configuration = new Configuration(Configuration.VERSION_2_3_30);
             StringTemplateLoader templateLoader = new StringTemplateLoader();
             configuration.setTemplateLoader(templateLoader);
             configuration.setDefaultEncoding("UTF-8");
@@ -32,7 +32,7 @@ public class FreemarkerTemplate implements SSRTemplate {
             String querySql = stringWriter.toString();
             return querySql;
         } catch (Exception e) {
-            throw new SSRException("freemarker 处理sql模板失败。", e);
+            throw new SSRException("freemarker 处理sql模板失败："+e.getMessage(), e);
         }
     }
 }

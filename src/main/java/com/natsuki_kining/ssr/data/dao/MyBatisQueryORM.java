@@ -2,9 +2,10 @@ package com.natsuki_kining.ssr.data.dao;
 
 import com.natsuki_kining.ssr.annotation.TableFieldName;
 import com.natsuki_kining.ssr.beans.QueryParams;
-import com.natsuki_kining.ssr.beans.SSRDynamicSql;
+import com.natsuki_kining.ssr.beans.SSRDynamicSQL;
+import com.natsuki_kining.ssr.data.AbstractSSRData;
 import com.natsuki_kining.ssr.exception.SSRException;
-import org.apache.commons.lang3.StringUtils;
+import com.natsuki_kining.ssr.utils.Assert;
 import org.apache.ibatis.mapping.*;
 import org.apache.ibatis.scripting.LanguageDriver;
 import org.apache.ibatis.session.Configuration;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +27,7 @@ import java.util.Map;
  **/
 @Component
 @ConditionalOnProperty(prefix = "ssr", name = "orm.type", havingValue = "mybatis")
-public class MyBatisDao implements SSRDao {
+public class MyBatisQueryORM extends AbstractSSRData implements QueryORM {
 
     @Autowired
     private SqlSession sqlSession;
@@ -36,29 +36,19 @@ public class MyBatisDao implements SSRDao {
     private LanguageDriver languageDriver;
 
     @Override
-    public List<Map> selectList(String sql, QueryParams queryParams) {
-        return select(sql, queryParams.getParams(), Map.class);
-    }
-
-    @Override
     public <E> List<E> selectList(String sql, QueryParams queryParams, Class<E> returnType) {
         return select(sql, queryParams.getParams(), returnType);
     }
 
     @Override
-    public SSRDynamicSql get(String code) {
-        String sql = "SELECT * FROM SSR_DYNAMIC_SQL SDS WHERE SDS.QUERY_CODE = #{code}";
-        Map<String, Object> params = new HashMap<>();
-        params.put("code", code);
-        List<SSRDynamicSql> list = select(sql, params, SSRDynamicSql.class);
+    public SSRDynamicSQL getSSRDynamicSQL(String code) {
+        List<SSRDynamicSQL> list = select(querySSRDynamicSQL, getQuerySSRDynamicSQLParams(code), SSRDynamicSQL.class);
         if (list != null && list.size() > 0) {
-            SSRDynamicSql ssrDynamicSql = list.get(0);
-            if (StringUtils.isBlank(ssrDynamicSql.getSqlTemplate())) {
-                throw new SSRException("根据" + code + "查询的sql模板为空，请检查code是否正确。");
-            }
+            SSRDynamicSQL ssrDynamicSql = list.get(0);
+            Assert.isBlank(ssrDynamicSql.getSqlTemplate(),"根据" + code + "查询的sql模板为空，请检查code是否正确。");
             return ssrDynamicSql;
         }
-        return null;
+        throw new SSRException("根据" + code + "查询的SSRDynamicSQL结果为空，请检查code是否正确。");
     }
 
     @PostConstruct
@@ -97,8 +87,8 @@ public class MyBatisDao implements SSRDao {
     private void addResultMapper(List<ResultMap> resultMaps, Class<?> resultType) {
         Field[] fields = resultType.getDeclaredFields();
         List<ResultMapping> resultMappingList = new ArrayList<ResultMapping>(fields.length);
-        ResultMapping resultMapping = null;
-        StringBuilder stringBuilder = null;
+        ResultMapping resultMapping;
+        StringBuilder stringBuilder;
         for (Field field : fields) {
             String property = field.getName();
             Class<?> fieldType = field.getType();

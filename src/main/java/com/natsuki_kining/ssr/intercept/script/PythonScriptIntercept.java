@@ -44,7 +44,7 @@ public class PythonScriptIntercept extends QueryScriptIntercept {
         } else if (obj instanceof PyString) {
             PyString pyString = (PyString) obj;
             value = pyString.getString();
-        } else if(obj instanceof PyInstance){
+        } else if (obj instanceof PyInstance) {
             PyInstance pyInstance = (PyInstance) obj;
             PyObject pyObject = pyInstance.__dict__;
             objJSONString = pyObject.toString();
@@ -53,7 +53,7 @@ public class PythonScriptIntercept extends QueryScriptIntercept {
             value = fieldAccess.get(obj, "attributes");
         }
 
-        if (objJSONString != null){
+        if (objJSONString != null) {
             return JSON.parseObject(objJSONString, clazz);
         }
 

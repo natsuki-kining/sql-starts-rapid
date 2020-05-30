@@ -1,6 +1,6 @@
 package com.natsuki_kining.ssr.data;
 
-import com.natsuki_kining.ssr.beans.SSRDynamicSql;
+import com.natsuki_kining.ssr.beans.SSRDynamicSQL;
 
 /**
  * 数据接口
@@ -10,6 +10,6 @@ import com.natsuki_kining.ssr.beans.SSRDynamicSql;
  */
 public interface SSRData {
 
-    SSRDynamicSql get(String code);
+    SSRDynamicSQL getSSRDynamicSQL(String code);
 
 }

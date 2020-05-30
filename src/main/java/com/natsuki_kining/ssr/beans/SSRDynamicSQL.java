@@ -12,7 +12,7 @@ import java.util.Date;
  * @Version 1.0.0
  **/
 @Data
-public class SSRDynamicSql {
+public class SSRDynamicSQL {
 
     /**
      * 主键

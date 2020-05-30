@@ -2,7 +2,7 @@ package com.natsuki_kining.ssr.intercept;
 
 import com.alibaba.fastjson.JSON;
 import com.natsuki_kining.ssr.beans.QueryParams;
-import com.natsuki_kining.ssr.beans.SSRDynamicSql;
+import com.natsuki_kining.ssr.beans.SSRDynamicSQL;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
@@ -20,7 +20,7 @@ public abstract class QueryScriptIntercept implements QueryIntercept {
     protected String resultName = "ssrResult";
 
     @Override
-    public boolean preHandle(QueryParams queryParams, SSRDynamicSql dynamicSql) {
+    public boolean preHandle(QueryParams queryParams, SSRDynamicSQL dynamicSql, Map<String, Object> preData) {
         String preScript = dynamicSql.getPreScript();
         if (StringUtils.isBlank(preScript)) {
             return true;
@@ -29,7 +29,7 @@ public abstract class QueryScriptIntercept implements QueryIntercept {
     }
 
     @Override
-    public void queryBefore(QueryParams queryParams, SSRDynamicSql dynamicSql) {
+    public void queryBefore(QueryParams queryParams, SSRDynamicSQL dynamicSql, Map<String, Object> preData) {
         String beforeScript = dynamicSql.getPreScript();
         if (StringUtils.isNotBlank(beforeScript)) {
             executeScript(beforeScript, queryParams);
@@ -37,7 +37,7 @@ public abstract class QueryScriptIntercept implements QueryIntercept {
     }
 
     @Override
-    public Object queryAfter(QueryParams queryParams, SSRDynamicSql dynamicSql, Object queryData, Object preData) {
+    public Object queryAfter(QueryParams queryParams, SSRDynamicSQL dynamicSql, Map<String, Object> preData, Object queryData) {
         String beforeScript = dynamicSql.getPreScript();
         if (StringUtils.isBlank(beforeScript)) {
             return queryData;
@@ -51,9 +51,10 @@ public abstract class QueryScriptIntercept implements QueryIntercept {
 
     /**
      * 类型转换
-     * @param obj 需要转换的对象
+     *
+     * @param obj   需要转换的对象
      * @param clazz 要转换成的类型
-     * @param <T> 泛型
+     * @param <T>   泛型
      * @return 转换后的值
      */
     public <T> T convert(Object obj, Class<T> clazz) {
@@ -83,6 +84,7 @@ public abstract class QueryScriptIntercept implements QueryIntercept {
 
     /**
      * 判断是否是数值类型
+     *
      * @param clazz
      * @return
      */
@@ -97,6 +99,7 @@ public abstract class QueryScriptIntercept implements QueryIntercept {
 
     /**
      * 判断是否是布尔类型，字符类型，字符串类型
+     *
      * @param clazz
      * @return
      */
@@ -108,6 +111,7 @@ public abstract class QueryScriptIntercept implements QueryIntercept {
 
     /**
      * 判断是否是对象类型
+     *
      * @param clazz
      * @param object
      * @return
@@ -118,6 +122,7 @@ public abstract class QueryScriptIntercept implements QueryIntercept {
 
     /**
      * 判断是否是基础类型等
+     *
      * @param clazz
      * @param object
      * @return

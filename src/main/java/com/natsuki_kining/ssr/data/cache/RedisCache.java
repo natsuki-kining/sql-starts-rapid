@@ -1,6 +1,6 @@
 package com.natsuki_kining.ssr.data.cache;
 
-import com.natsuki_kining.ssr.beans.SSRDynamicSql;
+import com.natsuki_kining.ssr.beans.SSRDynamicSQL;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +25,8 @@ public class RedisCache implements SSRCache {
     private RedisTemplate<String, Object> redisTemplate;
 
     @Override
-    public SSRDynamicSql get(String code) {
-        return StringUtils.isBlank(code) ? null : (SSRDynamicSql) redisTemplate.opsForValue().get(code);
+    public SSRDynamicSQL getSSRDynamicSQL(String code) {
+        return StringUtils.isBlank(code) ? null : (SSRDynamicSQL) redisTemplate.opsForValue().get(code);
     }
 
 }

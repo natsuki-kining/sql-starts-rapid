@@ -3,7 +3,7 @@
 
 <mapper namespace="com.natsuki_kining.ssr.test.project.mapper.SSRDynamicSqlMapper">
 
-    <resultMap id="SSRDynamicSqlMapper" type="com.natsuki_kining.ssr.beans.SSRDynamicSql">
+    <resultMap id="SSRDynamicSqlMapper" type="com.natsuki_kining.ssr.beans.SSRDynamicSQL">
         <result column="ID" jdbcType="VARCHAR" property="id" />
         <result column="QUERY_CODE" jdbcType="VARCHAR" property="queryCode" />
         <result column="QUERY_NAME" jdbcType="VARCHAR" property="queryName" />
@@ -28,7 +28,7 @@
         select * from SSR_DYNAMIC_SQL where id = #{id}
     </select>
 
-    <insert id="insertUser" parameterType="com.natsuki_kining.ssr.beans.SSRDynamicSql" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertUser" parameterType="com.natsuki_kining.ssr.beans.SSRDynamicSQL" useGeneratedKeys="true" keyProperty="id">
         insert into `SSR_DYNAMIC_SQL`(`ID`,`QUERY_CODE`,`QUERY_NAME`,`QUERY_TYPE`,
                                     `SQL_TEMPLATE`,`PRE_SCRIPT`,`BEFORE_SCRIPT`,
                                     `AFTER_SCRIPT`,`VERSION`,`DEL_FLAG`,`ORDER_NUM`,

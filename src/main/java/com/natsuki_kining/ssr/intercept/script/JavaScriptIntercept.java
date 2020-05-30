@@ -21,7 +21,7 @@ import javax.script.ScriptException;
 public class JavaScriptIntercept extends QueryScriptIntercept {
 
     @Override
-    public Object executeScript(String script,Object ssrParams) {
+    public Object executeScript(String script, Object ssrParams) {
         ScriptEngineManager manager = new ScriptEngineManager();
         ScriptEngine engine = manager.getEngineByName("javascript");
         engine.put(paramsName, ssrParams);
@@ -32,18 +32,9 @@ public class JavaScriptIntercept extends QueryScriptIntercept {
             result = engine.get(resultName);
         } catch (ScriptException e) {
             e.printStackTrace();
-            throw new SSRException(e.getMessage(),e);
+            throw new SSRException(e.getMessage(), e);
         }
         return result;
     }
 
-//    @Override
-//    public <T> T convert(Object obj, Class<T> clazz) {
-//        if (obj instanceof ScriptObjectMirror){
-//            T o = (T)((ScriptObjectMirror) obj).wrapAsJSONCompatible(obj, clazz);
-//            System.out.println(o);
-//            return o;
-//        }
-//        return super.convert(obj,clazz);
-//    }
 }
