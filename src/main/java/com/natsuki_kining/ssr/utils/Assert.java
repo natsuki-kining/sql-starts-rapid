@@ -3,6 +3,7 @@ package com.natsuki_kining.ssr.utils;
 /**
  * 断言工具类
  *
+ * @author natsuki_kining
  */
 public class Assert {
 

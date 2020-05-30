@@ -10,6 +10,12 @@ import com.natsuki_kining.ssr.beans.SSRDynamicSQL;
  */
 public interface SSRData {
 
+    /**
+     * 查询SSR_DYNAMIC_SQL表，并返回SSRDynamicSQL
+     *
+     * @param code 查询的code
+     * @return SSRDynamicSQL对象
+     */
     SSRDynamicSQL getSSRDynamicSQL(String code);
 
 }

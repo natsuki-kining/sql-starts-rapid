@@ -14,7 +14,7 @@ import java.util.Map;
 @Data
 public class QueryParams {
 
-    private String code;
+    private String queryCode;
     private Map<String, Object> params;
     private Map<String, String> sort;
     private List<Map<String, String>> sorts;
@@ -25,14 +25,14 @@ public class QueryParams {
     private transient int initialCapacity = 0;
 
     public int getPageNo() {
-        if(pageNo<1){
+        if (pageNo < 1) {
             pageNo = 1;
         }
         return pageNo;
     }
 
     public int getPageSize() {
-        if(pageSize<1){
+        if (pageSize < 1) {
             pageSize = 10;
         }
         return pageSize;

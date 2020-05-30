@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Slf4j
-public class SQLImpl implements SQL{
+public class SQLImpl implements SQL {
 
     @Autowired
     private SQLGenerator sqlGenerator;
@@ -29,13 +29,13 @@ public class SQLImpl implements SQL{
     @Override
     public String getQuerySQL(QueryRule queryRule, QueryParams queryParams) {
         StringBuilder stringBuilder;
-        if (QueryCodeType.GENERATE_QUERY == queryRule.getQueryCodeType()){
+        if (QueryCodeType.GENERATE_QUERY == queryRule.getQueryCodeType()) {
             stringBuilder = new StringBuilder(sqlGenerator.generate(queryParams));
-        }else if (QueryCodeType.SINGLE_QUERY == queryRule.getQueryCodeType()){
+        } else if (QueryCodeType.SINGLE_QUERY == queryRule.getQueryCodeType()) {
             String sql = ssrTemplate.formatSQL(queryRule.getDynamicSql().getSqlTemplate(), queryParams);
             stringBuilder = new StringBuilder(sql);
-        }else{
-            throw new SSRException("没有找到对应的queryRule："+queryRule);
+        } else {
+            throw new SSRException("没有找到对应的queryRule：" + queryRule);
         }
         //处理分页
         //处理排序

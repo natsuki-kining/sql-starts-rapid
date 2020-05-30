@@ -2,8 +2,8 @@ package com.natsuki_kining.ssr.proxy;
 
 import com.natsuki_kining.ssr.annotation.QueryCode;
 import com.natsuki_kining.ssr.enums.ORMType;
-import com.natsuki_kining.ssr.intercept.QueryJavaIntercept;
-import com.natsuki_kining.ssr.intercept.QueryScriptIntercept;
+import com.natsuki_kining.ssr.intercept.AbstractQueryJavaIntercept;
+import com.natsuki_kining.ssr.intercept.AbstractQueryScriptIntercept;
 import com.natsuki_kining.ssr.rule.Rule;
 import com.natsuki_kining.ssr.sql.SQL;
 import lombok.extern.slf4j.Slf4j;
@@ -25,39 +25,41 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 class ProxyConfig {
 
-    private Map<String, QueryJavaIntercept> queryJavaInterceptMap = new ConcurrentHashMap<>();
+    private Map<String, AbstractQueryJavaIntercept> queryJavaInterceptMap = new ConcurrentHashMap<>();
 
-    private QueryJavaIntercept javaMasterIntercept = null;
+    private AbstractQueryJavaIntercept javaMasterIntercept = null;
 
-    QueryScriptIntercept getScriptIntercept(){
+    AbstractQueryScriptIntercept getScriptIntercept() {
         return scriptIntercept;
     }
 
-    QueryJavaIntercept getJavaMasterIntercept(){
+    AbstractQueryJavaIntercept getJavaMasterIntercept() {
         return javaMasterIntercept;
     }
 
-    QueryJavaIntercept getJavaIntercept(String code){
+    AbstractQueryJavaIntercept getJavaIntercept(String code) {
         return queryJavaInterceptMap.get(code);
     }
 
-    SQL getSQL(){
+    SQL getSQL() {
         return this.sql;
     }
 
-    Rule getRule(){
+    Rule getRule() {
         return this.rule;
     }
+
     /**
      * 获取orm类型
-     * @return
+     *
+     * @return ORMType
      */
-    ORMType getORMType(){
-        if (ORMType.HIBERNATE.getType().equals(ormType)){
+    ORMType getORMType() {
+        if (ORMType.HIBERNATE.getType().equals(ormType)) {
             return ORMType.HIBERNATE;
-        }else if (ORMType.MYBATIS.getType().equals(ormType)){
+        } else if (ORMType.MYBATIS.getType().equals(ormType)) {
             return ORMType.MYBATIS;
-        }else{
+        } else {
             return ORMType.USER_DEFINED;
         }
     }
@@ -72,22 +74,22 @@ class ProxyConfig {
     private Rule rule;
 
     @Autowired(required = false)
-    private QueryScriptIntercept scriptIntercept;
+    private AbstractQueryScriptIntercept scriptIntercept;
 
     @Autowired(required = false)
-    private List<QueryJavaIntercept> queryJavaIntercepts;
+    private List<AbstractQueryJavaIntercept> queryJavaIntercepts;
 
     @PostConstruct
-    private void init(){
-        if (queryJavaIntercepts != null && queryJavaIntercepts.size() >0){
-            for (QueryJavaIntercept queryJavaIntercept : queryJavaIntercepts) {
-                if (queryJavaIntercept.getClass().isAnnotationPresent(QueryCode.class)){
+    private void init() {
+        if (queryJavaIntercepts != null && queryJavaIntercepts.size() > 0) {
+            for (AbstractQueryJavaIntercept queryJavaIntercept : queryJavaIntercepts) {
+                if (queryJavaIntercept.getClass().isAnnotationPresent(QueryCode.class)) {
                     QueryCode annotation = queryJavaIntercept.getClass().getAnnotation(QueryCode.class);
-                    queryJavaInterceptMap.put(annotation.value(),queryJavaIntercept);
-                }else{
-                    if (javaMasterIntercept == null){
+                    queryJavaInterceptMap.put(annotation.value(), queryJavaIntercept);
+                } else {
+                    if (javaMasterIntercept == null) {
                         javaMasterIntercept = queryJavaIntercept;
-                    }else{
+                    } else {
                         log.warn("已经存在一个master的java拦截器");
                     }
                 }

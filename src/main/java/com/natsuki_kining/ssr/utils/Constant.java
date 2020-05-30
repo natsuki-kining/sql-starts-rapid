@@ -8,7 +8,7 @@ package com.natsuki_kining.ssr.utils;
  */
 public class Constant {
 
-    public interface QueryCodeType{
+    public interface QueryCodeType {
         String GENERATE = "generate";
         String SINGLE = "single";
     }

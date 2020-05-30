@@ -12,6 +12,7 @@ public interface Rule {
 
     /**
      * 解析code生成查询规则
+     *
      * @param queryCode
      * @return
      */

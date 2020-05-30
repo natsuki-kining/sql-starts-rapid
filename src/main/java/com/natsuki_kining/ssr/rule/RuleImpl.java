@@ -23,65 +23,48 @@ import java.util.regex.Pattern;
 @Component
 public class RuleImpl implements Rule {
 
-    /**
-     *     private String queryCode;
-     *
-     *     private SSRDynamicSQL dynamicSql;
-     *
-     *     private QueryCodeType queryCodeType;
-     *
-     *     private Map<String,QueryRule> queryCodeMap;
-     *
-     */
-
     @Autowired
     private QueryORM orm;
 
     @Override
     public QueryRule analysis(String queryCode) {
-        if (queryCode.contains(",")){
-            Map<String,QueryRule> queryCodeMap = new HashMap<>();
-            String regular  = "([^,]+)";
+        String eachQueryFlag = ",";
+        if (queryCode.contains(eachQueryFlag)) {
+            String regular = "([^,]+)";
             Pattern pattern = Pattern.compile(regular);
             Matcher matcher = pattern.matcher(queryCode);
-            while (matcher.find()){
+            Map<String, QueryRule> queryCodeMap = new HashMap<>(6);
+            while (matcher.find()) {
                 String code = matcher.group();
                 QueryRule queryRule = getQueryRule(code);
-                queryCodeMap.put(queryRule.getQueryCode(),queryRule);
+                queryCodeMap.put(queryRule.getQueryCode(), queryRule);
             }
-            return new QueryRule(queryCode,null,QueryCodeType.EACH_QUERY,queryCodeMap);
-        }else{
+            return new QueryRule(queryCode, null, QueryCodeType.EACH_QUERY, queryCodeMap);
+        } else {
             return getQueryRule(queryCode);
         }
     }
 
-    private QueryRule getQueryRule(String queryCode){
+    private QueryRule getQueryRule(String queryCode) {
         QueryCodeType queryCodeType = null;
         int index = queryCode.indexOf(":");
-        if (index == -1){
+        if (index == -1) {
             queryCodeType = QueryCodeType.SINGLE_QUERY;
             SSRDynamicSQL dynamicSql = orm.getSSRDynamicSQL(queryCode);
-            return new QueryRule(queryCode,dynamicSql,queryCodeType,null);
-        }else{
-            String substring = queryCode.substring(index+1);
-            if (Constant.QueryCodeType.GENERATE.equals(substring)){
+            return new QueryRule(queryCode, dynamicSql, queryCodeType, null);
+        } else {
+            String substring = queryCode.substring(index + 1);
+            if (Constant.QueryCodeType.GENERATE.equals(substring)) {
                 queryCodeType = QueryCodeType.GENERATE_QUERY;
-            }else if (Constant.QueryCodeType.SINGLE.equals(substring)){
+            } else if (Constant.QueryCodeType.SINGLE.equals(substring)) {
                 queryCodeType = QueryCodeType.SINGLE_QUERY;
-            }else{
-                throw new SSRException(queryCode+"没有指定的查询类型："+substring);
+            } else {
+                throw new SSRException(queryCode + "没有指定的查询类型：" + substring);
             }
-            queryCode = queryCode.substring(0,index);
+            queryCode = queryCode.substring(0, index);
         }
         SSRDynamicSQL dynamicSql = orm.getSSRDynamicSQL(queryCode);
-        return new QueryRule(queryCode,dynamicSql,queryCodeType,null);
-    }
-
-    public static void main(String[] args) {
-        String a = "com.xxx.entity.UserRole";
-        int index = a.indexOf(":");
-        System.out.println(a.substring(index+1));
-        System.out.println(a.substring(0,index));
+        return new QueryRule(queryCode, dynamicSql, queryCodeType, null);
     }
 
 }

@@ -2,7 +2,7 @@ package com.natsuki_kining.ssr.intercept.script;
 
 import com.alibaba.fastjson.JSON;
 import com.esotericsoftware.reflectasm.FieldAccess;
-import com.natsuki_kining.ssr.intercept.QueryScriptIntercept;
+import com.natsuki_kining.ssr.intercept.AbstractQueryScriptIntercept;
 import org.python.core.*;
 import org.python.util.PythonInterpreter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
  */
 @ConditionalOnProperty(prefix = "ssr", name = "script.type", havingValue = "pythonScript")
 @Component
-public class PythonScriptIntercept extends QueryScriptIntercept {
+public class PythonScriptIntercept extends AbstractQueryScriptIntercept {
 
     @Override
     public Object executeScript(String script, Object ssrParams) {

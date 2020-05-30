@@ -19,15 +19,14 @@ public enum ORMType {
     /**
      * 用户自定义ORM查询实现
      */
-    USER_DEFINED("user-defined")
-    ;
+    USER_DEFINED("user-defined");
     private String type;
 
-    ORMType(String type){
+    ORMType(String type) {
         this.type = type;
     }
 
-    public String getType(){
+    public String getType() {
         return this.type;
     }
 

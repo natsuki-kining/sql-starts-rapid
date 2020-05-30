@@ -12,7 +12,7 @@ import java.util.Map;
 
 /**
  * 查询的实现类
- *
+ * <p>
  * 使用代理调用拦截器里的方法
  *
  * @Author natsuki_kining
@@ -31,12 +31,12 @@ public class QueryImpl implements Query {
 
     @Override
     public List<Map> query(QueryParams queryParams) {
-        return query(queryParams,Map.class);
+        return query(queryParams, Map.class);
     }
 
     @Override
     public <T> List<T> query(QueryParams queryParams, Class<T> clazz) {
-        return proxy.getObject().getInstance(orm).selectList(proxySQL,queryParams,clazz);
+        return proxy.getObject().getInstance(orm).selectList(proxySQL, queryParams, clazz);
     }
 
 

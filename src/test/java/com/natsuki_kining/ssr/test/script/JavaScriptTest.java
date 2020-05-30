@@ -2,7 +2,7 @@ package com.natsuki_kining.ssr.test.script;
 
 import com.natsuki_kining.ssr.beans.QueryParams;
 import com.natsuki_kining.ssr.beans.QueryResult;
-import com.natsuki_kining.ssr.intercept.QueryScriptIntercept;
+import com.natsuki_kining.ssr.intercept.AbstractQueryScriptIntercept;
 import com.natsuki_kining.ssr.intercept.script.JavaScriptIntercept;
 import org.junit.Test;
 
@@ -22,7 +22,7 @@ public class JavaScriptTest {
      */
     @Test
     public void baseDataType() {
-        QueryScriptIntercept scriptIntercept = new JavaScriptIntercept();
+        AbstractQueryScriptIntercept scriptIntercept = new JavaScriptIntercept();
         String script = "ssrResult = ssrParams + 1";
         int ssrParams = 2;
         int ssrResult = scriptIntercept.executeScript(script, ssrParams, Integer.class);
@@ -50,9 +50,9 @@ public class JavaScriptTest {
      */
     @Test
     public void objectType() {
-        QueryScriptIntercept scriptIntercept = new JavaScriptIntercept();
+        AbstractQueryScriptIntercept scriptIntercept = new JavaScriptIntercept();
         QueryParams params = new QueryParams();
-        params.setCode("query-user");
+        params.setQueryCode("query-user");
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("name", "zhangsan");
         paramMap.put("age", 18);
@@ -62,7 +62,7 @@ public class JavaScriptTest {
         QueryParams result = scriptIntercept.executeScript(script, params, QueryParams.class);
         System.out.println(params == result);
 
-        String script2 = "ssrParams.code='query-user-list';ssrResult = ssrParams;";
+        String script2 = "ssrParams.queryCode='query-user-list';ssrResult = ssrParams;";
         QueryParams result2 = scriptIntercept.executeScript(script2, params, QueryParams.class);
         System.out.println(params == result2);
 

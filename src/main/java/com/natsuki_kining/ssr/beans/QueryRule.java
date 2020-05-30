@@ -18,7 +18,7 @@ public class QueryRule {
 
     private QueryCodeType queryCodeType;
 
-    private Map<String,QueryRule> queryCodeMap;
+    private Map<String, QueryRule> queryCodeMap;
 
     public QueryRule(String queryCode, SSRDynamicSQL dynamicSql, QueryCodeType queryCodeType, Map<String, QueryRule> queryCodeMap) {
         this.queryCode = queryCode;

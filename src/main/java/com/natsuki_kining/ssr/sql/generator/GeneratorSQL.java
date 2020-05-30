@@ -12,11 +12,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class GeneratorSQL implements SQLGenerator {
 
-    /**
-     * 生成要查询的sql
-     * @param queryParams
-     * @return
-     */
     @Override
     public String generate(QueryParams queryParams) {
         return null;

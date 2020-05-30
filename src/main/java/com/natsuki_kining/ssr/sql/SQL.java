@@ -2,7 +2,6 @@ package com.natsuki_kining.ssr.sql;
 
 import com.natsuki_kining.ssr.beans.QueryParams;
 import com.natsuki_kining.ssr.beans.QueryRule;
-import com.natsuki_kining.ssr.beans.SSRDynamicSQL;
 
 /**
  * 获取执行sql的接口
@@ -14,8 +13,9 @@ public interface SQL {
 
     /**
      * 获取查询SQL
-     * @param queryRule
-     * @param queryParams
+     *
+     * @param queryRule 查询规则
+     * @param queryParams 查询参数
      * @return 查询SQL
      */
     String getQuerySQL(QueryRule queryRule, QueryParams queryParams);

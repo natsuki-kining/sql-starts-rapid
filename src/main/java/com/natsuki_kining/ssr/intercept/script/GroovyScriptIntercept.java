@@ -1,6 +1,6 @@
 package com.natsuki_kining.ssr.intercept.script;
 
-import com.natsuki_kining.ssr.intercept.QueryScriptIntercept;
+import com.natsuki_kining.ssr.intercept.AbstractQueryScriptIntercept;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  */
 @ConditionalOnProperty(prefix = "ssr", name = "script.type", havingValue = "groovy")
 @Component
-public class GroovyScriptIntercept extends QueryScriptIntercept {
+public class GroovyScriptIntercept extends AbstractQueryScriptIntercept {
 
     @Override
     public Object executeScript(String script, Object ssrParams) {

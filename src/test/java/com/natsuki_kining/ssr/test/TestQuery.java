@@ -13,6 +13,6 @@ public class TestQuery {
     private static QueryImpl q;
 
     public static void main(String[] args) {
-        q.query(null,null);
+        q.query(null, null);
     }
 }

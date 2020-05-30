@@ -32,7 +32,7 @@ public class FreemarkerTemplate implements SQLTemplate {
             String querySql = stringWriter.toString();
             return querySql;
         } catch (Exception e) {
-            throw new SSRException("freemarker 处理sql模板失败："+e.getMessage(), e);
+            throw new SSRException("freemarker 处理sql模板失败：" + e.getMessage(), e);
         }
     }
 }

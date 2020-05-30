@@ -2,7 +2,7 @@ package com.natsuki_kining.ssr.enums;
 
 /**
  * 查询code类型枚举类
- *
+ * <p>
  * 查询的queryCode规则：code：module
  *
  * @Author : natsuki_kining
@@ -31,7 +31,7 @@ public enum QueryCodeType {
      * 遍历里面的queryCode，并把查询的值传给下一次查询
      * 例如：queryCode=SSRDynamicSQL里的QUEYR_CODE字段的集合，用英文逗号分隔
      * queryCode=query-user-role,query-role,query-user
-     * 也可以写成：queryCode=queryCode=com.xxx.entity.UserRole:generate,com.xxx.entity.Role:generate,com.xxx.entity.User:generate
+     * 也可以写成：queryCode=com.xxx.entity.UserRole:generate,com.xxx.entity.Role:generate,com.xxx.entity.User:generate
      */
     EACH_QUERY,
     ;

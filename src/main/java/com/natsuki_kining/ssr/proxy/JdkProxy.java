@@ -5,8 +5,8 @@ import com.natsuki_kining.ssr.beans.QueryRule;
 import com.natsuki_kining.ssr.beans.SSRDynamicSQL;
 import com.natsuki_kining.ssr.data.dao.QueryORM;
 import com.natsuki_kining.ssr.enums.QueryCodeType;
-import com.natsuki_kining.ssr.intercept.QueryJavaIntercept;
-import com.natsuki_kining.ssr.intercept.QueryScriptIntercept;
+import com.natsuki_kining.ssr.intercept.AbstractQueryJavaIntercept;
+import com.natsuki_kining.ssr.intercept.AbstractQueryScriptIntercept;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -40,22 +40,23 @@ public class JdkProxy implements InvocationHandler, SSRProxy {
         return (QueryORM) Proxy.newProxyInstance(clazz.getClassLoader(), clazz.getInterfaces(), this);
     }
 
+    @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         QueryParams queryParams = (QueryParams) args[1];
-        QueryRule queryRule = proxyConfig.getRule().analysis(queryParams.getCode());
-        if (QueryCodeType.EACH_QUERY == queryRule.getQueryCodeType()){
-            Map<String, Object> preDate = new HashMap<>();
+        QueryRule queryRule = proxyConfig.getRule().analysis(queryParams.getQueryCode());
+        if (QueryCodeType.EACH_QUERY == queryRule.getQueryCodeType()) {
             Map<String, QueryRule> queryCodeMap = queryRule.getQueryCodeMap();
+            Map<String, Object> preDate = new HashMap<>(queryCodeMap.size());
             Object value = null;
-            for(Map.Entry<String,QueryRule> entry : queryCodeMap.entrySet()){
+            for (Map.Entry<String, QueryRule> entry : queryCodeMap.entrySet()) {
                 QueryRule entryValue = entry.getValue();
-                args[0] = proxyConfig.getSQL().getQuerySQL(entryValue,queryParams);
+                args[0] = proxyConfig.getSQL().getQuerySQL(entryValue, queryParams);
                 value = invoke(method, args, preDate, entryValue.getDynamicSql(), queryParams);
-                preDate.put(entry.getKey(),value);
+                preDate.put(entry.getKey(), value);
             }
             return value;
-        }else{
-            args[0] = proxyConfig.getSQL().getQuerySQL(queryRule,queryParams);
+        } else {
+            args[0] = proxyConfig.getSQL().getQuerySQL(queryRule, queryParams);
             return invoke(method, args, null, queryRule.getDynamicSql(), queryParams);
         }
     }
@@ -80,15 +81,15 @@ public class JdkProxy implements InvocationHandler, SSRProxy {
     }
 
     private Object queryAfter(QueryParams queryParams, SSRDynamicSQL dynamicSql, Map<String, Object> preData, Object queryData) {
-        QueryJavaIntercept javaMasterIntercept = proxyConfig.getJavaMasterIntercept();
+        AbstractQueryJavaIntercept javaMasterIntercept = proxyConfig.getJavaMasterIntercept();
         if (javaMasterIntercept != null) {
             queryData = javaMasterIntercept.queryAfter(queryParams, dynamicSql, preData, queryData);
         }
-        QueryJavaIntercept queryCodeIntercept = proxyConfig.getJavaIntercept(dynamicSql.getQueryCode());
+        AbstractQueryJavaIntercept queryCodeIntercept = proxyConfig.getJavaIntercept(dynamicSql.getQueryCode());
         if (queryCodeIntercept != null) {
             queryData = queryCodeIntercept.queryAfter(queryParams, dynamicSql, preData, queryData);
         }
-        QueryScriptIntercept scriptIntercept = proxyConfig.getScriptIntercept();
+        AbstractQueryScriptIntercept scriptIntercept = proxyConfig.getScriptIntercept();
         if (scriptIntercept != null) {
             queryData = scriptIntercept.queryAfter(queryParams, dynamicSql, preData, queryData);
         }
@@ -96,30 +97,30 @@ public class JdkProxy implements InvocationHandler, SSRProxy {
     }
 
     private void queryBefore(QueryParams queryParams, SSRDynamicSQL dynamicSql, Map<String, Object> preData) {
-        QueryJavaIntercept javaMasterIntercept = proxyConfig.getJavaMasterIntercept();
+        AbstractQueryJavaIntercept javaMasterIntercept = proxyConfig.getJavaMasterIntercept();
         if (javaMasterIntercept != null) {
             javaMasterIntercept.queryBefore(queryParams, dynamicSql, preData);
         }
-        QueryJavaIntercept queryCodeIntercept = proxyConfig.getJavaIntercept(dynamicSql.getQueryCode());
+        AbstractQueryJavaIntercept queryCodeIntercept = proxyConfig.getJavaIntercept(dynamicSql.getQueryCode());
         if (queryCodeIntercept != null) {
             queryCodeIntercept.queryBefore(queryParams, dynamicSql, preData);
         }
-        QueryScriptIntercept scriptIntercept = proxyConfig.getScriptIntercept();
+        AbstractQueryScriptIntercept scriptIntercept = proxyConfig.getScriptIntercept();
         if (scriptIntercept != null) {
             scriptIntercept.queryBefore(queryParams, dynamicSql, preData);
         }
     }
 
     private boolean preHandle(QueryParams queryParams, SSRDynamicSQL dynamicSql, Map<String, Object> preData) {
-        QueryJavaIntercept javaMasterIntercept = proxyConfig.getJavaMasterIntercept();
+        AbstractQueryJavaIntercept javaMasterIntercept = proxyConfig.getJavaMasterIntercept();
         if (javaMasterIntercept != null && !javaMasterIntercept.preHandle(queryParams, dynamicSql, preData)) {
             return false;
         }
-        QueryJavaIntercept queryCodeIntercept = proxyConfig.getJavaIntercept(dynamicSql.getQueryCode());
+        AbstractQueryJavaIntercept queryCodeIntercept = proxyConfig.getJavaIntercept(dynamicSql.getQueryCode());
         if (queryCodeIntercept != null && !queryCodeIntercept.preHandle(queryParams, dynamicSql, preData)) {
             return false;
         }
-        QueryScriptIntercept scriptIntercept = proxyConfig.getScriptIntercept();
+        AbstractQueryScriptIntercept scriptIntercept = proxyConfig.getScriptIntercept();
         return scriptIntercept == null || scriptIntercept.preHandle(queryParams, dynamicSql, preData);
     }
 

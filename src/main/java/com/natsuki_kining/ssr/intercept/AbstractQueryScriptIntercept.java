@@ -14,7 +14,7 @@ import java.util.Map;
  * @Author : natsuki_kining
  * @Date : 2020/4/13 23:39
  */
-public abstract class QueryScriptIntercept implements QueryIntercept {
+public abstract class AbstractQueryScriptIntercept implements QueryIntercept {
 
     protected String paramsName = "ssrParams";
     protected String resultName = "ssrResult";
@@ -42,7 +42,7 @@ public abstract class QueryScriptIntercept implements QueryIntercept {
         if (StringUtils.isBlank(beforeScript)) {
             return queryData;
         }
-        Map<String, Object> scriptParam = new HashMap<>();
+        Map<String, Object> scriptParam = new HashMap<>(3);
         scriptParam.put("queryParams", queryParams);
         scriptParam.put("queryData", queryData);
         scriptParam.put("preData", preData);

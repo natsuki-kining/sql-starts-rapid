@@ -14,11 +14,21 @@ import java.util.Map;
 public interface Query {
 
     /**
-     * 查询
-     * @return
+     * 查询返回map list
+     *
+     * @param queryParams 查询参数
+     * @return map的集合
      */
     List<Map> query(QueryParams queryParams);
 
+    /**
+     * 查询返回泛型list
+     *
+     * @param queryParams 查询参数
+     * @param clazz       转换的类型
+     * @param <E>         泛型
+     * @return 泛型的集合
+     */
     <E> List<E> query(QueryParams queryParams, Class<E> clazz);
 
 }

@@ -22,6 +22,7 @@ public @interface TableFieldName {
      * 用于数据库字段名字跟类属性名字不符合转换规则的情况
      * 不加注解默认的规则转换 code -> CODE，userName -> USER_NAME
      * 加注解，则按注解的值来转换
+     *
      * @return
      */
     String value();

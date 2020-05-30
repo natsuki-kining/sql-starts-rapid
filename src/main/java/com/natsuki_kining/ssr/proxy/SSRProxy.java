@@ -13,5 +13,11 @@ import com.natsuki_kining.ssr.data.dao.QueryORM;
  */
 public interface SSRProxy {
 
+    /**
+     * 获取代理示例
+     *
+     * @param target 代理的目标类
+     * @return QueryORM 代理后的对象
+     */
     QueryORM getInstance(QueryORM target);
 }

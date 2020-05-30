@@ -1,8 +1,6 @@
 package com.natsuki_kining.ssr.sql.generator;
 
 import com.natsuki_kining.ssr.beans.QueryParams;
-import com.natsuki_kining.ssr.beans.SSRDynamicSQL;
-import com.natsuki_kining.ssr.sql.SQL;
 
 /**
  * TODO
@@ -12,6 +10,12 @@ import com.natsuki_kining.ssr.sql.SQL;
  */
 public interface SQLGenerator {
 
+    /**
+     * 根据参数自动生成查询的sql语句
+     *
+     * @param queryParams
+     * @return 生成要查询的sql
+     */
     String generate(QueryParams queryParams);
 
 }

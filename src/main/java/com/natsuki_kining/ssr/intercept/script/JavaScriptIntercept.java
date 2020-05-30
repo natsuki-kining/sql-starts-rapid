@@ -1,7 +1,7 @@
 package com.natsuki_kining.ssr.intercept.script;
 
 import com.natsuki_kining.ssr.exception.SSRException;
-import com.natsuki_kining.ssr.intercept.QueryScriptIntercept;
+import com.natsuki_kining.ssr.intercept.AbstractQueryScriptIntercept;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +18,7 @@ import javax.script.ScriptException;
  */
 @ConditionalOnProperty(prefix = "ssr", name = "script.type", havingValue = "javaScript")
 @Component
-public class JavaScriptIntercept extends QueryScriptIntercept {
+public class JavaScriptIntercept extends AbstractQueryScriptIntercept {
 
     @Override
     public Object executeScript(String script, Object ssrParams) {

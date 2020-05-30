@@ -2,7 +2,7 @@ package com.natsuki_kining.ssr.test.script;
 
 import com.natsuki_kining.ssr.beans.QueryParams;
 import com.natsuki_kining.ssr.beans.QueryResult;
-import com.natsuki_kining.ssr.intercept.QueryScriptIntercept;
+import com.natsuki_kining.ssr.intercept.AbstractQueryScriptIntercept;
 import com.natsuki_kining.ssr.intercept.script.GroovyScriptIntercept;
 import org.junit.Test;
 
@@ -22,7 +22,7 @@ public class GroovyScriptTest {
      */
     @Test
     public void baseDataType() {
-        QueryScriptIntercept scriptIntercept = new GroovyScriptIntercept();
+        AbstractQueryScriptIntercept scriptIntercept = new GroovyScriptIntercept();
         String script = "ssrResult = ssrParams + 1";
         int ssrParams = 2;
         int ssrResult = scriptIntercept.executeScript(script, ssrParams, Integer.class);
@@ -58,9 +58,9 @@ public class GroovyScriptTest {
      */
     @Test
     public void objectType() {
-        QueryScriptIntercept scriptIntercept = new GroovyScriptIntercept();
+        AbstractQueryScriptIntercept scriptIntercept = new GroovyScriptIntercept();
         QueryParams params = new QueryParams();
-        params.setCode("query-user");
+        params.setQueryCode("query-user");
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("name", "zhangsan");
         paramMap.put("age", 18);
@@ -70,14 +70,14 @@ public class GroovyScriptTest {
         QueryParams result = scriptIntercept.executeScript(script, params, QueryParams.class);
         System.out.println(params == result);
 
-        String script2 = "ssrParams.code='query-user-list';ssrResult = ssrParams;";
+        String script2 = "ssrParams.queryCode='query-user-list';ssrResult = ssrParams;";
         QueryParams result2 = scriptIntercept.executeScript(script2, params, QueryParams.class);
         System.out.println(params == result2);
 
         //返回自定义类型
         String script3 = "class SsrResultTest{int count;int pageSize;int pageNo;List<Object> data;}\nssrResult = new SsrResultTest();ssrResult.count=11;ssrResult.pageSize=10;ssrResult.pageNo=1;ssrResult.data=['a','b','c','d'];";
-        QueryResult queryResult3 = scriptIntercept.executeScript(script3, params,QueryResult.class);
-        System.out.println("result.count:"+queryResult3.getCount());
-        System.out.println("result.data:"+queryResult3.getData().get(0));
+        QueryResult queryResult3 = scriptIntercept.executeScript(script3, params, QueryResult.class);
+        System.out.println("result.count:" + queryResult3.getCount());
+        System.out.println("result.data:" + queryResult3.getData().get(0));
     }
 }

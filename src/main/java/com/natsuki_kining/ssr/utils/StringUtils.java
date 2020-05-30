@@ -2,6 +2,8 @@ package com.natsuki_kining.ssr.utils;
 
 /**
  * 字符串工具类
+ *
+ * @author natsuki_kining
  */
 public class StringUtils {
 
@@ -12,7 +14,7 @@ public class StringUtils {
     public static boolean isBlank(String str) {
         int strLen;
         if (str != null && (strLen = str.length()) != 0) {
-            for(int i = 0; i < strLen; ++i) {
+            for (int i = 0; i < strLen; ++i) {
                 if (!Character.isWhitespace(str.charAt(i))) {
                     return false;
                 }
@@ -33,6 +35,7 @@ public class StringUtils {
 
     /**
      * 将首字母变成大写
+     *
      * @param str 需要改变的字符串
      * @return 首字母变大写后的字符串
      */

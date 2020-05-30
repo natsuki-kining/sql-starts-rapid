@@ -12,10 +12,11 @@ public interface SQLTemplate {
 
     /**
      * 格式化sql
-     * @param templateSql
-     * @param queryParams
-     * @return
+     *
+     * @param templateSql sql模板
+     * @param queryParams 查询参数
+     * @return orm能解析的sql
      */
-    String formatSQL(String templateSql,QueryParams queryParams);
+    String formatSQL(String templateSql, QueryParams queryParams);
 
 }

@@ -6,6 +6,6 @@ package com.natsuki_kining.ssr.intercept;
  * @Author : natsuki_kining
  * @Date : 2020/4/18 20:55
  */
-public abstract class QueryJavaIntercept implements QueryIntercept{
+public abstract class AbstractQueryJavaIntercept implements QueryIntercept {
 
 }
