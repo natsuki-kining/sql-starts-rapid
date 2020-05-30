@@ -21,6 +21,7 @@ public class SSRDynamicSQL {
 
     /**
      * 查询的code
+     * 不允许使用英文逗号“,”跟冒号“:”
      */
     private String queryCode;
 

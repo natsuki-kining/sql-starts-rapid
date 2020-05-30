@@ -4,6 +4,7 @@ import com.natsuki_kining.ssr.beans.QueryParams;
 import com.natsuki_kining.ssr.beans.QueryRule;
 import com.natsuki_kining.ssr.beans.SSRDynamicSQL;
 import com.natsuki_kining.ssr.data.dao.QueryORM;
+import com.natsuki_kining.ssr.enums.QueryCodeType;
 import com.natsuki_kining.ssr.intercept.QueryJavaIntercept;
 import com.natsuki_kining.ssr.intercept.QueryScriptIntercept;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,28 +43,24 @@ public class JdkProxy implements InvocationHandler, SSRProxy {
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         QueryParams queryParams = (QueryParams) args[1];
         QueryRule queryRule = proxyConfig.getRule().analysis(queryParams.getCode());
-        Map<String, String> queryList = queryRule.getQueryList();
-        if (queryList == null){
-            SSRDynamicSQL dynamicSql = null;
-            if (queryRule.singleQuery()) {
-                dynamicSql = target.getSSRDynamicSQL(queryRule.getQueryCode());
-            }
-            args[0] = proxyConfig.getSQL().getQuerySQL(dynamicSql,queryParams);
-            return invoke(method, args, null, queryRule.getQueryCode(), null, queryParams);
-        }else{
+        if (QueryCodeType.EACH_QUERY == queryRule.getQueryCodeType()){
             Map<String, Object> preDate = new HashMap<>();
+            Map<String, QueryRule> queryCodeMap = queryRule.getQueryCodeMap();
             Object value = null;
-            for (String queryCode : queryRule.getQueryList().keySet()) {
-                SSRDynamicSQL dynamicSql = target.getSSRDynamicSQL(queryRule.getQueryCode());
-                String querySQL = proxyConfig.getSQL().getQuerySQL(dynamicSql, queryParams);
-                args[0] = querySQL;
-                value = invoke(method, args, preDate, queryCode, dynamicSql, queryParams);
+            for(Map.Entry<String,QueryRule> entry : queryCodeMap.entrySet()){
+                QueryRule entryValue = entry.getValue();
+                args[0] = proxyConfig.getSQL().getQuerySQL(entryValue,queryParams);
+                value = invoke(method, args, preDate, entryValue.getDynamicSql(), queryParams);
+                preDate.put(entry.getKey(),value);
             }
             return value;
+        }else{
+            args[0] = proxyConfig.getSQL().getQuerySQL(queryRule,queryParams);
+            return invoke(method, args, null, queryRule.getDynamicSql(), queryParams);
         }
     }
 
-    private Object invoke(Method method, Object[] args, Map<String, Object> preDate, String queryCode, SSRDynamicSQL dynamicSql, QueryParams queryParams) throws InvocationTargetException, IllegalAccessException {
+    private Object invoke(Method method, Object[] args, Map<String, Object> preDate, SSRDynamicSQL dynamicSql, QueryParams queryParams) throws InvocationTargetException, IllegalAccessException {
         //调用拦截器的预处理方法判断是否需要往下执行
         boolean preHandle = preHandle(queryParams, dynamicSql, preDate);
         if (!preHandle) {

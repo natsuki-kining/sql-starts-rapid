@@ -1,6 +1,7 @@
 package com.natsuki_kining.ssr.sql;
 
 import com.natsuki_kining.ssr.beans.QueryParams;
+import com.natsuki_kining.ssr.beans.QueryRule;
 import com.natsuki_kining.ssr.beans.SSRDynamicSQL;
 
 /**
@@ -13,9 +14,9 @@ public interface SQL {
 
     /**
      * 获取查询SQL
-     * @param dynamicSql
+     * @param queryRule
      * @param queryParams
      * @return 查询SQL
      */
-    String getQuerySQL(SSRDynamicSQL dynamicSql, QueryParams queryParams);
+    String getQuerySQL(QueryRule queryRule, QueryParams queryParams);
 }
