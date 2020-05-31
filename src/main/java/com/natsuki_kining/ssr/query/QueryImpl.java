@@ -1,7 +1,7 @@
 package com.natsuki_kining.ssr.query;
 
 import com.natsuki_kining.ssr.beans.QueryParams;
-import com.natsuki_kining.ssr.data.dao.QueryORM;
+import com.natsuki_kining.ssr.data.orm.QueryORM;
 import com.natsuki_kining.ssr.proxy.SSRProxy;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -3,7 +3,7 @@ package com.natsuki_kining.ssr.proxy;
 import com.natsuki_kining.ssr.beans.QueryParams;
 import com.natsuki_kining.ssr.beans.QueryRule;
 import com.natsuki_kining.ssr.beans.SSRDynamicSQL;
-import com.natsuki_kining.ssr.data.dao.QueryORM;
+import com.natsuki_kining.ssr.data.orm.QueryORM;
 import com.natsuki_kining.ssr.enums.QueryCodeType;
 import com.natsuki_kining.ssr.intercept.AbstractQueryJavaIntercept;
 import com.natsuki_kining.ssr.intercept.AbstractQueryScriptIntercept;

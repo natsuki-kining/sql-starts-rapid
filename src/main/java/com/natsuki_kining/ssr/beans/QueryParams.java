@@ -1,5 +1,6 @@
 package com.natsuki_kining.ssr.beans;
 
+import com.natsuki_kining.ssr.utils.Constant;
 import lombok.Data;
 
 import java.util.List;
@@ -19,7 +20,10 @@ public class QueryParams {
     private Map<String, String> sort;
     private List<Map<String, String>> sorts;
     private int pageNo = 1;
-    private int pageSize = 10;
+    /**
+     * pageSize = -1 则查询全部、不进行分页
+     */
+    private int pageSize = Constant.QueryPage.DEFAULT_PAGE_SIZE;
     private transient int pageEnd;
     private transient int pageStart;
     private transient int initialCapacity = 0;
@@ -32,6 +36,9 @@ public class QueryParams {
     }
 
     public int getPageSize() {
+        if (pageSize == -1){
+            return pageSize;
+        }
         if (pageSize < 1) {
             pageSize = 10;
         }

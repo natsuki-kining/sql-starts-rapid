@@ -1,7 +1,7 @@
 package com.natsuki_kining.ssr.proxy;
 
 
-import com.natsuki_kining.ssr.data.dao.QueryORM;
+import com.natsuki_kining.ssr.data.orm.QueryORM;
 
 /**
  * 代理接口

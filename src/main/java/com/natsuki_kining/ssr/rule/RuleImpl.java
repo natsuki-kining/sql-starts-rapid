@@ -2,7 +2,7 @@ package com.natsuki_kining.ssr.rule;
 
 import com.natsuki_kining.ssr.beans.QueryRule;
 import com.natsuki_kining.ssr.beans.SSRDynamicSQL;
-import com.natsuki_kining.ssr.data.dao.QueryORM;
+import com.natsuki_kining.ssr.data.orm.QueryORM;
 import com.natsuki_kining.ssr.enums.QueryCodeType;
 import com.natsuki_kining.ssr.exception.SSRException;
 import com.natsuki_kining.ssr.utils.Constant;
@@ -46,20 +46,22 @@ public class RuleImpl implements Rule {
     }
 
     private QueryRule getQueryRule(String queryCode) {
-        QueryCodeType queryCodeType = null;
+        QueryCodeType queryCodeType;
         int index = queryCode.indexOf(":");
         if (index == -1) {
             queryCodeType = QueryCodeType.SINGLE_QUERY;
             SSRDynamicSQL dynamicSql = orm.getSSRDynamicSQL(queryCode);
             return new QueryRule(queryCode, dynamicSql, queryCodeType, null);
         } else {
-            String substring = queryCode.substring(index + 1);
-            if (Constant.QueryCodeType.GENERATE.equals(substring)) {
-                queryCodeType = QueryCodeType.GENERATE_QUERY;
-            } else if (Constant.QueryCodeType.SINGLE.equals(substring)) {
+            String queryType = queryCode.substring(index + 1);
+            if (Constant.QueryCodeType.GENERATE_BY_ENTITY.equals(queryType)) {
+                queryCodeType = QueryCodeType.GENERATE_QUERY_BY_ENTITY;
+            }else if (Constant.QueryCodeType.GENERATE_BY_TABLE.equals(queryType)) {
+                queryCodeType = QueryCodeType.GENERATE_QUERY_BY_TABLE;
+            } else if (Constant.QueryCodeType.SINGLE.equals(queryType)) {
                 queryCodeType = QueryCodeType.SINGLE_QUERY;
             } else {
-                throw new SSRException(queryCode + "没有指定的查询类型：" + substring);
+                throw new SSRException(queryCode + "没有指定的查询类型：" + queryType);
             }
             queryCode = queryCode.substring(0, index);
         }
