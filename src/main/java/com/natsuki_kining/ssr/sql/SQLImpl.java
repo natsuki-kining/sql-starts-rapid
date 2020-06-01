@@ -5,9 +5,15 @@ import com.natsuki_kining.ssr.beans.QueryRule;
 import com.natsuki_kining.ssr.enums.QueryCodeType;
 import com.natsuki_kining.ssr.sql.generator.Generator;
 import com.natsuki_kining.ssr.sql.template.SQLTemplate;
+import com.natsuki_kining.ssr.utils.Assert;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+import java.util.Map;
 
 /**
  * 获取sql的实现类
@@ -20,10 +26,10 @@ import org.springframework.stereotype.Component;
 public class SQLImpl implements SQL {
 
     @Autowired
-    private Generator generator;
-
-    @Autowired
     private SQLTemplate ssrTemplate;
+
+    @Resource(name = "${spring.datasource.driver-class-name}")
+    private Generator generator;
 
     @Override
     public String getQuerySQL(QueryRule queryRule, QueryParams queryParams) {
@@ -41,4 +47,8 @@ public class SQLImpl implements SQL {
         return sql.toString();
     }
 
+    @PostConstruct
+    private void init(){
+        System.out.println(1);
+    }
 }

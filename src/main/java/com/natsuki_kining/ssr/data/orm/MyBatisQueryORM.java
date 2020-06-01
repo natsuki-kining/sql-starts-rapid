@@ -6,6 +6,7 @@ import com.natsuki_kining.ssr.beans.SSRDynamicSQL;
 import com.natsuki_kining.ssr.data.AbstractSSRData;
 import com.natsuki_kining.ssr.exception.SSRException;
 import com.natsuki_kining.ssr.utils.Assert;
+import com.natsuki_kining.ssr.utils.StringUtils;
 import org.apache.ibatis.mapping.*;
 import org.apache.ibatis.scripting.LanguageDriver;
 import org.apache.ibatis.session.Configuration;
@@ -97,17 +98,7 @@ public class MyBatisQueryORM extends AbstractSSRData implements QueryORM {
                 TableFieldName tableFieldName = field.getAnnotation(TableFieldName.class);
                 column = tableFieldName.value();
             } else {
-                char[] chars = property.toCharArray();
-                stringBuilder = new StringBuilder();
-                for (char aChar : chars) {
-                    if (Character.isUpperCase(aChar)) {
-                        stringBuilder.append("_");
-                        stringBuilder.append(aChar);
-                    } else {
-                        stringBuilder.append(aChar);
-                    }
-                }
-                column = stringBuilder.toString().toUpperCase();
+                column = StringUtils.castFieldToColumn(property);
             }
             resultMapping = new ResultMapping.Builder(configuration, property, column, fieldType).build();
             resultMappingList.add(resultMapping);
