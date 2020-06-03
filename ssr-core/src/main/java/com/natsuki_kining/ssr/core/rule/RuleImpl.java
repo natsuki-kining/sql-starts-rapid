@@ -65,7 +65,7 @@ public class RuleImpl implements Rule {
             }
             queryCode = queryCode.substring(0, index);
         }
-        SSRDynamicSQL dynamicSql = orm.getSSRDynamicSQL(queryCode);
+        SSRDynamicSQL dynamicSql = new SSRDynamicSQL(queryCode);
         return new QueryRule(queryCode, dynamicSql, queryCodeType, null);
     }
 

@@ -14,6 +14,10 @@ import java.util.Date;
 @Data
 public class SSRDynamicSQL {
 
+    public SSRDynamicSQL(String queryCode) {
+        this.queryCode = queryCode;
+    }
+
     /**
      * 主键
      */

@@ -45,7 +45,6 @@ public abstract class AbstractGeneratorSQL implements Generator {
         }else if (queryRule.getQueryCodeType() == QueryCodeType.GENERATE_QUERY_BY_TABLE){
             querySql.append(queryRule.getQueryCode());
         }
-        generateWhereSQL(querySql,queryRule,queryParams);
         return querySql.toString();
     }
 
@@ -60,11 +59,11 @@ public abstract class AbstractGeneratorSQL implements Generator {
                 querySql.append(StringUtils.castFieldToColumn(k));
                 querySql.append(conditionSign);
                 if (isUseHibernateORM){
-                    querySql.append(" = :");
+                    querySql.append(":");
                     querySql.append(k);
                     querySql.append(" ");
                 }else{
-                    querySql.append(" = #{");
+                    querySql.append("#{");
                     querySql.append(k);
                     querySql.append("} ");
                 }

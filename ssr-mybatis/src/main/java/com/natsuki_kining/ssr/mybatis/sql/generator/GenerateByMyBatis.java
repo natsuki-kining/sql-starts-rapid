@@ -13,9 +13,5 @@ import com.natsuki_kining.ssr.core.sql.generator.Generator;
  */
 public class GenerateByMyBatis extends AbstractGeneratorSQL implements Generator {
 
-    @Override
-    public void generateWhereSQL(StringBuilder querySql, QueryRule queryRule, QueryParams queryParams) {
-        super.generateWhereSQL(querySql, queryRule, queryParams);
-    }
 
 }
