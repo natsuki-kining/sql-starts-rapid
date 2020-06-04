@@ -16,8 +16,21 @@ import java.util.Map;
 public class QueryParams {
 
     private String queryCode;
+    /**
+     * key:property,
+     * value:queryValue
+     */
     private Map<String, Object> params;
+    /**
+     * key:property,
+     * value:sort
+     */
     private LinkedHashMap<String, String> sort;
+    /**
+     * key:property
+     * value:ConditionSign
+     */
+    private Map<String,String> conditionSign;
     private int pageNo = 1;
     /**
      * pageSize = -1 则查询全部、不进行分页

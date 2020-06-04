@@ -1,5 +1,8 @@
 package com.natsuki_kining.ssr.core.utils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * TODO
  *
@@ -7,6 +10,28 @@ package com.natsuki_kining.ssr.core.utils;
  * @Date : 2020/5/31 0:12
  */
 public class Constant {
+
+    public static final Map<String,String> COMMON_CONDITION = new HashMap<String, String>(){{
+        put("and",SQLCondition.Common.AND);
+        put("or",SQLCondition.Common.OR);
+        put("eq",SQLCondition.Common.EQ);
+        put("lt",SQLCondition.Common.LT);
+        put("le",SQLCondition.Common.LE);
+        put("gt",SQLCondition.Common.GT);
+        put("ge",SQLCondition.Common.GE);
+    }};
+
+    public static final Map<String,String> MYSQL_CONDITION = new HashMap<String, String>(){{
+        put("ll",SQLCondition.MySql.L_LIKE);
+        put("rl",SQLCondition.MySql.R_LIKE);
+        put("al",SQLCondition.MySql.A_LIKE);
+    }};
+
+    public static final Map<String,String> ORACLE_CONDITION = new HashMap<String, String>(){{
+        put("ll",SQLCondition.Oracle.L_LIKE);
+        put("rl",SQLCondition.Oracle.R_LIKE);
+        put("al",SQLCondition.Oracle.A_LIKE);
+    }};
 
     /**
      * 查询类型常量
@@ -27,17 +52,30 @@ public class Constant {
     }
 
     public interface SQLCondition{
-        String AND = "AND ";
-        String OR = "OR ";
-        String LIKE = "LIKE ";
 
-        String EQ = "= :name ";
-        String L_LIKE = "concat('%',:name) ";
-        String R_LIKE = "concat(:name,'%') ";
-        String A_LIKE = "concat(concat('%',:name),'%') ";
-        String LT = "< :name ";
-        String LE = "<= :name ";
-        String GT = "> :name ";
-        String GE = ">= :name ";
+        String paramName = ":name";
+
+        interface Common{
+            String AND = "AND ";
+            String OR = "OR ";
+
+            String EQ = "= ";
+            String LT = "< ";
+            String LE = "<= ";
+            String GT = "> ";
+            String GE = ">= ";
+        }
+
+        interface Oracle{
+            String L_LIKE = "LIKE '%' || :name ";
+            String R_LIKE = "LIKE :name || '%' ";
+            String A_LIKE = "LIKE '%' || :name || '%' ";
+        }
+
+        interface MySql{
+            String L_LIKE = "LIKE concat('%',:name) ";
+            String R_LIKE = "LIKE concat(:name,'%') ";
+            String A_LIKE = "LIKE concat(concat('%',:name),'%') ";
+        }
     }
 }

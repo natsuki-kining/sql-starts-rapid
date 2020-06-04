@@ -5,6 +5,7 @@ import com.natsuki_kining.ssr.core.beans.QueryParams;
 import com.natsuki_kining.ssr.core.beans.QueryRule;
 import com.natsuki_kining.ssr.core.enums.QueryCodeType;
 import com.natsuki_kining.ssr.core.exception.SSRException;
+import com.natsuki_kining.ssr.core.utils.Constant;
 import com.natsuki_kining.ssr.core.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -53,21 +54,38 @@ public abstract class AbstractGeneratorSQL implements Generator {
         if (queryParams.getParams() != null && queryParams.getParams().size() > 0){
             querySql.append(" T1 WHERE 1=1 ");
             boolean isUseHibernateORM = "hibernate".equals(ormType);
-            String conditionSign = " = ";
-            queryParams.getParams().keySet().forEach(k->{
+            for(String k : queryParams.getParams().keySet()) {
+                String conditionSign = getConditionSign(queryParams, k);
+                if (conditionSign == null) {
+                    conditionSign = getLikeConditionSign(queryParams, k);
+                    if (conditionSign == null){
+                        conditionSign = Constant.SQLCondition.Common.EQ;
+                    }else {
+                        querySql.append("AND T1.");
+                        querySql.append(StringUtils.castFieldToColumn(k));
+                        querySql.append(" ");
+                        if (isUseHibernateORM) {
+                            conditionSign = conditionSign.replaceAll(Constant.SQLCondition.paramName,":"+k);
+                        } else {
+                            conditionSign = conditionSign.replaceAll(Constant.SQLCondition.paramName,"#{"+k+"}");
+                        }
+                        querySql.append(conditionSign);
+                        continue;
+                    }
+                }
                 querySql.append("AND T1.");
                 querySql.append(StringUtils.castFieldToColumn(k));
                 querySql.append(conditionSign);
-                if (isUseHibernateORM){
+                if (isUseHibernateORM) {
                     querySql.append(":");
                     querySql.append(k);
                     querySql.append(" ");
-                }else{
+                } else {
                     querySql.append("#{");
                     querySql.append(k);
                     querySql.append("} ");
                 }
-            });
+            }
         }
     }
 
@@ -78,7 +96,8 @@ public abstract class AbstractGeneratorSQL implements Generator {
         }
         querySql.append("ORDER BY ");
         Set<Map.Entry<String, String>> sortSet = queryParams.getSort().entrySet();
-        sortSet.forEach(e->querySql.append(StringUtils.castFieldToColumn(e.getKey())+" " + e.getValue() + ""));
+        sortSet.stream().forEach(e->querySql.append(StringUtils.castFieldToColumn(e.getKey())+" " + e.getValue().toUpperCase() + ","));
+        querySql.deleteCharAt(querySql.length()-1);
     }
 
     @Override
@@ -86,4 +105,13 @@ public abstract class AbstractGeneratorSQL implements Generator {
 
     }
 
+    protected String getConditionSign(QueryParams queryParams, String k) {
+        Map<String, String> conditionSign = queryParams.getConditionSign();
+        if (conditionSign == null || conditionSign.size() == 0){
+            return Constant.SQLCondition.Common.EQ;
+        }
+        return Constant.COMMON_CONDITION.get(conditionSign.get(k));
+    }
+
+    protected abstract String getLikeConditionSign(QueryParams queryParams, String k);
 }
