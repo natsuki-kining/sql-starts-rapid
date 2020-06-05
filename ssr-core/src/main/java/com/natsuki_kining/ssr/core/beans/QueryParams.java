@@ -17,20 +17,23 @@ public class QueryParams {
 
     private String queryCode;
     /**
-     * key:property,
-     * value:queryValue
+     * key->property,
+     * value->queryValue
      */
     private Map<String, Object> params;
     /**
-     * key:property,
-     * value:sort
+     * key->property,
+     * value->sort
      */
     private LinkedHashMap<String, String> sort;
+
     /**
-     * key:property
-     * value:ConditionSign
+     * 自动生成sql用
+     * 查询条件
+     * kye->code[:and]
+     * value->al[:groupId]
      */
-    private Map<String,String> conditionSign;
+    private Map<String,String> condition;
     private int pageNo = 1;
     /**
      * pageSize = -1 则查询全部、不进行分页
@@ -38,7 +41,6 @@ public class QueryParams {
     private int pageSize = Constant.QueryPage.DEFAULT_PAGE_SIZE;
     private transient int pageEnd;
     private transient int pageStart;
-    private transient int initialCapacity = 0;
 
     public int getPageNo() {
         if (pageNo < 1) {
@@ -66,6 +68,5 @@ public class QueryParams {
         pageStart = getPageEnd() - getPageSize();
         return pageStart;
     }
-
 
 }

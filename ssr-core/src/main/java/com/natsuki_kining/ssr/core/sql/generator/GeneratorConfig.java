@@ -13,14 +13,24 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class GeneratorConfig {
 
-    @Bean(name = {"com.mysql.cj.jdbc.Driver","com.mysql.jdbc.Driver"})
-    public GenerateByOracle generateByOracle(){
-        return new GenerateByOracle();
+    @Bean(name = {"mybatis-com.mysql.cj.jdbc.Driver","mybatis-com.mysql.jdbc.Driver"})
+    public GenerateByOracleMybatis GenerateByOracleMybatis(){
+        return new GenerateByOracleMybatis();
     }
 
-    @Bean(name = {"oracle.jdbc.driver.OracleDriver","oracle.jdbc.OracleDriver"})
-    public GenerateByMySQL generateByMySQL(){
-        return new GenerateByMySQL();
+    @Bean(name = {"mybatis-oracle.jdbc.driver.OracleDriver","mybatis-oracle.jdbc.OracleDriver"})
+    public GenerateByMySQLMybatis GenerateByMySQLMybatis(){
+        return new GenerateByMySQLMybatis();
+    }
+
+    @Bean(name = {"hibernate-com.mysql.cj.jdbc.Driver","hibernate-com.mysql.jdbc.Driver"})
+    public GenerateByOracleHibernate GenerateByOracleHibernate(){
+        return new GenerateByOracleHibernate();
+    }
+
+    @Bean(name = {"hibernate-oracle.jdbc.driver.OracleDriver","hibernate-oracle.jdbc.OracleDriver"})
+    public GenerateByMySQLHibernate GenerateByMySQLHibernate(){
+        return new GenerateByMySQLHibernate();
     }
 
 }

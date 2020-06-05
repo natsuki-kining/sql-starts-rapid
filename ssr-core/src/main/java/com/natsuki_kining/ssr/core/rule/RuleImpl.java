@@ -5,8 +5,10 @@ import com.natsuki_kining.ssr.core.beans.SSRDynamicSQL;
 import com.natsuki_kining.ssr.core.data.orm.QueryORM;
 import com.natsuki_kining.ssr.core.enums.QueryCodeType;
 import com.natsuki_kining.ssr.core.exception.SSRException;
+import com.natsuki_kining.ssr.core.utils.Assert;
 import com.natsuki_kining.ssr.core.utils.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -25,6 +27,12 @@ public class RuleImpl implements Rule {
 
     @Autowired
     private QueryORM orm;
+
+    @Value("${ssr.generate-by-entity.enable:false}")
+    private boolean generateByEntityEnable;
+
+    @Value("${ssr.generate-by-table.enable:false}")
+    private boolean generateByTableEnable;
 
     @Override
     public QueryRule analysis(String queryCode) {
@@ -56,8 +64,10 @@ public class RuleImpl implements Rule {
             String queryType = queryCode.substring(index + 1);
             if (Constant.QueryCodeType.GENERATE_BY_ENTITY.equals(queryType)) {
                 queryCodeType = QueryCodeType.GENERATE_QUERY_BY_ENTITY;
+                Assert.isTrue(generateByEntityEnable,"如果需要使用通过实体来生成sql，请设置ssr.generate-by-entity.enable=true");
             }else if (Constant.QueryCodeType.GENERATE_BY_TABLE.equals(queryType)) {
                 queryCodeType = QueryCodeType.GENERATE_QUERY_BY_TABLE;
+                Assert.isTrue(generateByTableEnable,"如果需要使用通过实体来生成sql，请设置ssr.generate-by-table.enable=true");
             } else if (Constant.QueryCodeType.SINGLE.equals(queryType)) {
                 queryCodeType = QueryCodeType.SINGLE_QUERY;
             } else {

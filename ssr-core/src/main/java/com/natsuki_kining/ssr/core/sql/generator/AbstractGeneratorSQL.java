@@ -1,17 +1,19 @@
 package com.natsuki_kining.ssr.core.sql.generator;
 
 import com.natsuki_kining.ssr.core.annotation.TableName;
+import com.natsuki_kining.ssr.core.beans.QueryCondition;
 import com.natsuki_kining.ssr.core.beans.QueryParams;
 import com.natsuki_kining.ssr.core.beans.QueryRule;
 import com.natsuki_kining.ssr.core.enums.QueryCodeType;
+import com.natsuki_kining.ssr.core.enums.QueryConnect;
+import com.natsuki_kining.ssr.core.enums.QueryOperationalCharacter;
 import com.natsuki_kining.ssr.core.exception.SSRException;
+import com.natsuki_kining.ssr.core.utils.BeanUtils;
 import com.natsuki_kining.ssr.core.utils.Constant;
 import com.natsuki_kining.ssr.core.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 生成sql
@@ -22,8 +24,7 @@ import java.util.Set;
 @Slf4j
 public abstract class AbstractGeneratorSQL implements Generator {
 
-    @Value("${ssr.orm.type}")
-    private String ormType;
+    protected Map<String, List<QueryCondition>> queryConditionMap;
 
     @Override
     public String generateQuerySQL(QueryRule queryRule, QueryParams queryParams) {
@@ -46,51 +47,61 @@ public abstract class AbstractGeneratorSQL implements Generator {
         }else if (queryRule.getQueryCodeType() == QueryCodeType.GENERATE_QUERY_BY_TABLE){
             querySql.append(queryRule.getQueryCode());
         }
+        //处理查询条件
+        generateWhereSQL(querySql,queryRule,queryParams);
+        //处理排序
+        generateSortSQL(querySql,queryRule,queryParams);
+        //处理分页
+        generatePageSQL(querySql,queryRule,queryParams);
         return querySql.toString();
     }
 
-    @Override
-    public void generateWhereSQL(StringBuilder querySql, QueryRule queryRule, QueryParams queryParams) {
-        if (queryParams.getParams() != null && queryParams.getParams().size() > 0){
-            querySql.append(" T1 WHERE 1=1 ");
-            boolean isUseHibernateORM = "hibernate".equals(ormType);
-            for(String k : queryParams.getParams().keySet()) {
-                String conditionSign = getConditionSign(queryParams, k);
-                if (conditionSign == null) {
-                    conditionSign = getLikeConditionSign(queryParams, k);
-                    if (conditionSign == null){
-                        conditionSign = Constant.SQLCondition.Common.EQ;
-                    }else {
-                        querySql.append("AND T1.");
-                        querySql.append(StringUtils.castFieldToColumn(k));
-                        querySql.append(" ");
-                        if (isUseHibernateORM) {
-                            conditionSign = conditionSign.replaceAll(Constant.SQLCondition.paramName,":"+k);
-                        } else {
-                            conditionSign = conditionSign.replaceAll(Constant.SQLCondition.paramName,"#{"+k+"}");
-                        }
-                        querySql.append(conditionSign);
-                        continue;
-                    }
-                }
+    /**
+     * 生成where条件
+     * @param querySql sql StringBuilder
+     * @param queryRule 查询规则
+     * @param queryParams 查询参数
+     */
+    protected void generateWhereSQL(StringBuilder querySql, QueryRule queryRule, QueryParams queryParams) {
+        if (queryParams.getParams() == null || queryParams.getParams().size() == 0){
+            return;
+        }
+        querySql.append(" T1 WHERE 1=1 ");
+
+        queryConditionHandle(queryParams);
+        //如果有自定义的查询条件，则按自定义的规则来生成，没有则使用默认生成规则
+        if (queryConditionMap == null){
+            queryParams.getParams().keySet().stream().forEach(k->{
                 querySql.append("AND T1.");
                 querySql.append(StringUtils.castFieldToColumn(k));
-                querySql.append(conditionSign);
-                if (isUseHibernateORM) {
-                    querySql.append(":");
-                    querySql.append(k);
-                    querySql.append(" ");
-                } else {
-                    querySql.append("#{");
-                    querySql.append(k);
-                    querySql.append("} ");
-                }
-            }
+                querySql.append("=");
+                querySql.append(placeholderParam(k));
+                querySql.append(" ");
+            });
+        }else{
+            Set<Map.Entry<String, List<QueryCondition>>> entrySet = queryConditionMap.entrySet();
+            entrySet.stream().forEach(m->{
+                List<QueryCondition> queryConditionList = m.getValue();
+                queryConditionList.stream().forEach(c->{
+                    //and / or
+                    querySql.append(c.getQueryConnect().value());
+                    querySql.append(" T1.");
+                    querySql.append(StringUtils.castFieldToColumn(c.getQueryCode()));
+                    //运算符 跟参数
+                    String character = conditionHandel(c.getOperationalCharacter().value()).replaceAll(Constant.QUERY_PARAMS_NAME,placeholderParam(c.getQueryCode()));
+                    querySql.append(character);
+                });
+            });
         }
     }
 
-    @Override
-    public void generateSortSQL(StringBuilder querySql, QueryRule queryRule, QueryParams queryParams) {
+    /**
+     * 生成排序
+     * @param querySql sql StringBuilder
+     * @param queryRule 查询规则
+     * @param queryParams 查询参数
+     */
+    protected void generateSortSQL(StringBuilder querySql, QueryRule queryRule, QueryParams queryParams) {
         if (queryParams.getSort() == null){
             return;
         }
@@ -100,18 +111,65 @@ public abstract class AbstractGeneratorSQL implements Generator {
         querySql.deleteCharAt(querySql.length()-1);
     }
 
-    @Override
-    public void generatePageSQL(StringBuilder stringBuilder, QueryRule queryRule, QueryParams queryParams) {
+    /**
+     * 生成分页
+     * @param querySql sql StringBuilder
+     * @param queryRule 查询规则
+     * @param queryParams 查询参数
+     */
+    protected void generatePageSQL(StringBuilder querySql, QueryRule queryRule, QueryParams queryParams) {
 
     }
 
-    protected String getConditionSign(QueryParams queryParams, String k) {
-        Map<String, String> conditionSign = queryParams.getConditionSign();
-        if (conditionSign == null || conditionSign.size() == 0){
-            return Constant.SQLCondition.Common.EQ;
+    /**
+     * 处理查询条件
+     * @param queryParams
+     */
+    protected void queryConditionHandle(QueryParams queryParams) {
+        Map<String, String> conditionMap = queryParams.getCondition();
+        if (conditionMap == null || conditionMap.size() == 0){
+            return;
         }
-        return Constant.COMMON_CONDITION.get(conditionSign.get(k));
+        queryConditionMap = new HashMap<>();
+        conditionMap.forEach((k,v)->{
+            QueryConnect connect;
+            QueryOperationalCharacter operationalCharacter;
+            String queryCode;
+            String groupId= null;
+
+            //code[:and]
+            String[] keys = k.split(":");
+            queryCode = keys[0];
+            if (keys.length == 2){
+                connect = BeanUtils.getQueryConnect(keys[1].toLowerCase());
+            }else{
+                connect = QueryConnect.AND;
+            }
+
+            //al[:groupId]
+            String[] values = v.split(":");
+            operationalCharacter = BeanUtils.getQueryOperationalCharacter(values[0].toLowerCase());
+            if (values.length == 2){
+                groupId = values[1];
+            }else{
+                groupId = UUID.randomUUID().toString();
+            }
+
+            QueryCondition queryCondition = new QueryCondition(connect,operationalCharacter,queryCode);
+            if (queryConditionMap.get(groupId) == null){
+                queryConditionMap.put(groupId,new ArrayList<>());
+            }
+            queryConditionMap.get(groupId).add(queryCondition);
+        });
     }
 
-    protected abstract String getLikeConditionSign(QueryParams queryParams, String k);
+    protected abstract String conditionHandel(String replacement);
+
+    /**
+     * 查询占位符
+     * @param queryCode
+     * @return
+     */
+    protected abstract String placeholderParam(String queryCode);
+
 }

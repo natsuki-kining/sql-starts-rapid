@@ -1,5 +1,8 @@
 package com.natsuki_kining.ssr.core.utils;
 
+import com.natsuki_kining.ssr.core.enums.QueryConnect;
+import com.natsuki_kining.ssr.core.enums.QueryOperationalCharacter;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,26 +14,23 @@ import java.util.Map;
  */
 public class Constant {
 
-    public static final Map<String,String> COMMON_CONDITION = new HashMap<String, String>(){{
-        put("and",SQLCondition.Common.AND);
-        put("or",SQLCondition.Common.OR);
-        put("eq",SQLCondition.Common.EQ);
-        put("lt",SQLCondition.Common.LT);
-        put("le",SQLCondition.Common.LE);
-        put("gt",SQLCondition.Common.GT);
-        put("ge",SQLCondition.Common.GE);
+    public static final String QUERY_PARAMS_NAME = ":name";
+
+    public static final Map<String,QueryConnect> QUERY_CONNECT_MAP = new HashMap<String, QueryConnect>(){{
+        put("and", QueryConnect.AND);
+        put("or",QueryConnect.OR);
     }};
 
-    public static final Map<String,String> MYSQL_CONDITION = new HashMap<String, String>(){{
-        put("ll",SQLCondition.MySql.L_LIKE);
-        put("rl",SQLCondition.MySql.R_LIKE);
-        put("al",SQLCondition.MySql.A_LIKE);
-    }};
-
-    public static final Map<String,String> ORACLE_CONDITION = new HashMap<String, String>(){{
-        put("ll",SQLCondition.Oracle.L_LIKE);
-        put("rl",SQLCondition.Oracle.R_LIKE);
-        put("al",SQLCondition.Oracle.A_LIKE);
+    public static final Map<String,QueryOperationalCharacter> QUERY_OPERATIONAL_CHARACTER_MAP = new HashMap<String, QueryOperationalCharacter>(){{
+        put("eq",QueryOperationalCharacter.EQ);
+        put("neq",QueryOperationalCharacter.NEQ);
+        put("lt",QueryOperationalCharacter.LT);
+        put("le",QueryOperationalCharacter.LE);
+        put("gt",QueryOperationalCharacter.GT);
+        put("ge",QueryOperationalCharacter.GE);
+        put("ll",QueryOperationalCharacter.L_LIKE);
+        put("rl",QueryOperationalCharacter.R_LIKE);
+        put("al",QueryOperationalCharacter.A_LIKE);
     }};
 
     /**
@@ -51,31 +51,4 @@ public class Constant {
         int DEFAULT_PAGE_SIZE = 10;
     }
 
-    public interface SQLCondition{
-
-        String paramName = ":name";
-
-        interface Common{
-            String AND = "AND ";
-            String OR = "OR ";
-
-            String EQ = "= ";
-            String LT = "< ";
-            String LE = "<= ";
-            String GT = "> ";
-            String GE = ">= ";
-        }
-
-        interface Oracle{
-            String L_LIKE = "LIKE '%' || :name ";
-            String R_LIKE = "LIKE :name || '%' ";
-            String A_LIKE = "LIKE '%' || :name || '%' ";
-        }
-
-        interface MySql{
-            String L_LIKE = "LIKE concat('%',:name) ";
-            String R_LIKE = "LIKE concat(:name,'%') ";
-            String A_LIKE = "LIKE concat(concat('%',:name),'%') ";
-        }
-    }
 }

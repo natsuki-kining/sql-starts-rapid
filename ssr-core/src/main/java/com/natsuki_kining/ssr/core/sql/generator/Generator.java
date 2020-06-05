@@ -20,27 +20,4 @@ public interface Generator {
      */
     String generateQuerySQL(QueryRule queryRule, QueryParams queryParams);
 
-    /**
-     * 生成where条件
-     * @param querySql sql StringBuilder
-     * @param queryRule 查询规则
-     * @param queryParams 查询参数
-     */
-    void generateWhereSQL(StringBuilder querySql, QueryRule queryRule, QueryParams queryParams);
-
-    /**
-     * 生成排序
-     * @param querySql sql StringBuilder
-     * @param queryRule 查询规则
-     * @param queryParams 查询参数
-     */
-    void generateSortSQL(StringBuilder querySql, QueryRule queryRule, QueryParams queryParams);
-
-    /**
-     * 生成分页
-     * @param querySql sql StringBuilder
-     * @param queryRule 查询规则
-     * @param queryParams 查询参数
-     */
-    void generatePageSQL(StringBuilder querySql, QueryRule queryRule, QueryParams queryParams);
 }

@@ -25,7 +25,7 @@ public class SQLImpl implements SQL {
     @Autowired
     private SQLTemplate ssrTemplate;
 
-    @Resource(name = "${spring.datasource.driver-class-name}")
+    @Resource(name = "${ssr.orm.type}-${spring.datasource.driver-class-name}")
     private Generator generator;
 
     @Override
@@ -36,13 +36,7 @@ public class SQLImpl implements SQL {
             sql = new StringBuilder(formatSQL);
         }else{
             sql = new StringBuilder(generator.generateQuerySQL(queryRule,queryParams));
-            //处理查询条件
-            generator.generateWhereSQL(sql,queryRule,queryParams);
         }
-        //处理排序
-        generator.generateSortSQL(sql,queryRule,queryParams);
-        //处理分页
-        generator.generatePageSQL(sql,queryRule,queryParams);
         return sql.toString();
     }
 
