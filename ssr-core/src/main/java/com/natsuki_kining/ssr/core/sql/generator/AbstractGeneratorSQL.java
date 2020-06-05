@@ -5,10 +5,7 @@ import com.natsuki_kining.ssr.core.beans.QueryCondition;
 import com.natsuki_kining.ssr.core.beans.QueryParams;
 import com.natsuki_kining.ssr.core.beans.QueryRule;
 import com.natsuki_kining.ssr.core.enums.QueryCodeType;
-import com.natsuki_kining.ssr.core.enums.QueryConnect;
-import com.natsuki_kining.ssr.core.enums.QueryOperationalCharacter;
 import com.natsuki_kining.ssr.core.exception.SSRException;
-import com.natsuki_kining.ssr.core.utils.BeanUtils;
 import com.natsuki_kining.ssr.core.utils.Constant;
 import com.natsuki_kining.ssr.core.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -84,12 +81,12 @@ public abstract class AbstractGeneratorSQL implements Generator {
                 List<QueryCondition> queryConditionList = m.getValue();
                 queryConditionList.stream().forEach(c->{
                     //and / or
-                    querySql.append(c.getQueryConnect().value());
+                    querySql.append(c.getQueryConnect());
                     querySql.append(" T1.");
                     querySql.append(StringUtils.castFieldToColumn(c.getQueryCode()));
+                    querySql.append(" ");
                     //运算符 跟参数
-                    String character = conditionHandel(c.getOperationalCharacter().value()).replaceAll(Constant.QUERY_PARAMS_NAME,placeholderParam(c.getQueryCode()));
-                    querySql.append(character);
+                    querySql.append(c.getOperationalCharacter());
                 });
             });
         }
@@ -132,23 +129,30 @@ public abstract class AbstractGeneratorSQL implements Generator {
         }
         queryConditionMap = new HashMap<>();
         conditionMap.forEach((k,v)->{
-            QueryConnect connect;
-            QueryOperationalCharacter operationalCharacter;
+            String connect;
             String queryCode;
-            String groupId= null;
+            String operationalCharacter;
+            String groupId;
 
             //code[:and]
             String[] keys = k.split(":");
             queryCode = keys[0];
+            String placeholderParam = placeholderParam(queryCode);
             if (keys.length == 2){
-                connect = BeanUtils.getQueryConnect(keys[1].toLowerCase());
+                connect = StringUtils.getQueryConnect(keys[1].toLowerCase());
             }else{
-                connect = QueryConnect.AND;
+                connect = Constant.Condition.AND;
             }
 
             //al[:groupId]
             String[] values = v.split(":");
-            operationalCharacter = BeanUtils.getQueryOperationalCharacter(values[0].toLowerCase());
+            operationalCharacter = StringUtils.getQueryOperationalCharacter(values[0].toLowerCase());
+
+            if (Constant.Condition.ALL_LIKE.equals(operationalCharacter) || Constant.Condition.LEFT_LIKE.equals(operationalCharacter) || Constant.Condition.RIGHT_LIKE.equals(operationalCharacter)){
+                operationalCharacter = likeConditionHandel(operationalCharacter,placeholderParam);
+            }else{
+                operationalCharacter = operationalCharacter + " " + placeholderParam;
+            }
             if (values.length == 2){
                 groupId = values[1];
             }else{
@@ -163,7 +167,7 @@ public abstract class AbstractGeneratorSQL implements Generator {
         });
     }
 
-    protected abstract String conditionHandel(String replacement);
+    protected abstract String likeConditionHandel(String replacement,String placeholderParam);
 
     /**
      * 查询占位符

@@ -1,7 +1,5 @@
 package com.natsuki_kining.ssr.core.beans;
 
-import com.natsuki_kining.ssr.core.enums.QueryConnect;
-import com.natsuki_kining.ssr.core.enums.QueryOperationalCharacter;
 import lombok.Data;
 
 /**
@@ -13,7 +11,7 @@ import lombok.Data;
 @Data
 public class QueryCondition {
 
-    public QueryCondition(QueryConnect queryConnect, QueryOperationalCharacter operationalCharacter, String queryCode) {
+    public QueryCondition(String queryConnect, String operationalCharacter, String queryCode) {
         this.queryConnect = queryConnect;
         this.operationalCharacter = operationalCharacter;
         this.queryCode = queryCode;
@@ -24,18 +22,18 @@ public class QueryCondition {
      * and
      * or
      */
-    private QueryConnect queryConnect;
+    private String queryConnect;
 
     /**
-     * 运算符
+     * 运算符 + 参数
      * =
      * <>
      * ……
      */
-    private QueryOperationalCharacter operationalCharacter;
+    private String operationalCharacter;
 
     /**
-     * 通过id则会使用括号包起来
+     * 查询code
      */
     private String queryCode;
 

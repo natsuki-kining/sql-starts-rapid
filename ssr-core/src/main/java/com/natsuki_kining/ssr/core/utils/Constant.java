@@ -1,8 +1,5 @@
 package com.natsuki_kining.ssr.core.utils;
 
-import com.natsuki_kining.ssr.core.enums.QueryConnect;
-import com.natsuki_kining.ssr.core.enums.QueryOperationalCharacter;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,25 +10,6 @@ import java.util.Map;
  * @Date : 2020/5/31 0:12
  */
 public class Constant {
-
-    public static final String QUERY_PARAMS_NAME = ":name";
-
-    public static final Map<String,QueryConnect> QUERY_CONNECT_MAP = new HashMap<String, QueryConnect>(){{
-        put("and", QueryConnect.AND);
-        put("or",QueryConnect.OR);
-    }};
-
-    public static final Map<String,QueryOperationalCharacter> QUERY_OPERATIONAL_CHARACTER_MAP = new HashMap<String, QueryOperationalCharacter>(){{
-        put("eq",QueryOperationalCharacter.EQ);
-        put("neq",QueryOperationalCharacter.NEQ);
-        put("lt",QueryOperationalCharacter.LT);
-        put("le",QueryOperationalCharacter.LE);
-        put("gt",QueryOperationalCharacter.GT);
-        put("ge",QueryOperationalCharacter.GE);
-        put("ll",QueryOperationalCharacter.L_LIKE);
-        put("rl",QueryOperationalCharacter.R_LIKE);
-        put("al",QueryOperationalCharacter.A_LIKE);
-    }};
 
     /**
      * 查询类型常量
@@ -51,4 +29,29 @@ public class Constant {
         int DEFAULT_PAGE_SIZE = 10;
     }
 
+    public interface Condition{
+        String LEFT_LIKE = "ll";
+        String RIGHT_LIKE = "rl";
+        String ALL_LIKE = "al";
+        String EQ = "=";
+
+        String AND = "AND";
+
+        Map<String,String> QUERY_CONNECT_MAP = new HashMap<String, String>(){{
+            put("and", "AND");
+            put("or","OR");
+        }};
+
+        Map<String,String> QUERY_OPERATIONAL_CHARACTER_MAP = new HashMap<String, String>(){{
+            put(EQ, EQ);
+            put("neq","<>");
+            put("lt","<");
+            put("le","<=");
+            put("gt",">");
+            put("ge",">=");
+            put(LEFT_LIKE, LEFT_LIKE);
+            put(RIGHT_LIKE, RIGHT_LIKE);
+            put(ALL_LIKE, ALL_LIKE);
+        }};
+    }
 }

@@ -25,7 +25,7 @@ public class SQLImpl implements SQL {
     @Autowired
     private SQLTemplate ssrTemplate;
 
-    @Resource(name = "${ssr.orm.type}-${spring.datasource.driver-class-name}")
+    @Resource(name = "${spring.datasource.driver-class-name}")
     private Generator generator;
 
     @Override
