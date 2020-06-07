@@ -45,11 +45,6 @@ public class SSRDynamicSQL {
     private String sqlTemplate;
 
     /**
-     * 预处理脚本
-     */
-    private String preScript;
-
-    /**
      * 查询之前脚本
      */
     private String beforeScript;

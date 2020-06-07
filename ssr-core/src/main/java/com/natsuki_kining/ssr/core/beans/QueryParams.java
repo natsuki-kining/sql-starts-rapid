@@ -4,6 +4,7 @@ import com.natsuki_kining.ssr.core.utils.Constant;
 import lombok.Data;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,12 +29,9 @@ public class QueryParams {
     private LinkedHashMap<String, String> sort;
 
     /**
-     * 自动生成sql用
-     * 查询条件
-     * kye->code[:and]
-     * value->al[:groupId]
+     * 自动生成sql where 条件用
      */
-    private Map<String,String> condition;
+    private List<QueryCondition> condition;
     private int pageNo = 1;
     /**
      * pageSize = -1 则查询全部、不进行分页

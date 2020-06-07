@@ -11,32 +11,34 @@ import lombok.Data;
 @Data
 public class QueryCondition {
 
-    public QueryCondition(String queryConnect, String operationalCharacter, String queryCode) {
-        this.queryConnect = queryConnect;
-        this.operationalCharacter = operationalCharacter;
-        this.queryCode = queryCode;
-    }
-
-    /**
-     * 连接符
-     * and
-     * or
-     */
-    private String queryConnect;
-
-    /**
-     * 运算符 + 参数
-     * =
-     * <>
-     * ……
-     */
-    private String operationalCharacter;
-
     /**
      * 查询code
      */
     private String queryCode;
 
+    private Object value;
+
+    private String connect;
+
+    private String operational;
+
+    private String groupId;
+
+    private String groupConnect;
+
+    public String getConnect() {
+        if (connect == null){
+            return null;
+        }
+        return connect.trim();
+    }
+
+    public String getOperational() {
+        if (operational == null){
+            return null;
+        }
+        return operational.trim();
+    }
 }
 
 

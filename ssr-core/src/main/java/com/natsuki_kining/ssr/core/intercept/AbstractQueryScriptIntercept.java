@@ -1,6 +1,7 @@
 package com.natsuki_kining.ssr.core.intercept;
 
 import com.alibaba.fastjson.JSON;
+import com.natsuki_kining.ssr.core.beans.QueryInfo;
 import com.natsuki_kining.ssr.core.beans.QueryParams;
 import com.natsuki_kining.ssr.core.beans.SSRDynamicSQL;
 import org.apache.commons.lang3.StringUtils;
@@ -20,25 +21,21 @@ public abstract class AbstractQueryScriptIntercept implements QueryIntercept {
     protected String resultName = "ssrResult";
 
     @Override
-    public boolean preHandle(QueryParams queryParams, SSRDynamicSQL dynamicSql, Map<String, Object> preData) {
-        String preScript = dynamicSql.getPreScript();
-        if (StringUtils.isBlank(preScript)) {
-            return true;
-        }
-        return (boolean) executeScript(preScript, queryParams);
+    public boolean preHandle(QueryParams queryParams) {
+        return true;
     }
 
     @Override
-    public void queryBefore(QueryParams queryParams, SSRDynamicSQL dynamicSql, Map<String, Object> preData) {
-        String beforeScript = dynamicSql.getPreScript();
+    public void queryBefore(QueryParams queryParams, QueryInfo queryInfo, SSRDynamicSQL dynamicSql, Map<String, Object> preData) {
+        String beforeScript = dynamicSql.getBeforeScript();
         if (StringUtils.isNotBlank(beforeScript)) {
             executeScript(beforeScript, queryParams);
         }
     }
 
     @Override
-    public Object queryAfter(QueryParams queryParams, SSRDynamicSQL dynamicSql, Map<String, Object> preData, Object queryData) {
-        String beforeScript = dynamicSql.getPreScript();
+    public Object queryAfter(QueryParams queryParams, QueryInfo queryInfo, SSRDynamicSQL dynamicSql, Map<String, Object> preData, Object queryData) {
+        String beforeScript = dynamicSql.getAfterScript();
         if (StringUtils.isBlank(beforeScript)) {
             return queryData;
         }

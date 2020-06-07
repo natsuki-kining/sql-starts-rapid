@@ -6,11 +6,15 @@ import com.natsuki_kining.ssr.core.beans.QueryParams;
 import com.natsuki_kining.ssr.core.beans.QueryRule;
 import com.natsuki_kining.ssr.core.enums.QueryCodeType;
 import com.natsuki_kining.ssr.core.exception.SSRException;
+import com.natsuki_kining.ssr.core.utils.CollectionUtils;
 import com.natsuki_kining.ssr.core.utils.Constant;
+import com.natsuki_kining.ssr.core.utils.MapUtils;
 import com.natsuki_kining.ssr.core.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
 
 /**
  * 生成sql
@@ -21,156 +25,154 @@ import java.util.*;
 @Slf4j
 public abstract class AbstractGeneratorSQL implements Generator {
 
-    protected Map<String, List<QueryCondition>> queryConditionMap;
-
     @Override
     public String generateQuerySQL(QueryRule queryRule, QueryParams queryParams) {
         StringBuilder querySql = new StringBuilder("SELECT * FROM ");
-        if (queryRule.getQueryCodeType() == QueryCodeType.GENERATE_QUERY_BY_ENTITY){
+        if (queryRule.getQueryCodeType() == QueryCodeType.GENERATE_QUERY_BY_ENTITY) {
             Class<?> clazz;
             try {
                 clazz = Class.forName(queryRule.getQueryCode());
             } catch (ClassNotFoundException e) {
-                throw new SSRException(e.getMessage(),e);
+                throw new SSRException(e.getMessage(), e);
             }
             String tableName;
-            if (clazz.isAnnotationPresent(TableName.class)){
+            if (clazz.isAnnotationPresent(TableName.class)) {
                 TableName tableNameAnnotation = clazz.getAnnotation(TableName.class);
                 tableName = tableNameAnnotation.value();
-            }else{
+            } else {
                 tableName = clazz.getSimpleName();
             }
             querySql.append(tableName);
-        }else if (queryRule.getQueryCodeType() == QueryCodeType.GENERATE_QUERY_BY_TABLE){
+        } else if (queryRule.getQueryCodeType() == QueryCodeType.GENERATE_QUERY_BY_TABLE) {
             querySql.append(queryRule.getQueryCode());
         }
         //处理查询条件
-        generateWhereSQL(querySql,queryRule,queryParams);
+        generateWhereSQL(querySql, queryRule, queryParams);
         //处理排序
-        generateSortSQL(querySql,queryRule,queryParams);
+        generateSortSQL(querySql, queryRule, queryParams);
         //处理分页
-        generatePageSQL(querySql,queryRule,queryParams);
+        generatePageSQL(querySql, queryRule, queryParams);
         return querySql.toString();
     }
 
     /**
      * 生成where条件
-     * @param querySql sql StringBuilder
-     * @param queryRule 查询规则
+     *
+     * @param querySql    sql StringBuilder
+     * @param queryRule   查询规则
      * @param queryParams 查询参数
      */
     protected void generateWhereSQL(StringBuilder querySql, QueryRule queryRule, QueryParams queryParams) {
-        if (queryParams.getParams() == null || queryParams.getParams().size() == 0){
+        if (MapUtils.isEmpty(queryParams.getParams()) && CollectionUtils.isEmpty(queryParams.getCondition())) {
             return;
         }
         querySql.append(" T1 WHERE 1=1 ");
 
-        queryConditionHandle(queryParams);
+        //<String, List<QueryCondition>> queryConditionMap = queryConditionHandle(queryParams);
         //如果有自定义的查询条件，则按自定义的规则来生成，没有则使用默认生成规则
-        if (queryConditionMap == null){
-            queryParams.getParams().keySet().stream().forEach(k->{
+        if (CollectionUtils.isEmpty(queryParams.getCondition())) {
+            queryParams.getParams().keySet().stream().forEach(k -> {
                 querySql.append("AND T1.");
                 querySql.append(StringUtils.castFieldToColumn(k));
-                querySql.append("=");
+                querySql.append(" = ");
                 querySql.append(placeholderParam(k));
                 querySql.append(" ");
             });
-        }else{
-            Set<Map.Entry<String, List<QueryCondition>>> entrySet = queryConditionMap.entrySet();
-            entrySet.stream().forEach(m->{
-                List<QueryCondition> queryConditionList = m.getValue();
-                queryConditionList.stream().forEach(c->{
-                    //and / or
-                    querySql.append(c.getQueryConnect());
-                    querySql.append(" T1.");
-                    querySql.append(StringUtils.castFieldToColumn(c.getQueryCode()));
-                    querySql.append(" ");
-                    //运算符 跟参数
-                    querySql.append(c.getOperationalCharacter());
-                });
+        } else {
+            Map<String,Object> params = new HashMap<>();
+            List<QueryCondition> conditionList = queryParams.getCondition();
+            Map<String,List<QueryCondition>> queryConditionMap = new HashMap<>();
+            conditionList.stream().forEach(c->{
+                String groupId = c.getGroupId();
+                if (StringUtils.isBlank(groupId)){
+                    groupId = UUID.randomUUID().toString();
+                }
+                if (queryConditionMap.get(groupId) == null){
+                    queryConditionMap.put(groupId,new ArrayList<>());
+                }
+                queryConditionMap.get(groupId).add(c);
             });
+
+
+            AtomicInteger index = new AtomicInteger(0);
+            queryConditionMap.forEach((k,v)->{
+                String paramName = "param";
+                if (v.size() == 1){
+                    index.getAndIncrement();
+                    QueryCondition c = v.get(0);
+                    queryConditionHandle(querySql,c,params,paramName+index.get());
+                }else{
+                    querySql.append(StringUtils.getInListValue(Constant.Condition.QUERY_CONNECT_LIST, v.get(0).getConnect(), Constant.Condition.DEFAULT_CONNECT));
+                    querySql.append(" ( ");
+                    v.stream().forEach(c->{
+                        index.getAndIncrement();
+                        queryConditionHandle(querySql,c,params,paramName+index.get());
+                    });
+                    querySql.append(" ) ");
+                }
+            });
+            queryParams.getParams().putAll(params);
         }
     }
 
     /**
      * 生成排序
-     * @param querySql sql StringBuilder
-     * @param queryRule 查询规则
+     *
+     * @param querySql    sql StringBuilder
+     * @param queryRule   查询规则
      * @param queryParams 查询参数
      */
     protected void generateSortSQL(StringBuilder querySql, QueryRule queryRule, QueryParams queryParams) {
-        if (queryParams.getSort() == null){
+        if (queryParams.getSort() == null) {
             return;
         }
         querySql.append("ORDER BY ");
         Set<Map.Entry<String, String>> sortSet = queryParams.getSort().entrySet();
-        sortSet.stream().forEach(e->querySql.append(StringUtils.castFieldToColumn(e.getKey())+" " + e.getValue().toUpperCase() + ","));
-        querySql.deleteCharAt(querySql.length()-1);
+        sortSet.stream().forEach(e -> querySql.append(StringUtils.castFieldToColumn(e.getKey()) + " " + e.getValue().toUpperCase() + ","));
+        querySql.deleteCharAt(querySql.length() - 1);
     }
 
     /**
      * 生成分页
-     * @param querySql sql StringBuilder
-     * @param queryRule 查询规则
+     *
+     * @param querySql    sql StringBuilder
+     * @param queryRule   查询规则
      * @param queryParams 查询参数
      */
     protected void generatePageSQL(StringBuilder querySql, QueryRule queryRule, QueryParams queryParams) {
 
     }
 
-    /**
-     * 处理查询条件
-     * @param queryParams
-     */
-    protected void queryConditionHandle(QueryParams queryParams) {
-        Map<String, String> conditionMap = queryParams.getCondition();
-        if (conditionMap == null || conditionMap.size() == 0){
-            return;
+
+    private void queryConditionHandle(StringBuilder querySql,QueryCondition queryCondition,Map<String,Object> params,String paramName){
+        String queryCode = queryCondition.getQueryCode();
+        String connect = queryCondition.getConnect();
+        String operational = queryCondition.getOperational();
+        Object value = queryCondition.getValue();
+
+        params.put(paramName,value);
+
+        connect = StringUtils.getInListValue(Constant.Condition.QUERY_CONNECT_LIST, connect, Constant.Condition.DEFAULT_CONNECT);
+        if (Constant.Condition.QUERY_LIKE_OPERATIONAL_CHARACTER_LIST.contains(operational)) {
+            operational = likeConditionHandel(operational, placeholderParam(paramName));
+        } else {
+            operational = StringUtils.getInListValue(Constant.Condition.QUERY_OPERATIONAL_CHARACTER_LIST, operational, Constant.Condition.DEFAULT_OPERATIONAL_CHARACTER) + " " + placeholderParam(paramName) + " ";
         }
-        queryConditionMap = new HashMap<>();
-        conditionMap.forEach((k,v)->{
-            String connect;
-            String queryCode;
-            String operationalCharacter;
-            String groupId;
 
-            //code[:and]
-            String[] keys = k.split(":");
-            queryCode = keys[0];
-            String placeholderParam = placeholderParam(queryCode);
-            if (keys.length == 2){
-                connect = StringUtils.getQueryConnect(keys[1].toLowerCase());
-            }else{
-                connect = Constant.Condition.AND;
-            }
-
-            //al[:groupId]
-            String[] values = v.split(":");
-            operationalCharacter = StringUtils.getQueryOperationalCharacter(values[0].toLowerCase());
-
-            if (Constant.Condition.ALL_LIKE.equals(operationalCharacter) || Constant.Condition.LEFT_LIKE.equals(operationalCharacter) || Constant.Condition.RIGHT_LIKE.equals(operationalCharacter)){
-                operationalCharacter = likeConditionHandel(operationalCharacter,placeholderParam);
-            }else{
-                operationalCharacter = operationalCharacter + " " + placeholderParam;
-            }
-            if (values.length == 2){
-                groupId = values[1];
-            }else{
-                groupId = UUID.randomUUID().toString();
-            }
-
-            QueryCondition queryCondition = new QueryCondition(connect,operationalCharacter,queryCode);
-            if (queryConditionMap.get(groupId) == null){
-                queryConditionMap.put(groupId,new ArrayList<>());
-            }
-            queryConditionMap.get(groupId).add(queryCondition);
-        });
+        querySql.append(connect);
+        querySql.append(" T1.");
+        querySql.append(StringUtils.castFieldToColumn(queryCode));
+        querySql.append(" ");
+        querySql.append(operational);
+        querySql.append(" ");
+        querySql.append(paramName);
     }
 
-    protected abstract String likeConditionHandel(String replacement,String placeholderParam);
+    protected abstract String likeConditionHandel(String replacement, String placeholderParam);
 
     /**
      * 查询占位符
+     *
      * @param queryCode
      * @return
      */

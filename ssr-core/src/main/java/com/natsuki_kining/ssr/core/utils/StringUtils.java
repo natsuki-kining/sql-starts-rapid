@@ -1,5 +1,7 @@
 package com.natsuki_kining.ssr.core.utils;
 
+import java.util.List;
+
 /**
  * 字符串工具类
  *
@@ -69,30 +71,15 @@ public class StringUtils {
         return column.toString().toUpperCase();
     }
 
-    /**
-     * 获取连接符
-     * @param key key
-     * @return 连接符
-     */
-    public static String getQueryConnect(String key){
-        String queryConnect = Constant.Condition.QUERY_CONNECT_MAP.get(key);
-        if (queryConnect == null){
-            queryConnect = Constant.Condition.AND;
+    public static String getInListValue(List<String> list,String value,String defaultValue){
+        if (StringUtils.isBlank(value)){
+            return defaultValue;
+        }else{
+            if (list.contains(value)){
+                return value;
+            }else{
+                return defaultValue;
+            }
         }
-        return queryConnect;
     }
-
-    /**
-     * 获取运算符
-     * @param key key
-     * @return 运算符
-     */
-    public static String getQueryOperationalCharacter(String key){
-        String queryOperationalCharacter = Constant.Condition.QUERY_OPERATIONAL_CHARACTER_MAP.get(key);
-        if (queryOperationalCharacter == null){
-            queryOperationalCharacter = Constant.Condition.EQ;
-        }
-        return queryOperationalCharacter;
-    }
-
 }

@@ -1,5 +1,6 @@
 package com.natsuki_kining.ssr.test.intercept;
 
+import com.natsuki_kining.ssr.core.beans.QueryInfo;
 import com.natsuki_kining.ssr.core.beans.QueryParams;
 import com.natsuki_kining.ssr.core.beans.SSRDynamicSQL;
 import com.natsuki_kining.ssr.core.intercept.AbstractQueryJavaIntercept;
@@ -16,17 +17,17 @@ import java.util.Map;
 public class SSRQueryIntercept extends AbstractQueryJavaIntercept {
 
     @Override
-    public boolean preHandle(QueryParams queryParams, SSRDynamicSQL ssrDynamicSQL, Map<String, Object> map) {
+    public boolean preHandle(QueryParams queryParams) {
         return true;
     }
 
     @Override
-    public void queryBefore(QueryParams queryParams, SSRDynamicSQL ssrDynamicSQL, Map<String, Object> map) {
+    public void queryBefore(QueryParams queryParams, QueryInfo queryInfo, SSRDynamicSQL ssrDynamicSQL, Map<String, Object> map) {
 
     }
 
     @Override
-    public Object queryAfter(QueryParams queryParams, SSRDynamicSQL ssrDynamicSQL, Map<String, Object> map, Object data) {
+    public Object queryAfter(QueryParams queryParams,QueryInfo queryInfo, SSRDynamicSQL ssrDynamicSQL, Map<String, Object> map, Object data) {
         return data;
     }
 }

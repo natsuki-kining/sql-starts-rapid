@@ -1,6 +1,8 @@
 package com.natsuki_kining.ssr.core.utils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,25 +35,38 @@ public class Constant {
         String LEFT_LIKE = "ll";
         String RIGHT_LIKE = "rl";
         String ALL_LIKE = "al";
-        String EQ = "=";
 
-        String AND = "AND";
+        String DEFAULT_OPERATIONAL_CHARACTER = "=";
 
-        Map<String,String> QUERY_CONNECT_MAP = new HashMap<String, String>(){{
-            put("and", "AND");
-            put("or","OR");
+        String DEFAULT_CONNECT = "AND";
+
+        List<String> QUERY_CONNECT_LIST = new ArrayList<String>(){{
+            add("AND");
+            add("OR");
         }};
 
-        Map<String,String> QUERY_OPERATIONAL_CHARACTER_MAP = new HashMap<String, String>(){{
-            put(EQ, EQ);
-            put("neq","<>");
-            put("lt","<");
-            put("le","<=");
-            put("gt",">");
-            put("ge",">=");
-            put(LEFT_LIKE, LEFT_LIKE);
-            put(RIGHT_LIKE, RIGHT_LIKE);
-            put(ALL_LIKE, ALL_LIKE);
+        List<String> QUERY_OPERATIONAL_CHARACTER_LIST = new ArrayList<String>(){{
+            add("=");
+            add("<>");
+            add("!=");
+            add(">");
+            add(">=");
+            add("<");
+            add("<=");
         }};
+
+        List<String> QUERY_LIKE_OPERATIONAL_CHARACTER_LIST = new ArrayList<String>(){{
+            add("ll");
+            add("rl");
+            add("al");
+        }};
+
+    }
+
+    public interface Intercept{
+        /**
+         * 最后一个拦截器的code
+         */
+        String SSR_LAST_INTERCEPT = "ssr-last-intercept";
     }
 }
