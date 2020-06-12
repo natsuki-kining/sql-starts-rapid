@@ -79,9 +79,10 @@ public abstract class AbstractGeneratorSQL implements Generator {
                 querySql.append(" ");
             });
         } else {
-            Map<String,Object> params = new HashMap<>();
+            Map<String,Object> params = new HashMap<>(queryParams.getCondition().size());
+            queryParams.setParams(params);
             List<QueryCondition> conditionList = queryParams.getCondition();
-            Map<String,List<QueryCondition>> queryConditionMap = new HashMap<>();
+            Map<String,List<QueryCondition>> queryConditionMap = new HashMap<>(conditionList.size());
             conditionList.stream().forEach(c->{
                 String groupId = c.getGroupId();
                 if (StringUtils.isBlank(groupId)){
@@ -102,7 +103,7 @@ public abstract class AbstractGeneratorSQL implements Generator {
                     QueryCondition c = v.get(0);
                     queryConditionHandle(querySql,c,params,paramName+index.get());
                 }else{
-                    querySql.append(StringUtils.getInListValue(Constant.Condition.QUERY_CONNECT_LIST, v.get(0).getConnect(), Constant.Condition.DEFAULT_CONNECT));
+                    querySql.append(StringUtils.getInListValue(Constant.Condition.QUERY_CONNECT_LIST, v.get(0).getConnect().toUpperCase(), Constant.Condition.DEFAULT_CONNECT));
                     querySql.append(" ( ");
                     v.stream().forEach(c->{
                         index.getAndIncrement();
@@ -111,7 +112,6 @@ public abstract class AbstractGeneratorSQL implements Generator {
                     querySql.append(" ) ");
                 }
             });
-            queryParams.getParams().putAll(params);
         }
     }
 
@@ -152,22 +152,26 @@ public abstract class AbstractGeneratorSQL implements Generator {
 
         params.put(paramName,value);
 
-        connect = StringUtils.getInListValue(Constant.Condition.QUERY_CONNECT_LIST, connect, Constant.Condition.DEFAULT_CONNECT);
+        connect = StringUtils.getInListValue(Constant.Condition.QUERY_CONNECT_LIST, connect.toUpperCase(), Constant.Condition.DEFAULT_CONNECT);
         if (Constant.Condition.QUERY_LIKE_OPERATIONAL_CHARACTER_LIST.contains(operational)) {
             operational = likeConditionHandel(operational, placeholderParam(paramName));
         } else {
             operational = StringUtils.getInListValue(Constant.Condition.QUERY_OPERATIONAL_CHARACTER_LIST, operational, Constant.Condition.DEFAULT_OPERATIONAL_CHARACTER) + " " + placeholderParam(paramName) + " ";
         }
-
         querySql.append(connect);
         querySql.append(" T1.");
         querySql.append(StringUtils.castFieldToColumn(queryCode));
         querySql.append(" ");
         querySql.append(operational);
         querySql.append(" ");
-        querySql.append(paramName);
     }
 
+    /**
+     * 处理like查询sql片段
+     * @param replacement like 标识符
+     * @param placeholderParam 占位符
+     * @return
+     */
     protected abstract String likeConditionHandel(String replacement, String placeholderParam);
 
     /**

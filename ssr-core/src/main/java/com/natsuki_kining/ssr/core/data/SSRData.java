@@ -14,9 +14,9 @@ public interface SSRData {
     /**
      * 查询SSR_DYNAMIC_SQL表，并返回SSRDynamicSQL
      *
-     * @param code 查询的code
+     * @param queryCode 查询的code
      * @return SSRDynamicSQL对象
      */
-    SSRDynamicSQL getSSRDynamicSQL(String code);
+    SSRDynamicSQL getSSRDynamicSQL(String queryCode);
 
 }

@@ -62,12 +62,15 @@ public class JdkProxy implements InvocationHandler, SSRProxy {
                 QueryRule entryValue = entry.getValue();
                 args[0] = proxyConfig.getSQL().getQuerySQL(entryValue, queryParams);
                 value = invoke(method, args, preDate, entryValue.getDynamicSql(), queryParams);
+                proxyConfig.getCache().save(entryValue.getDynamicSql());
                 preDate.put(entry.getKey(), value);
             }
             return value;
         } else {
             args[0] = proxyConfig.getSQL().getQuerySQL(queryRule, queryParams);
-            return invoke(method, args, null, queryRule.getDynamicSql(), queryParams);
+            Object invoke = invoke(method, args, null, queryRule.getDynamicSql(), queryParams);
+            proxyConfig.getCache().save(queryRule.getDynamicSql());
+            return invoke;
         }
     }
 

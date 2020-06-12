@@ -1,6 +1,7 @@
 package com.natsuki_kining.ssr.core.proxy;
 
 import com.natsuki_kining.ssr.core.annotation.QueryCode;
+import com.natsuki_kining.ssr.core.data.cache.SSRCache;
 import com.natsuki_kining.ssr.core.enums.ORMType;
 import com.natsuki_kining.ssr.core.intercept.AbstractQueryJavaIntercept;
 import com.natsuki_kining.ssr.core.intercept.AbstractQueryScriptIntercept;
@@ -49,29 +50,18 @@ class ProxyConfig {
         return this.rule;
     }
 
-    /**
-     * 获取orm类型
-     *
-     * @return ORMType
-     */
-    ORMType getORMType() {
-        if (ORMType.HIBERNATE.getType().equals(ormType)) {
-            return ORMType.HIBERNATE;
-        } else if (ORMType.MYBATIS.getType().equals(ormType)) {
-            return ORMType.MYBATIS;
-        } else {
-            return ORMType.USER_DEFINED;
-        }
+    SSRCache getCache() {
+        return this.cache;
     }
-
-    @Value("${ssr.orm.type}")
-    private String ormType;
 
     @Autowired
     private SQL sql;
 
     @Autowired
     private Rule rule;
+
+    @Autowired
+    private SSRCache cache;
 
     @Autowired(required = false)
     private AbstractQueryScriptIntercept scriptIntercept;

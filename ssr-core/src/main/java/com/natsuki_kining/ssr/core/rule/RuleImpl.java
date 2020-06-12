@@ -2,12 +2,14 @@ package com.natsuki_kining.ssr.core.rule;
 
 import com.natsuki_kining.ssr.core.beans.QueryRule;
 import com.natsuki_kining.ssr.core.beans.SSRDynamicSQL;
+import com.natsuki_kining.ssr.core.data.SSRData;
 import com.natsuki_kining.ssr.core.data.orm.QueryORM;
 import com.natsuki_kining.ssr.core.enums.QueryCodeType;
 import com.natsuki_kining.ssr.core.exception.SSRException;
 import com.natsuki_kining.ssr.core.utils.Assert;
 import com.natsuki_kining.ssr.core.utils.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +28,8 @@ import java.util.regex.Pattern;
 public class RuleImpl implements Rule {
 
     @Autowired
-    private QueryORM orm;
+    @Qualifier("SSRDataImpl")
+    private SSRData data;
 
     @Value("${ssr.generate-by-entity.enable:false}")
     private boolean generateByEntityEnable;
@@ -58,7 +61,7 @@ public class RuleImpl implements Rule {
         int index = queryCode.indexOf(":");
         if (index == -1) {
             queryCodeType = QueryCodeType.SINGLE_QUERY;
-            SSRDynamicSQL dynamicSql = orm.getSSRDynamicSQL(queryCode);
+            SSRDynamicSQL dynamicSql = data.getSSRDynamicSQL(queryCode);
             return new QueryRule(queryCode, dynamicSql, queryCodeType, null);
         } else {
             String queryType = queryCode.substring(index + 1);
