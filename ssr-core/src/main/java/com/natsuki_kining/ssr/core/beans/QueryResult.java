@@ -2,6 +2,7 @@ package com.natsuki_kining.ssr.core.beans;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -11,7 +12,9 @@ import java.util.List;
  * @Date 2020/4/16 20:02
  **/
 @Data
-public class QueryResult<T> {
+public class QueryResult<T> implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private List<T> data;
     private int count;

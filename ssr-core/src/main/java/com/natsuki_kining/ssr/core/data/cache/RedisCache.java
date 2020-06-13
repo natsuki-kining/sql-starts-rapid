@@ -3,11 +3,12 @@ package com.natsuki_kining.ssr.core.data.cache;
 import com.natsuki_kining.ssr.core.beans.SSRDynamicSQL;
 import com.natsuki_kining.ssr.core.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
 
 /**
  * redis缓存
@@ -21,7 +22,7 @@ import org.springframework.stereotype.Component;
 @ConditionalOnProperty(prefix = "ssr", name = "cache.type", havingValue = "redis")
 public class RedisCache implements SSRCache {
 
-    @Autowired
+    @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
     @Override

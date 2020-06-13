@@ -3,6 +3,7 @@ package com.natsuki_kining.ssr.core.beans;
 import com.natsuki_kining.ssr.core.utils.Constant;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,9 @@ import java.util.Map;
  * @Date : 2020/4/14 0:33
  */
 @Data
-public class QueryParams {
+public class QueryParams implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private String queryCode;
     /**

@@ -3,6 +3,7 @@ package com.natsuki_kining.ssr.core.beans;
 
 import com.natsuki_kining.ssr.core.enums.QueryCodeType;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -11,7 +12,9 @@ import java.util.Map;
  * @Author : natsuki_kining
  * @Date : 2020/5/30 17:30
  */
-public class QueryRule {
+public class QueryRule implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private String queryCode;
 

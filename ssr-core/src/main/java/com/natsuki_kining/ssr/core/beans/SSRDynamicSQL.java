@@ -2,6 +2,7 @@ package com.natsuki_kining.ssr.core.beans;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -12,7 +13,9 @@ import java.util.Date;
  * @Version 1.0.0
  **/
 @Data
-public class SSRDynamicSQL {
+public class SSRDynamicSQL implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     public SSRDynamicSQL(String queryCode) {
         this.queryCode = queryCode;

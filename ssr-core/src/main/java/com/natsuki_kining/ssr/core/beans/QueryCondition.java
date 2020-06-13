@@ -2,6 +2,8 @@ package com.natsuki_kining.ssr.core.beans;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * 查询条件
  *
@@ -9,7 +11,9 @@ import lombok.Data;
  * @Date 2020/6/5 18:21
  **/
 @Data
-public class QueryCondition {
+public class QueryCondition implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * 查询code
