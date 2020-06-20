@@ -12,18 +12,29 @@ import com.natsuki_kining.ssr.core.data.SSRData;
 public interface SSRCache extends SSRData {
 
     /**
-     * 缓存 SSRDynamicSQL
-     * @param dynamicSQL SSRDynamicSQL
+     * 根据code获取缓存中的数据
+     * @param code 缓存的key
+     * @param clazz 泛型类
+     * @param <T> 泛型
+     * @return 缓存的值
+     */
+    <T> T get(String code,Class<T> clazz);
+
+    /**
+     * 缓存数据
+     * @param code 缓存的key
+     * @param object 缓存的值
      * @return 是否成功
      */
-    boolean save(SSRDynamicSQL dynamicSQL);
+    boolean save(String code,Object object);
 
     /**
      * 删除缓存
-     * @param queryCode 查询code
+     * @param code 缓存的key
      * @return 是否成功
      */
-    boolean delete(String queryCode);
+    boolean delete(String code);
+
 
 
 

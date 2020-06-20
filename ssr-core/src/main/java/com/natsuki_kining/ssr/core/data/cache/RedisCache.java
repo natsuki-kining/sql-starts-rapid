@@ -1,14 +1,17 @@
 package com.natsuki_kining.ssr.core.data.cache;
 
+import com.alibaba.fastjson.JSON;
 import com.natsuki_kining.ssr.core.beans.SSRDynamicSQL;
-import com.natsuki_kining.ssr.core.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Primary;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
+import javax.annotation.PostConstruct;
 
 /**
  * redis缓存
@@ -22,18 +25,28 @@ import javax.annotation.Resource;
 @ConditionalOnProperty(prefix = "ssr", name = "cache.type", havingValue = "redis")
 public class RedisCache implements SSRCache {
 
-    @Resource
-    private RedisTemplate<String, Object> redisTemplate;
+    @Autowired
+    private StringRedisTemplate redisTemplate;
 
-    @Override
-    public SSRDynamicSQL getSSRDynamicSQL(String code) {
-        return StringUtils.isBlank(code) ? null : (SSRDynamicSQL) redisTemplate.opsForValue().get(code);
+    @Value("${ssr.cache.redis.key:ssr-cache}")
+    private String cacheKey;
+
+    private HashOperations<String, String, String> operations;
+
+    @PostConstruct
+    private void init(){
+        operations = redisTemplate.opsForHash();
     }
 
     @Override
-    public boolean save(SSRDynamicSQL dynamicSQL) {
+    public <T> T get(String code,Class<T> clazz) {
+        return JSON.parseObject(operations.get(cacheKey,code),clazz);
+    }
+
+    @Override
+    public boolean save(String code,Object object) {
         try{
-            redisTemplate.opsForValue().set(dynamicSQL.getQueryCode(),dynamicSQL);
+            operations.put(cacheKey,code, JSON.toJSONString(object));
             return true;
         }catch (Exception e){
             log.error(e.getMessage(),e);
@@ -42,8 +55,18 @@ public class RedisCache implements SSRCache {
     }
 
     @Override
-    public boolean delete(String queryCode) {
-        redisTemplate.delete(queryCode);
-        return false;
+    public boolean delete(String code) {
+        try{
+            operations.delete(cacheKey,code);
+            return true;
+        }catch (Exception e){
+            log.error(e.getMessage(),e);
+            return false;
+        }
+    }
+
+    @Override
+    public SSRDynamicSQL getSSRDynamicSQL(String queryCode) {
+        return get(queryCode,SSRDynamicSQL.class);
     }
 }

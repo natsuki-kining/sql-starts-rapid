@@ -2,6 +2,7 @@ package com.natsuki_kining.ssr.core.data.cache;
 
 import com.natsuki_kining.ssr.core.beans.SSRDynamicSQL;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -18,22 +19,23 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Author natsuki_kining
  * @Date 2020/6/11 19:17
  **/
+@Slf4j
 @Component
 public class DefaultCache implements SSRCache {
 
     /**
      * 缓存最大数量
      */
-    @Value("${ssr.cache.default.length:300}")
+    @Value("${ssr.cache.default.length:500}")
     private int maxLength;
     /**
      * 缓存达到最大数时，一次移除不常用的数量
      */
-    @Value("${ssr.cache.default.rarely:30}")
+    @Value("${ssr.cache.default.rarely:50}")
     private int rarely;
 
-    Map<String, SSRDynamicSQL> cache;
-    List<QueryIndex> queryCountList;
+    private Map<String, Object> cache;
+    private List<QueryIndex> queryCountList;
 
     @PostConstruct
     private void init() {
@@ -42,7 +44,13 @@ public class DefaultCache implements SSRCache {
     }
 
     @Override
-    public boolean save(SSRDynamicSQL dynamicSQL) {
+    public <T> T get(String code, Class<T> clazz) {
+        reSetQueryCount(code);
+        return (T)cache.get(code);
+    }
+
+    @Override
+    public boolean save(String code,Object object) {
         try {
             //移除不常用
             if (cache.size() == maxLength) {
@@ -58,10 +66,11 @@ public class DefaultCache implements SSRCache {
                     }
                 }
             }
-            cache.put(dynamicSQL.getQueryCode(), dynamicSQL);
-            reSetQueryCount(dynamicSQL.getQueryCode());
+            cache.put(code, object);
+            reSetQueryCount(code);
             return true;
         } catch (Exception e) {
+            log.error(e.getMessage(),e);
             return false;
         }
     }
@@ -75,8 +84,7 @@ public class DefaultCache implements SSRCache {
 
     @Override
     public SSRDynamicSQL getSSRDynamicSQL(String queryCode) {
-        reSetQueryCount(queryCode);
-        return cache.get(queryCode);
+        return get(queryCode,SSRDynamicSQL.class);
     }
 
     @Data

@@ -16,8 +16,8 @@ import javax.script.ScriptException;
  * @Author : natsuki_kining
  * @Date : 2020/4/18 20:28
  */
-@ConditionalOnProperty(prefix = "ssr", name = "script.type", havingValue = "javaScript")
 @Component
+@ConditionalOnProperty(prefix = "ssr", name = "script.type", havingValue = "javaScript")
 public class JavaScriptIntercept extends AbstractQueryScriptIntercept {
 
     @Override
@@ -31,7 +31,6 @@ public class JavaScriptIntercept extends AbstractQueryScriptIntercept {
             engine.eval(script);
             result = engine.get(resultName);
         } catch (ScriptException e) {
-            e.printStackTrace();
             throw new SSRException(e.getMessage(), e);
         }
         return result;
