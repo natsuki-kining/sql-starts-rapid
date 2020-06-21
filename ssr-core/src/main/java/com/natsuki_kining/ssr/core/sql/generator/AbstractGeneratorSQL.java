@@ -48,10 +48,6 @@ public abstract class AbstractGeneratorSQL implements Generator {
         }
         //处理查询条件
         generateWhereSQL(querySql, queryRule, queryParams);
-        //处理排序
-        generateSortSQL(querySql, queryRule, queryParams);
-        //处理分页
-        generatePageSQL(querySql, queryRule, queryParams);
         return querySql.toString();
     }
 
@@ -122,27 +118,18 @@ public abstract class AbstractGeneratorSQL implements Generator {
      * @param queryRule   查询规则
      * @param queryParams 查询参数
      */
-    protected void generateSortSQL(StringBuilder querySql, QueryRule queryRule, QueryParams queryParams) {
+    public void generateSortSQL(StringBuilder querySql, QueryRule queryRule, QueryParams queryParams) {
         if (queryParams.getSort() == null) {
             return;
         }
-        querySql.append("ORDER BY ");
+        if (!queryParams.isGenerateSort()){
+            return;
+        }
+        querySql.append(" ORDER BY ");
         Set<Map.Entry<String, String>> sortSet = queryParams.getSort().entrySet();
         sortSet.stream().forEach(e -> querySql.append(StringUtils.castFieldToColumn(e.getKey()) + " " + e.getValue().toUpperCase() + ","));
         querySql.deleteCharAt(querySql.length() - 1);
     }
-
-    /**
-     * 生成分页
-     *
-     * @param querySql    sql StringBuilder
-     * @param queryRule   查询规则
-     * @param queryParams 查询参数
-     */
-    protected void generatePageSQL(StringBuilder querySql, QueryRule queryRule, QueryParams queryParams) {
-
-    }
-
 
     private void queryConditionHandle(StringBuilder querySql,QueryCondition queryCondition,Map<String,Object> params,String paramName){
         String queryCode = queryCondition.getQueryCode();

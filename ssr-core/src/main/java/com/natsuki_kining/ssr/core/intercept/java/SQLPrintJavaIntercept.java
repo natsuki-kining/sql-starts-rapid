@@ -8,12 +8,13 @@ import com.natsuki_kining.ssr.core.beans.SSRDynamicSQL;
 import com.natsuki_kining.ssr.core.intercept.AbstractQueryJavaIntercept;
 import com.natsuki_kining.ssr.core.utils.Constant;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
 /**
- * TODO
+ * 打印查询信息：例如查询sql，查询参数，查询耗时等
  *
  * @Author natsuki_kinig
  * @Date 2020/6/6 17:29
@@ -23,15 +24,22 @@ import java.util.Map;
 @QueryCode(Constant.Intercept.SSR_LAST_INTERCEPT)
 public class SQLPrintJavaIntercept extends AbstractQueryJavaIntercept {
 
+    @Value("${ssr.show-query-info.enable:true}")
+    private boolean showQueryInfo;
+
     @Override
     public void queryBefore(QueryParams queryParams, QueryInfo queryInfo, SSRDynamicSQL dynamicSql, Map<String, Object> preData) {
-        log.info("SQL:{}",queryInfo.getQuerySQL());
-        log.info("params:{}", JSON.toJSONString(queryParams.getParams()));
+        if (showQueryInfo){
+            log.info("SQL:{}",queryInfo.getQuerySQL());
+            log.info("params:{}", JSON.toJSONString(queryParams.getParams()));
+        }
     }
 
     @Override
     public Object queryAfter(QueryParams queryParams, QueryInfo queryInfo, SSRDynamicSQL dynamicSql, Map<String, Object> preData, Object queryData) {
-        log.info("查询耗时：{}",(queryInfo.getQueryEndTime() - queryInfo.getQueryStartTime()));
+        if (showQueryInfo) {
+            log.info("查询耗时：{}", (queryInfo.getQueryEndTime() - queryInfo.getQueryStartTime()));
+        }
         return queryData;
     }
 }

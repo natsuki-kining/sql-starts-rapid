@@ -37,6 +37,8 @@ public class SQLImpl implements SQL {
         }else{
             sql = new StringBuilder(generator.generateQuerySQL(queryRule,queryParams));
         }
+        generator.generateSortSQL(sql,queryRule,queryParams);
+        generator.generatePageSQL(sql,queryRule,queryParams);
         return sql.toString();
     }
 

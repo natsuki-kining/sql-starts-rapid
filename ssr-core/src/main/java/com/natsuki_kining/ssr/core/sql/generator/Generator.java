@@ -2,6 +2,10 @@ package com.natsuki_kining.ssr.core.sql.generator;
 
 import com.natsuki_kining.ssr.core.beans.QueryParams;
 import com.natsuki_kining.ssr.core.beans.QueryRule;
+import com.natsuki_kining.ssr.core.utils.StringUtils;
+
+import java.util.Map;
+import java.util.Set;
 
 /**
  * TODO
@@ -20,4 +24,21 @@ public interface Generator {
      */
     String generateQuerySQL(QueryRule queryRule, QueryParams queryParams);
 
+    /**
+     * 生成排序排序
+     *
+     * @param querySql    sql StringBuilder
+     * @param queryRule   查询规则
+     * @param queryParams 查询参数
+     */
+    void generateSortSQL(StringBuilder querySql, QueryRule queryRule, QueryParams queryParams);
+
+    /**
+     * 生成分页语句
+     *
+     * @param querySql    sql StringBuilder
+     * @param queryRule   查询规则
+     * @param queryParams 查询参数
+     */
+    void generatePageSQL(StringBuilder querySql, QueryRule queryRule, QueryParams queryParams);
 }

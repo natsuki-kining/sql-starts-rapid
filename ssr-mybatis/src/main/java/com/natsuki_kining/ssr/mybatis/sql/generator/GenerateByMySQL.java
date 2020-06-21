@@ -1,5 +1,7 @@
 package com.natsuki_kining.ssr.mybatis.sql.generator;
 
+import com.natsuki_kining.ssr.core.beans.QueryParams;
+import com.natsuki_kining.ssr.core.beans.QueryRule;
 import com.natsuki_kining.ssr.core.sql.generator.AbstractGeneratorSQL;
 import com.natsuki_kining.ssr.core.sql.generator.Generator;
 import com.natsuki_kining.ssr.core.utils.Constant;
@@ -26,5 +28,19 @@ public class GenerateByMySQL extends AbstractGeneratorSQL implements Generator {
     @Override
     protected String placeholderParam(String queryCode) {
         return "#{"+queryCode+"} ";
+    }
+
+    @Override
+    public void generatePageSQL(StringBuilder querySql, QueryRule queryRule, QueryParams queryParams) {
+        if (queryParams.getPageSize() == -1){
+            return;
+        }
+        if (!queryParams.isGeneratePage()){
+            return;
+        }
+        querySql.append(" LIMIT ");
+        querySql.append(queryParams.getPageStart());
+        querySql.append(",");
+        querySql.append(queryParams.getPageSize());
     }
 }

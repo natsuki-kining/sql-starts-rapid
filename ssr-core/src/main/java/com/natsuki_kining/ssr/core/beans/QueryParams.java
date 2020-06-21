@@ -30,6 +30,10 @@ public class QueryParams implements Serializable {
      * value->sort
      */
     private LinkedHashMap<String, String> sort;
+    /**
+     * 是否生成排序
+     */
+    private boolean generateSort = true;
 
     /**
      * 自动生成sql where 条件用
@@ -37,11 +41,13 @@ public class QueryParams implements Serializable {
     private List<QueryCondition> condition;
     private int pageNo = 1;
     /**
+     * 是否生成分页
+     */
+    private boolean generatePage = true;
+    /**
      * pageSize = -1 则查询全部、不进行分页
      */
     private int pageSize = Constant.QueryPage.DEFAULT_PAGE_SIZE;
-    private transient int pageEnd;
-    private transient int pageStart;
 
     public int getPageNo() {
         if (pageNo < 1) {
@@ -61,13 +67,11 @@ public class QueryParams implements Serializable {
     }
 
     public int getPageEnd() {
-        pageEnd = getPageNo() * getPageSize();
-        return pageEnd;
+        return getPageNo() * getPageSize();
     }
 
     public int getPageStart() {
-        pageStart = getPageEnd() - getPageSize();
-        return pageStart;
+        return getPageEnd() - getPageSize();
     }
 
 }

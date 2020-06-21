@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public abstract class AbstractQueryORM implements QueryORM {
 
-    protected final String querySSRDynamicSQL = "SELECT * FROM SSR_DYNAMIC_SQL SDS WHERE SDS.QUERY_CODE = #{code}";
+    protected String querySSRDynamicSQL = "SELECT QUERY_CODE,SQL_TEMPLATE,BEFORE_SCRIPT,AFTER_SCRIPT FROM SSR_DYNAMIC_SQL SDS WHERE SDS.QUERY_CODE = #{code}";
 
     protected Map<String, Object> getQuerySSRDynamicSQLParams(String code) {
         Map<String, Object> params = new HashMap<>(1);
