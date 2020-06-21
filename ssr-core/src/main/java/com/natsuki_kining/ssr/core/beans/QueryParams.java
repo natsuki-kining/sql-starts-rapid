@@ -36,9 +36,15 @@ public class QueryParams implements Serializable {
     private boolean generateSort = true;
 
     /**
+     * 自动生成sql用
      * 自动生成sql where 条件用
      */
     private List<QueryCondition> condition;
+    /**
+     * 自动生成sql用
+     * 查询字段，多个用英文逗号分隔
+     */
+    private String selectFields = "*";
     private int pageNo = 1;
     /**
      * 是否生成分页

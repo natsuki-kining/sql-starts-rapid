@@ -27,9 +27,12 @@ public abstract class AbstractGeneratorSQL implements Generator {
 
     @Override
     public String generateQuerySQL(QueryRule queryRule, QueryParams queryParams) {
-        StringBuilder querySql = new StringBuilder("SELECT * FROM ");
+        StringBuilder querySql = new StringBuilder("SELECT ");
+        querySql.append(queryParams.getSelectFields());
+        querySql.append(" FROM ");
         if (queryRule.getQueryCodeType() == QueryCodeType.GENERATE_QUERY_BY_ENTITY) {
             Class<?> clazz;
+
             try {
                 clazz = Class.forName(queryRule.getQueryCode());
             } catch (ClassNotFoundException e) {
