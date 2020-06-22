@@ -1,8 +1,5 @@
 package com.natsuki_kining.ssr.core.data.orm;
 
-import com.natsuki_kining.ssr.core.data.SSRData;
-import com.natsuki_kining.ssr.core.utils.Assert;
-
 import java.util.HashMap;
 import java.util.Map;
 

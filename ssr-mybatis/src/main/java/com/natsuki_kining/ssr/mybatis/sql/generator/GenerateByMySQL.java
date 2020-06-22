@@ -1,8 +1,6 @@
 package com.natsuki_kining.ssr.mybatis.sql.generator;
 
-import com.natsuki_kining.ssr.core.beans.QueryParams;
-import com.natsuki_kining.ssr.core.beans.QueryRule;
-import com.natsuki_kining.ssr.core.sql.generator.AbstractGeneratorSQL;
+import com.natsuki_kining.ssr.core.sql.generator.AbstractGeneratorByMySQL;
 import com.natsuki_kining.ssr.core.sql.generator.Generator;
 import com.natsuki_kining.ssr.core.utils.Constant;
 
@@ -12,7 +10,7 @@ import com.natsuki_kining.ssr.core.utils.Constant;
  * @Author : natsuki_kining
  * @Date : 2020/5/31 21:36
  */
-public class GenerateByMySQL extends AbstractGeneratorSQL implements Generator {
+public class GenerateByMySQL extends AbstractGeneratorByMySQL implements Generator {
 
     @Override
     protected String likeConditionHandel(String replacement,String placeholderParam) {
@@ -30,17 +28,5 @@ public class GenerateByMySQL extends AbstractGeneratorSQL implements Generator {
         return "#{"+queryCode+"} ";
     }
 
-    @Override
-    public void generatePageSQL(StringBuilder querySql, QueryRule queryRule, QueryParams queryParams) {
-        if (queryParams.getPageSize() == -1){
-            return;
-        }
-        if (!queryParams.isGeneratePage()){
-            return;
-        }
-        querySql.append(" LIMIT ");
-        querySql.append(queryParams.getPageStart());
-        querySql.append(",");
-        querySql.append(queryParams.getPageSize());
-    }
+
 }
