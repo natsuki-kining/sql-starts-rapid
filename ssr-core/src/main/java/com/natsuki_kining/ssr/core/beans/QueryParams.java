@@ -67,7 +67,7 @@ public class QueryParams implements Serializable {
             return pageSize;
         }
         if (pageSize < 1) {
-            pageSize = 10;
+            pageSize = Constant.QueryPage.DEFAULT_PAGE_SIZE;
         }
         return pageSize;
     }
