@@ -51,6 +51,12 @@ public class SSRDynamicSQL implements Serializable {
     private String sqlTemplate;
 
     /**
+     * 返回类型，多个用逗号分割
+     * queryCode:class name
+     */
+    private String resultType;
+
+    /**
      * 查询之前脚本
      */
     private String beforeScript;

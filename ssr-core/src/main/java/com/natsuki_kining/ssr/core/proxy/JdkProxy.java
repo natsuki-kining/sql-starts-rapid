@@ -85,6 +85,28 @@ public class JdkProxy implements InvocationHandler, SSRProxy {
             querySQL.setExecuteSQL(querySQL.getProcessedSQL());
         }
         args[0] = querySQL;
+
+        String resultType = dynamicSql.getResultType();
+        if (StringUtils.isNotBlank(resultType)){
+            String[] resultMapper = resultType.split(",");
+            for (String rm : resultMapper) {
+                String[] split = rm.split(":");
+                String queryCode = split[0];
+                String className = split[1];
+
+                if (dynamicSql.getQueryCode().equals(queryCode)){
+                    try{
+                        Class<?> clazz = Class.forName(className);
+                        args[2] = clazz;
+                    }catch (Exception e){
+                        log.warn(e.getMessage());
+                    }
+                    break;
+                }
+            }
+        }
+
+
         queryInfo.setQueryStartTime(System.currentTimeMillis());
         Object queryData = method.invoke(this.target, args);
         queryInfo.setQueryEndTime(System.currentTimeMillis());
