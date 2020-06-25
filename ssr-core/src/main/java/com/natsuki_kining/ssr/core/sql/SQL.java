@@ -3,6 +3,7 @@ package com.natsuki_kining.ssr.core.sql;
 
 import com.natsuki_kining.ssr.core.beans.QueryParams;
 import com.natsuki_kining.ssr.core.beans.QueryRule;
+import com.natsuki_kining.ssr.core.beans.QuerySQL;
 
 /**
  * 获取执行sql的接口
@@ -17,7 +18,7 @@ public interface SQL {
      *
      * @param queryRule 查询规则
      * @param queryParams 查询参数
-     * @return 查询SQL
+     * @return QuerySQL
      */
-    String getQuerySQL(QueryRule queryRule, QueryParams queryParams);
+    QuerySQL getQuerySQL(QueryRule queryRule, QueryParams queryParams);
 }

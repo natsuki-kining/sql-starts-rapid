@@ -1,6 +1,8 @@
 package com.natsuki_kining.ssr.core.query;
 
 import com.natsuki_kining.ssr.core.beans.QueryParams;
+import com.natsuki_kining.ssr.core.beans.QueryResult;
+import com.natsuki_kining.ssr.core.beans.QuerySQL;
 import com.natsuki_kining.ssr.core.data.orm.QueryORM;
 import com.natsuki_kining.ssr.core.proxy.SSRProxy;
 import org.springframework.beans.factory.ObjectFactory;
@@ -27,7 +29,7 @@ public class QueryImpl implements Query {
     @Autowired
     private ObjectFactory<SSRProxy> proxy;
 
-    private String proxySQL = "proxySQL";
+    private QuerySQL proxySQL = null;
 
     @Override
     public List<Map> query(QueryParams queryParams) {
@@ -35,9 +37,17 @@ public class QueryImpl implements Query {
     }
 
     @Override
-    public <T> List<T> query(QueryParams queryParams, Class<T> clazz) {
+    public <E> List<E> query(QueryParams queryParams, Class<E> clazz) {
         return proxy.getObject().getInstance(orm).selectList(proxySQL, queryParams, clazz);
     }
 
+    @Override
+    public QueryResult queryResult(QueryParams queryParams) {
+        return queryResult(queryParams, Map.class);
+    }
 
+    @Override
+    public <T> QueryResult queryResult(QueryParams queryParams, Class<T> clazz) {
+        return proxy.getObject().getInstance(orm).queryResult(proxySQL, queryParams, clazz);
+    }
 }

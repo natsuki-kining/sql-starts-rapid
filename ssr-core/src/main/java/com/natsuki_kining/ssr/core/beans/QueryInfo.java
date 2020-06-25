@@ -15,11 +15,11 @@ public class QueryInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public QueryInfo(String querySQL) {
+    public QueryInfo(QuerySQL querySQL) {
         this.querySQL = querySQL;
     }
 
-    private String querySQL;
+    private QuerySQL querySQL;
 
     private Long queryStartTime;
 

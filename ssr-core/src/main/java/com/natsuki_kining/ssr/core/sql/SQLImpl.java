@@ -2,6 +2,7 @@ package com.natsuki_kining.ssr.core.sql;
 
 import com.natsuki_kining.ssr.core.beans.QueryParams;
 import com.natsuki_kining.ssr.core.beans.QueryRule;
+import com.natsuki_kining.ssr.core.beans.QuerySQL;
 import com.natsuki_kining.ssr.core.enums.QueryCodeType;
 import com.natsuki_kining.ssr.core.sql.generator.Generator;
 import com.natsuki_kining.ssr.core.sql.template.SQLTemplate;
@@ -29,7 +30,8 @@ public class SQLImpl implements SQL {
     private Generator generator;
 
     @Override
-    public String getQuerySQL(QueryRule queryRule, QueryParams queryParams) {
+    public QuerySQL getQuerySQL(QueryRule queryRule, QueryParams queryParams) {
+        QuerySQL querySQL = new QuerySQL();
         StringBuilder sql;
         if (QueryCodeType.SINGLE_QUERY == queryRule.getQueryCodeType()) {
             String formatSQL = ssrTemplate.formatSQL(queryRule.getDynamicSql().getSqlTemplate(), queryParams);
@@ -37,9 +39,11 @@ public class SQLImpl implements SQL {
         }else{
             sql = new StringBuilder(generator.generateQuerySQL(queryRule,queryParams));
         }
+        querySQL.setSimpleSQL(sql.toString());
         generator.generateSortSQL(sql,queryRule,queryParams);
         generator.generatePageSQL(sql,queryRule,queryParams);
-        return sql.toString();
+        querySQL.setProcessedSQL(sql.toString());
+        return querySQL;
     }
 
 }

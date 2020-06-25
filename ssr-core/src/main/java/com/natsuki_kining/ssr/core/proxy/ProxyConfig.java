@@ -71,17 +71,18 @@ class ProxyConfig {
 
     @PostConstruct
     private void init() {
-        if (queryJavaIntercepts != null && queryJavaIntercepts.size() > 0) {
-            for (AbstractQueryJavaIntercept queryJavaIntercept : queryJavaIntercepts) {
-                if (queryJavaIntercept.getClass().isAnnotationPresent(QueryCode.class)) {
-                    QueryCode annotation = queryJavaIntercept.getClass().getAnnotation(QueryCode.class);
-                    queryJavaInterceptMap.put(annotation.value(), queryJavaIntercept);
+        if (queryJavaIntercepts == null || queryJavaIntercepts.size() == 0) {
+            return;
+        }
+        for (AbstractQueryJavaIntercept queryJavaIntercept : queryJavaIntercepts) {
+            if (queryJavaIntercept.getClass().isAnnotationPresent(QueryCode.class)) {
+                QueryCode annotation = queryJavaIntercept.getClass().getAnnotation(QueryCode.class);
+                queryJavaInterceptMap.put(annotation.value(), queryJavaIntercept);
+            } else {
+                if (javaMasterIntercept == null) {
+                    javaMasterIntercept = queryJavaIntercept;
                 } else {
-                    if (javaMasterIntercept == null) {
-                        javaMasterIntercept = queryJavaIntercept;
-                    } else {
-                        log.warn("已经存在一个master的java拦截器");
-                    }
+                    log.warn("已经存在一个master的java拦截器");
                 }
             }
         }

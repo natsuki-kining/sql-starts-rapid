@@ -1,14 +1,12 @@
 package com.natsuki_kining.ssr.core.proxy;
 
-import com.natsuki_kining.ssr.core.beans.QueryInfo;
-import com.natsuki_kining.ssr.core.beans.QueryParams;
-import com.natsuki_kining.ssr.core.beans.QueryRule;
-import com.natsuki_kining.ssr.core.beans.SSRDynamicSQL;
+import com.natsuki_kining.ssr.core.beans.*;
 import com.natsuki_kining.ssr.core.data.orm.QueryORM;
 import com.natsuki_kining.ssr.core.enums.QueryCodeType;
 import com.natsuki_kining.ssr.core.intercept.AbstractQueryJavaIntercept;
 import com.natsuki_kining.ssr.core.intercept.AbstractQueryScriptIntercept;
 import com.natsuki_kining.ssr.core.utils.Constant;
+import com.natsuki_kining.ssr.core.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -60,7 +58,7 @@ public class JdkProxy implements InvocationHandler, SSRProxy {
             Object value = null;
             for (Map.Entry<String, QueryRule> entry : queryCodeMap.entrySet()) {
                 QueryRule entryValue = entry.getValue();
-                args[0] = proxyConfig.getSQL().getQuerySQL(entryValue, queryParams);
+                args[0] = proxyConfig.getSQL().getQuerySQL(queryRule, queryParams);
                 SSRDynamicSQL dynamicSql = entryValue.getDynamicSql();
                 value = invoke(method, args, preDate, dynamicSql, queryParams);
                 proxyConfig.getCache().save(dynamicSql.getQueryCode(), dynamicSql);
@@ -78,11 +76,15 @@ public class JdkProxy implements InvocationHandler, SSRProxy {
 
     private Object invoke(Method method, Object[] args, Map<String, Object> preDate, SSRDynamicSQL dynamicSql, QueryParams queryParams) throws InvocationTargetException, IllegalAccessException {
         //调用拦截器的查询前方法
-        QueryInfo queryInfo = new QueryInfo((String) args[0]);
+        QueryInfo queryInfo = new QueryInfo((QuerySQL) args[0]);
         queryBefore(queryParams,queryInfo, dynamicSql, preDate);
 
         //查询
-        args[0] = queryInfo.getQuerySQL();
+        QuerySQL querySQL = queryInfo.getQuerySQL();
+        if (StringUtils.isBlank(querySQL.getExecuteSQL())){
+            querySQL.setExecuteSQL(querySQL.getProcessedSQL());
+        }
+        args[0] = querySQL;
         queryInfo.setQueryStartTime(System.currentTimeMillis());
         Object queryData = method.invoke(this.target, args);
         queryInfo.setQueryEndTime(System.currentTimeMillis());

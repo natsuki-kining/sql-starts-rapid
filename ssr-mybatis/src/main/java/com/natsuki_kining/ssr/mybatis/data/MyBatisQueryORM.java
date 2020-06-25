@@ -2,6 +2,8 @@ package com.natsuki_kining.ssr.mybatis.data;
 
 import com.natsuki_kining.ssr.core.annotation.TableFieldName;
 import com.natsuki_kining.ssr.core.beans.QueryParams;
+import com.natsuki_kining.ssr.core.beans.QueryResult;
+import com.natsuki_kining.ssr.core.beans.QuerySQL;
 import com.natsuki_kining.ssr.core.beans.SSRDynamicSQL;
 import com.natsuki_kining.ssr.core.data.orm.AbstractQueryORM;
 import com.natsuki_kining.ssr.core.data.orm.QueryORM;
@@ -40,8 +42,8 @@ public class MyBatisQueryORM extends AbstractQueryORM implements QueryORM {
     private String querySSRDynamicSQL = "SELECT QUERY_CODE,SQL_TEMPLATE,BEFORE_SCRIPT,AFTER_SCRIPT FROM SSR_DYNAMIC_SQL SDS WHERE SDS.QUERY_CODE = #{code} limit 1";
 
     @Override
-    public <E> List<E> selectList(String sql, QueryParams queryParams, Class<E> returnType) {
-        return select(sql, queryParams.getParams(), returnType);
+    public <E> List<E> selectList(QuerySQL querySQL, QueryParams queryParams, Class<E> returnType) {
+        return select(querySQL.getExecuteSQL(), queryParams.getParams(), returnType);
     }
 
     @Override
