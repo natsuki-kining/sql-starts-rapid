@@ -58,7 +58,7 @@ public class JdkProxy implements InvocationHandler, SSRProxy {
             Object value = null;
             for (Map.Entry<String, QueryRule> entry : queryCodeMap.entrySet()) {
                 QueryRule entryValue = entry.getValue();
-                args[0] = proxyConfig.getSQL().getQuerySQL(queryRule, queryParams);
+                args[0] = proxyConfig.getSQL().getQuerySQL(entryValue, queryParams);
                 SSRDynamicSQL dynamicSql = entryValue.getDynamicSql();
                 value = invoke(method, args, preDate, dynamicSql, queryParams);
                 proxyConfig.getCache().save(dynamicSql.getQueryCode(), dynamicSql);
@@ -79,13 +79,14 @@ public class JdkProxy implements InvocationHandler, SSRProxy {
         QueryInfo queryInfo = new QueryInfo((QuerySQL) args[0]);
         queryBefore(queryParams,queryInfo, dynamicSql, preDate);
 
-        //查询
+        //设置执行的SQL
         QuerySQL querySQL = queryInfo.getQuerySQL();
         if (StringUtils.isBlank(querySQL.getExecuteSQL())){
             querySQL.setExecuteSQL(querySQL.getProcessedSQL());
         }
         args[0] = querySQL;
 
+        //转换为指定的类型
         String resultType = dynamicSql.getResultType();
         if (StringUtils.isNotBlank(resultType)){
             String[] resultMapper = resultType.split(",");
@@ -106,7 +107,7 @@ public class JdkProxy implements InvocationHandler, SSRProxy {
             }
         }
 
-
+        //执行
         queryInfo.setQueryStartTime(System.currentTimeMillis());
         Object queryData = method.invoke(this.target, args);
         queryInfo.setQueryEndTime(System.currentTimeMillis());
