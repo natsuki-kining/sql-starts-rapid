@@ -25,7 +25,7 @@ import java.util.Map;
 @Component
 public class HibernateQueryORM extends AbstractQueryORM implements QueryORM {
 
-    protected String querySSRDynamicSQL = "SELECT QUERY_CODE queryCode,SQL_TEMPLATE sqlTemplate,BEFORE_SCRIPT beforeScript,AFTER_SCRIPT afterScript FROM SSR_DYNAMIC_SQL SDS WHERE SDS.QUERY_CODE = :code";
+    protected String querySSRDynamicSQL = "SELECT QUERY_CODE \"queryCode\",SQL_TEMPLATE \"sqlTemplate\",BEFORE_SCRIPT \"beforeScript\",AFTER_SCRIPT \"afterScript\" FROM SSR_DYNAMIC_SQL SDS WHERE SDS.QUERY_CODE = :code";
 
     @Autowired
     private EntityManagerFactory entityManagerFactory;
@@ -42,7 +42,9 @@ public class HibernateQueryORM extends AbstractQueryORM implements QueryORM {
         }
         if (params != null && params.size() > 0){
             params.forEach((k,v)->{
-                nativeQueryImplementor.setParameter(k,v);
+                if (sql.contains(":"+k)){
+                    nativeQueryImplementor.setParameter(k,v);
+                }
             });
         }
         List<E> list = nativeQueryImplementor.list();
@@ -54,4 +56,8 @@ public class HibernateQueryORM extends AbstractQueryORM implements QueryORM {
         return selectList(querySQL.getExecuteSQL(),queryParams.getParams(),returnType);
     }
 
+    @Override
+    protected String getQuerySSRDynamicSQL() {
+        return querySSRDynamicSQL;
+    }
 }

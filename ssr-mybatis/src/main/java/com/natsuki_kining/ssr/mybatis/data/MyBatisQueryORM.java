@@ -94,4 +94,9 @@ public class MyBatisQueryORM extends AbstractQueryORM implements QueryORM {
         }
         resultMaps.add(new ResultMap.Builder(configuration, "id", resultType, resultMappingList).build());
     }
+
+    @Override
+    protected String getQuerySSRDynamicSQL() {
+        return querySSRDynamicSQL;
+    }
 }

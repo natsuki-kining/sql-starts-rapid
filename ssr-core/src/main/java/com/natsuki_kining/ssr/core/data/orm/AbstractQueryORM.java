@@ -21,7 +21,7 @@ import java.util.Map;
 @Slf4j
 public abstract class AbstractQueryORM implements QueryORM {
 
-    protected String querySSRDynamicSQL = "SELECT QUERY_CODE,SQL_TEMPLATE,BEFORE_SCRIPT,AFTER_SCRIPT FROM SSR_DYNAMIC_SQL SDS WHERE SDS.QUERY_CODE = #{code}";
+    protected abstract String getQuerySSRDynamicSQL();
 
     protected Map<String, Object> getQuerySSRDynamicSQLParams(String code) {
         Map<String, Object> params = new HashMap<>(1);
@@ -31,7 +31,7 @@ public abstract class AbstractQueryORM implements QueryORM {
 
     @Override
     public SSRDynamicSQL getSSRDynamicSQL(String code) {
-        List<SSRDynamicSQL> list = selectList(querySSRDynamicSQL, getQuerySSRDynamicSQLParams(code), SSRDynamicSQL.class);
+        List<SSRDynamicSQL> list = selectList(getQuerySSRDynamicSQL(), getQuerySSRDynamicSQLParams(code), SSRDynamicSQL.class);
         if (list != null && list.size() > 0) {
             SSRDynamicSQL ssrDynamicSql = list.get(0);
             Assert.isBlank(ssrDynamicSql.getSqlTemplate(), "根据" + code + "查询的sql模板为空，请检查code是否正确。");
@@ -58,7 +58,7 @@ public abstract class AbstractQueryORM implements QueryORM {
                 }
                 data = map;
             }else{
-                data = selectList(querySQL, queryParams, Map.class);
+                data = selectList(querySQL, queryParams, clazz);
             }
             queryResult.setCode(200).setData(data);
         }catch (Exception e){
