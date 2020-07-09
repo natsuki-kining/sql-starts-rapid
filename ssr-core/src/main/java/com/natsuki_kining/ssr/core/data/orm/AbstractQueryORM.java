@@ -3,6 +3,9 @@ package com.natsuki_kining.ssr.core.data.orm;
 import com.natsuki_kining.ssr.core.beans.QueryParams;
 import com.natsuki_kining.ssr.core.beans.QueryResult;
 import com.natsuki_kining.ssr.core.beans.QuerySQL;
+import com.natsuki_kining.ssr.core.beans.SSRDynamicSQL;
+import com.natsuki_kining.ssr.core.exception.SSRException;
+import com.natsuki_kining.ssr.core.utils.Assert;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
@@ -24,6 +27,17 @@ public abstract class AbstractQueryORM implements QueryORM {
         Map<String, Object> params = new HashMap<>(1);
         params.put("code", code);
         return params;
+    }
+
+    @Override
+    public SSRDynamicSQL getSSRDynamicSQL(String code) {
+        List<SSRDynamicSQL> list = selectList(querySSRDynamicSQL, getQuerySSRDynamicSQLParams(code), SSRDynamicSQL.class);
+        if (list != null && list.size() > 0) {
+            SSRDynamicSQL ssrDynamicSql = list.get(0);
+            Assert.isBlank(ssrDynamicSql.getSqlTemplate(), "根据" + code + "查询的sql模板为空，请检查code是否正确。");
+            return ssrDynamicSql;
+        }
+        throw new SSRException("根据" + code + "查询的SSRDynamicSQL结果为空，请检查code是否正确。");
     }
 
     @Override

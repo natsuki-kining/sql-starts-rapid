@@ -19,6 +19,13 @@ public class QueryParams implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public QueryParams(Map<String, Object> params) {
+        this.params = params;
+    }
+
+    public QueryParams() {
+    }
+
     private String queryCode;
     /**
      * key->property,

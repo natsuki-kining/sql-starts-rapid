@@ -13,6 +13,7 @@
         <module>ssr-mybatis</module>
         <module>ssr-hibernate</module>
         <module>test-ssr-mybatis</module>
+        <module>test-ssr-hibernate</module>
     </modules>
 
     <build>

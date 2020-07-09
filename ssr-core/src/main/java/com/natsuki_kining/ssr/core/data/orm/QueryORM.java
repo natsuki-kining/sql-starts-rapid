@@ -6,6 +6,7 @@ import com.natsuki_kining.ssr.core.beans.QuerySQL;
 import com.natsuki_kining.ssr.core.data.SSRData;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * dao 接口
@@ -25,6 +26,8 @@ public interface QueryORM extends SSRData {
      * @return 查询的结果集
      */
     <E> List<E> selectList(QuerySQL querySQL, QueryParams queryParams, Class<E> returnType);
+
+    <E> List<E> selectList(String sql, Map<String,Object> params, Class<E> returnType);
 
     <T> QueryResult queryResult(QuerySQL querySQL, QueryParams queryParams, Class<T> returnType);
 }

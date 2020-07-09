@@ -15,7 +15,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({FIELD})
 @Retention(RUNTIME)
 @Documented
-public @interface TableFieldName {
+public @interface FieldName {
 
     /**
      * 对应数据库表字段名字

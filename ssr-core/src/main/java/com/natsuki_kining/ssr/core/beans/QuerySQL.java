@@ -26,4 +26,10 @@ public class QuerySQL {
      */
     private String executeSQL;
 
+    public QuerySQL(String executeSQL) {
+        this.executeSQL = executeSQL;
+    }
+
+    public QuerySQL() {
+    }
 }
