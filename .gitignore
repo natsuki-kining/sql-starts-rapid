@@ -71,7 +71,6 @@ Temporary Items
 *.svn-base
 .svn/wc.db
 .idea/workspace.xml
-.idea/workspace.xml
 
 # gradle
 .gradle

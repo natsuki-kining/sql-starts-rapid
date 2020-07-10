@@ -1,6 +1,8 @@
 package com.natsuki_kining.ssr.test.entity;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 /**
  * TODO
@@ -8,9 +10,10 @@ import javax.persistence.Column;
  * @Author : natsuki_kining
  * @Date : 2020/5/23 23:37
  */
+@Entity(name = "SSR_USER")
 public class SSRUser {
 
-    @Column(name="ID")
+    @Id
     private Integer id;
     @Column(name="NAME")
     private String name;

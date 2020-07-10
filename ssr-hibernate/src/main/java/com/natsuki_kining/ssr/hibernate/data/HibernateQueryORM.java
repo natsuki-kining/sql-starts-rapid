@@ -13,6 +13,7 @@ import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.Entity;
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
 import java.util.Map;
@@ -34,20 +35,24 @@ public class HibernateQueryORM extends AbstractQueryORM implements QueryORM {
     public <E> List<E> selectList(String sql, Map<String, Object> params, Class<E> returnType) {
         Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
         NativeQuery sqlQuery = session.createSQLQuery(sql);
-        NativeQueryImplementor nativeQueryImplementor;
+        NativeQuery nativeQuery;
         if (Map.class == returnType){
-            nativeQueryImplementor = sqlQuery.unwrap(NativeQueryImpl.class).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+            nativeQuery = sqlQuery.unwrap(NativeQueryImpl.class).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
         }else{
-            nativeQueryImplementor = sqlQuery.unwrap(NativeQueryImpl.class).setResultTransformer(Transformers.aliasToBean(returnType));
+            if (returnType.isAnnotationPresent(Entity.class)){
+                nativeQuery = sqlQuery.addEntity(returnType);
+            }else{
+                nativeQuery = sqlQuery.unwrap(NativeQueryImpl.class).setResultTransformer(Transformers.aliasToBean(returnType));
+            }
         }
         if (params != null && params.size() > 0){
             params.forEach((k,v)->{
                 if (sql.contains(":"+k)){
-                    nativeQueryImplementor.setParameter(k,v);
+                    nativeQuery.setParameter(k,v);
                 }
             });
         }
-        List<E> list = nativeQueryImplementor.list();
+        List<E> list = nativeQuery.list();
         return list;
     }
 
