@@ -1,5 +1,6 @@
 package com.natsuki_kining.ssr.hibernate.data;
 
+import com.alibaba.fastjson.JSON;
 import com.natsuki_kining.ssr.core.beans.QueryParams;
 import com.natsuki_kining.ssr.core.beans.QuerySQL;
 import com.natsuki_kining.ssr.core.data.orm.AbstractQueryORM;
@@ -8,15 +9,17 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.query.internal.NativeQueryImpl;
-import org.hibernate.query.spi.NativeQueryImplementor;
+import org.hibernate.transform.ResultTransformer;
 import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityManagerFactory;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * Hibernate sql 查询类
@@ -27,6 +30,10 @@ import java.util.Map;
 public class HibernateQueryORM extends AbstractQueryORM implements QueryORM {
 
     protected String querySSRDynamicSQL = "SELECT QUERY_CODE \"queryCode\",SQL_TEMPLATE \"sqlTemplate\",BEFORE_SCRIPT \"beforeScript\",AFTER_SCRIPT \"afterScript\" FROM SSR_DYNAMIC_SQL SDS WHERE SDS.QUERY_CODE = :code";
+
+    private String aliasRegex = "^select\\s+[`?\\w+`?\\s+as?\\s+'?\"?\\w+'?\"?\\s{0,n},?]+\\s+from.*$";
+
+    private Map<String,Boolean> aliasMap = new HashMap<>();
 
     @Autowired
     private EntityManagerFactory entityManagerFactory;
@@ -39,10 +46,37 @@ public class HibernateQueryORM extends AbstractQueryORM implements QueryORM {
         if (Map.class == returnType){
             nativeQuery = sqlQuery.unwrap(NativeQueryImpl.class).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
         }else{
+            //使用hibernate注解
             if (returnType.isAnnotationPresent(Entity.class)){
                 nativeQuery = sqlQuery.addEntity(returnType);
             }else{
-                nativeQuery = sqlQuery.unwrap(NativeQueryImpl.class).setResultTransformer(Transformers.aliasToBean(returnType));
+                //判断是否有使用别名，如果使用别名就不转换
+                Boolean useAlias = aliasMap.get(sql);
+                if (useAlias == null){
+                    useAlias = Pattern.compile(aliasRegex, Pattern.CASE_INSENSITIVE).matcher(sql).matches();
+                    aliasMap.put(sql,useAlias);
+                }
+                if(useAlias){
+                    nativeQuery = sqlQuery.unwrap(NativeQueryImpl.class).setResultTransformer(Transformers.aliasToBean(returnType));
+                }else{
+                    //没有使用别名需要实现转换
+                    nativeQuery = sqlQuery.unwrap(NativeQueryImpl.class).setResultTransformer(new ResultTransformer() {
+                        @Override
+                        public Object transformTuple(Object[] values, String[] columns) {
+                            Map<String,Object> map = new HashMap<>();
+                            int i = 0;
+                            for (String column : columns) {
+                                map.put(column, values[i++]);
+                            }
+                            return map;
+                        }
+                        @Override
+                        public List<E> transformList(List list) {
+                            List<E> es = JSON.parseArray(JSON.toJSONString(list), returnType);
+                            return es;
+                        }
+                    });
+                }
             }
         }
         if (params != null && params.size() > 0){
