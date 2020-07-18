@@ -72,7 +72,7 @@ public enum QueryStatus {
     private final int value;
     private final String reasonPhrase;
 
-    private QueryStatus(int value, String reasonPhrase) {
+    QueryStatus(int value, String reasonPhrase) {
         this.value = value;
         this.reasonPhrase = reasonPhrase;
     }
