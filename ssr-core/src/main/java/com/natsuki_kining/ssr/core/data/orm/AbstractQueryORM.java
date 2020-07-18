@@ -61,7 +61,7 @@ public abstract class AbstractQueryORM implements QueryORM {
             } else {
                 data = selectList(querySQL, queryParams, clazz);
             }
-            queryResult.setCode(200).setData(data);
+            queryResult.setCode(QueryStatus.OK).setData(data);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             queryResult.setCode(QueryStatus.INTERNAL_SERVER_ERROR).setMessage(e.getMessage());

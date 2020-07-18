@@ -8,10 +8,6 @@ package com.natsuki_kining.ssr.core.enums;
  **/
 public enum QueryStatus {
 
-    CONTINUE(100, "Continue"),
-    SWITCHING_PROTOCOLS(101, "Switching Protocols"),
-    PROCESSING(102, "Processing"),
-    CHECKPOINT(103, "Checkpoint"),
     OK(200, "OK"),
     CREATED(201, "Created"),
     ACCEPTED(202, "Accepted"),
