@@ -13,6 +13,7 @@ public interface SSRDynamicSQLMapper {
 
     /**
      * 根据id获取 SSRDynamicSql
+     *
      * @param id id
      * @return SSRDynamicSql
      */
@@ -20,6 +21,7 @@ public interface SSRDynamicSQLMapper {
 
     /**
      * 插入数据
+     *
      * @param dynamicSql SSRDynamicSql
      * @return 影响行数
      */

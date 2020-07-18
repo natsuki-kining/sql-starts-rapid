@@ -2,14 +2,12 @@ package com.natsuki_kining.ssr.core.proxy;
 
 import com.natsuki_kining.ssr.core.annotation.QueryCode;
 import com.natsuki_kining.ssr.core.data.cache.SSRCache;
-import com.natsuki_kining.ssr.core.enums.ORMType;
 import com.natsuki_kining.ssr.core.intercept.AbstractQueryJavaIntercept;
 import com.natsuki_kining.ssr.core.intercept.AbstractQueryScriptIntercept;
 import com.natsuki_kining.ssr.core.rule.Rule;
 import com.natsuki_kining.ssr.core.sql.SQL;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;

@@ -22,13 +22,14 @@ public class SSRDataImpl implements SSRData {
 
     /**
      * 委派调用
+     *
      * @param queryCode 查询的code
      * @return
      */
     @Override
     public SSRDynamicSQL getSSRDynamicSQL(String queryCode) {
         SSRDynamicSQL dynamicSQL = cache.getSSRDynamicSQL(queryCode);
-        if (dynamicSQL == null){
+        if (dynamicSQL == null) {
             return orm.getSSRDynamicSQL(queryCode);
         }
         return dynamicSQL;

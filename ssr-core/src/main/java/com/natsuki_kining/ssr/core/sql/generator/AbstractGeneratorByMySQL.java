@@ -13,10 +13,10 @@ public abstract class AbstractGeneratorByMySQL extends AbstractGeneratorSQL {
 
     @Override
     public void generatePageSQL(StringBuilder querySql, QueryRule queryRule, QueryParams queryParams) {
-        if (queryParams.getPageSize() == -1){
+        if (queryParams.getPageSize() == -1) {
             return;
         }
-        if (!queryParams.isGeneratePage()){
+        if (!queryParams.isGeneratePage()) {
             return;
         }
         querySql.append(" LIMIT ");

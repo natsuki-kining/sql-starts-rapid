@@ -3,7 +3,6 @@ package com.natsuki_kining.ssr.core.rule;
 import com.natsuki_kining.ssr.core.beans.QueryRule;
 import com.natsuki_kining.ssr.core.beans.SSRDynamicSQL;
 import com.natsuki_kining.ssr.core.data.SSRData;
-import com.natsuki_kining.ssr.core.data.orm.QueryORM;
 import com.natsuki_kining.ssr.core.enums.QueryCodeType;
 import com.natsuki_kining.ssr.core.exception.SSRException;
 import com.natsuki_kining.ssr.core.utils.Assert;
@@ -67,10 +66,10 @@ public class RuleImpl implements Rule {
             String queryType = queryCode.substring(index + 1);
             if (Constant.QueryCodeType.GENERATE_BY_ENTITY.equals(queryType)) {
                 queryCodeType = QueryCodeType.GENERATE_QUERY_BY_ENTITY;
-                Assert.isFalse(generateByEntityEnable,"如果需要使用通过实体来生成sql，请设置ssr.generate-by-entity.enable=true");
-            }else if (Constant.QueryCodeType.GENERATE_BY_TABLE.equals(queryType)) {
+                Assert.isFalse(generateByEntityEnable, "如果需要使用通过实体来生成sql，请设置ssr.generate-by-entity.enable=true");
+            } else if (Constant.QueryCodeType.GENERATE_BY_TABLE.equals(queryType)) {
                 queryCodeType = QueryCodeType.GENERATE_QUERY_BY_TABLE;
-                Assert.isFalse(generateByTableEnable,"如果需要使用通过表名来生成sql，请设置ssr.generate-by-table.enable=true");
+                Assert.isFalse(generateByTableEnable, "如果需要使用通过表名来生成sql，请设置ssr.generate-by-table.enable=true");
             } else if (Constant.QueryCodeType.SINGLE.equals(queryType)) {
                 queryCodeType = QueryCodeType.SINGLE_QUERY;
             } else {

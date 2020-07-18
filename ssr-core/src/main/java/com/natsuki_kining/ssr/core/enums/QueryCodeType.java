@@ -15,7 +15,7 @@ public enum QueryCodeType {
      * 例如：自动查询用户表
      * queryCode=类全路径:generateByEntity
      * queryCode=com.xxx.entity.User:generateByEntity
-     *
+     * <p>
      * 为了安全起见该功能默认关闭，开启需要添加配置：ssr.generate.entity.enable=true
      */
     GENERATE_QUERY_BY_ENTITY,

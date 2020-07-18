@@ -56,12 +56,13 @@ public class StringUtils {
      * 将类属性名转换成数据库字段名
      * code->CODE
      * userName->USER_NAME
+     *
      * @param fieldName
      * @return
      */
-    public static String castFieldToColumn(String fieldName){
+    public static String castFieldToColumn(String fieldName) {
         char[] chars = fieldName.toCharArray();
-        StringBuilder column = new StringBuilder(chars[0]+"");
+        StringBuilder column = new StringBuilder(chars[0] + "");
         for (int i = 1; i < chars.length; i++) {
             if (Character.isUpperCase(chars[i])) {
                 column.append("_");
@@ -71,13 +72,13 @@ public class StringUtils {
         return column.toString().toUpperCase();
     }
 
-    public static String getInListValue(List<String> list,String value,String defaultValue){
-        if (StringUtils.isBlank(value)){
+    public static String getInListValue(List<String> list, String value, String defaultValue) {
+        if (StringUtils.isBlank(value)) {
             return defaultValue;
-        }else{
-            if (list.contains(value)){
+        } else {
+            if (list.contains(value)) {
                 return value;
-            }else{
+            } else {
                 return defaultValue;
             }
         }

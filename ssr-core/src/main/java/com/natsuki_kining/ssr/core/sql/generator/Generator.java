@@ -2,10 +2,6 @@ package com.natsuki_kining.ssr.core.sql.generator;
 
 import com.natsuki_kining.ssr.core.beans.QueryParams;
 import com.natsuki_kining.ssr.core.beans.QueryRule;
-import com.natsuki_kining.ssr.core.utils.StringUtils;
-
-import java.util.Map;
-import java.util.Set;
 
 /**
  * TODO
@@ -18,7 +14,7 @@ public interface Generator {
     /**
      * 根据参数自动生成查询的sql语句
      *
-     * @param queryRule 查询规则
+     * @param queryRule   查询规则
      * @param queryParams 查询参数
      * @return 生成要查询的sql
      */

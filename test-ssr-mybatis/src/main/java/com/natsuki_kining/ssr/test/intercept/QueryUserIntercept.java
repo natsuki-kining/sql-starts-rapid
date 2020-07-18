@@ -24,7 +24,7 @@ public class QueryUserIntercept extends AbstractQueryJavaIntercept {
     }
 
     @Override
-    public void queryBefore(QueryParams queryParams,QueryInfo queryInfo, SSRDynamicSQL ssrDynamicSQL, Map<String, Object> map) {
+    public void queryBefore(QueryParams queryParams, QueryInfo queryInfo, SSRDynamicSQL ssrDynamicSQL, Map<String, Object> map) {
 
     }
 

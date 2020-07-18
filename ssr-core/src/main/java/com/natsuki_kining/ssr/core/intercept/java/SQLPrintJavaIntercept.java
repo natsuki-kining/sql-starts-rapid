@@ -29,8 +29,8 @@ public class SQLPrintJavaIntercept extends AbstractQueryJavaIntercept {
 
     @Override
     public void queryBefore(QueryParams queryParams, QueryInfo queryInfo, SSRDynamicSQL dynamicSql, Map<String, Object> preData) {
-        if (showQueryInfo){
-            log.info("SQL:{}",queryInfo.getQuerySQL());
+        if (showQueryInfo) {
+            log.info("SQL:{}", queryInfo.getQuerySQL());
             log.info("params:{}", JSON.toJSONString(queryParams.getParams()));
         }
     }

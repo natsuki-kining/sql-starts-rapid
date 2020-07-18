@@ -14,18 +14,18 @@ import com.natsuki_kining.ssr.core.utils.Constant;
 public class GenerateByOracle extends AbstractGeneratorByOracle implements Generator {
 
     @Override
-    protected String likeConditionHandel(String replacement,String placeholderParam) {
+    protected String likeConditionHandel(String replacement, String placeholderParam) {
         if (Constant.Condition.ALL_LIKE.equals(replacement)) {
-            return "LIKE '%' || "+placeholderParam+" || '%' ";
-        }else if (Constant.Condition.LEFT_LIKE.equals(replacement)) {
-            return "LIKE '%' || "+placeholderParam+" ";
-        }else{
-            return "LIKE "+placeholderParam+" || '%' ";
+            return "LIKE '%' || " + placeholderParam + " || '%' ";
+        } else if (Constant.Condition.LEFT_LIKE.equals(replacement)) {
+            return "LIKE '%' || " + placeholderParam + " ";
+        } else {
+            return "LIKE " + placeholderParam + " || '%' ";
         }
     }
 
     @Override
     protected String placeholderParam(String queryCode) {
-        return ":"+queryCode+" ";
+        return ":" + queryCode + " ";
     }
 }

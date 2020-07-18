@@ -15,13 +15,13 @@ public class SSRUser {
 
     @Id
     private Integer id;
-    @Column(name="NAME")
+    @Column(name = "NAME")
     private String name;
-    @Column(name="USER_NAME")
+    @Column(name = "USER_NAME")
     private String userName;
-    @Column(name="CODE")
+    @Column(name = "CODE")
     private String code;
-    @Column(name="PASSWORD")
+    @Column(name = "PASSWORD")
     private String password;
 
     public Integer getId() {

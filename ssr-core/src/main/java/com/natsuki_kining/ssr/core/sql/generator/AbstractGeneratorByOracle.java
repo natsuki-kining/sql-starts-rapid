@@ -13,10 +13,10 @@ public abstract class AbstractGeneratorByOracle extends AbstractGeneratorSQL {
 
     @Override
     public void generatePageSQL(StringBuilder querySql, QueryRule queryRule, QueryParams queryParams) {
-        if (queryParams.getPageSize() == -1){
+        if (queryParams.getPageSize() == -1) {
             return;
         }
-        if (!queryParams.isGeneratePage()){
+        if (!queryParams.isGeneratePage()) {
             return;
         }
         String sql = querySql.toString();
@@ -32,7 +32,6 @@ public abstract class AbstractGeneratorByOracle extends AbstractGeneratorSQL {
         querySql.append("WHERE t2.rowno > ");
         querySql.append(queryParams.getPageStart());
     }
-
 
 
 }

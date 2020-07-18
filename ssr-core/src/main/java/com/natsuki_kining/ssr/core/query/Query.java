@@ -34,6 +34,7 @@ public interface Query {
 
     /**
      * 查询返回QueryResult封装类型
+     *
      * @param queryParams
      * @param <T>
      * @return
@@ -42,6 +43,7 @@ public interface Query {
 
     /**
      * 查询返回QueryResult封装类型
+     *
      * @param queryParams
      * @param clazz
      * @param <T>

@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Stream;
 
 /**
  * 生成sql
@@ -78,35 +77,35 @@ public abstract class AbstractGeneratorSQL implements Generator {
                 querySql.append(" ");
             });
         } else {
-            Map<String,Object> params = new HashMap<>(queryParams.getCondition().size());
+            Map<String, Object> params = new HashMap<>(queryParams.getCondition().size());
             queryParams.setParams(params);
             List<QueryCondition> conditionList = queryParams.getCondition();
-            Map<String,List<QueryCondition>> queryConditionMap = new HashMap<>(conditionList.size());
-            conditionList.stream().forEach(c->{
+            Map<String, List<QueryCondition>> queryConditionMap = new HashMap<>(conditionList.size());
+            conditionList.stream().forEach(c -> {
                 String groupId = c.getGroupId();
-                if (StringUtils.isBlank(groupId)){
+                if (StringUtils.isBlank(groupId)) {
                     groupId = UUID.randomUUID().toString();
                 }
-                if (queryConditionMap.get(groupId) == null){
-                    queryConditionMap.put(groupId,new ArrayList<>());
+                if (queryConditionMap.get(groupId) == null) {
+                    queryConditionMap.put(groupId, new ArrayList<>());
                 }
                 queryConditionMap.get(groupId).add(c);
             });
 
 
             AtomicInteger index = new AtomicInteger(0);
-            queryConditionMap.forEach((k,v)->{
+            queryConditionMap.forEach((k, v) -> {
                 String paramName = "param";
-                if (v.size() == 1){
+                if (v.size() == 1) {
                     index.getAndIncrement();
                     QueryCondition c = v.get(0);
-                    queryConditionHandle(querySql,c,params,paramName+index.get());
-                }else{
+                    queryConditionHandle(querySql, c, params, paramName + index.get());
+                } else {
                     querySql.append(StringUtils.getInListValue(Constant.Condition.QUERY_CONNECT_LIST, v.get(0).getConnect().toUpperCase(), Constant.Condition.DEFAULT_CONNECT));
                     querySql.append(" ( ");
-                    v.stream().forEach(c->{
+                    v.stream().forEach(c -> {
                         index.getAndIncrement();
-                        queryConditionHandle(querySql,c,params,paramName+index.get());
+                        queryConditionHandle(querySql, c, params, paramName + index.get());
                     });
                     querySql.append(" ) ");
                 }
@@ -125,7 +124,7 @@ public abstract class AbstractGeneratorSQL implements Generator {
         if (queryParams.getSort() == null) {
             return;
         }
-        if (!queryParams.isGenerateSort()){
+        if (!queryParams.isGenerateSort()) {
             return;
         }
         querySql.append(" ORDER BY ");
@@ -134,13 +133,13 @@ public abstract class AbstractGeneratorSQL implements Generator {
         querySql.deleteCharAt(querySql.length() - 1);
     }
 
-    private void queryConditionHandle(StringBuilder querySql,QueryCondition queryCondition,Map<String,Object> params,String paramName){
+    private void queryConditionHandle(StringBuilder querySql, QueryCondition queryCondition, Map<String, Object> params, String paramName) {
         String queryCode = queryCondition.getQueryCode();
         String connect = queryCondition.getConnect();
         String operational = queryCondition.getOperational();
         Object value = queryCondition.getValue();
 
-        params.put(paramName,value);
+        params.put(paramName, value);
 
         connect = StringUtils.getInListValue(Constant.Condition.QUERY_CONNECT_LIST, connect.toUpperCase(), Constant.Condition.DEFAULT_CONNECT);
         if (Constant.Condition.QUERY_LIKE_OPERATIONAL_CHARACTER_LIST.contains(operational)) {
@@ -158,7 +157,8 @@ public abstract class AbstractGeneratorSQL implements Generator {
 
     /**
      * 处理like查询sql片段
-     * @param replacement like 标识符
+     *
+     * @param replacement      like 标识符
      * @param placeholderParam 占位符
      * @return
      */

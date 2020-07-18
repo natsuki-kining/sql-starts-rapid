@@ -33,7 +33,7 @@ public class HibernateQueryORM extends AbstractQueryORM implements QueryORM {
 
     private String aliasRegex = "^select\\s+[`?\\w+`?\\s+as?\\s+'?\"?\\w+'?\"?\\s{0,n},?]+\\s+from.*$";
 
-    private Map<String,Boolean> aliasMap = new HashMap<>();
+    private Map<String, Boolean> aliasMap = new HashMap<>();
 
     @Autowired
     private EntityManagerFactory entityManagerFactory;
@@ -43,33 +43,34 @@ public class HibernateQueryORM extends AbstractQueryORM implements QueryORM {
         Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
         NativeQuery sqlQuery = session.createSQLQuery(sql);
         NativeQuery nativeQuery;
-        if (Map.class == returnType){
+        if (Map.class == returnType) {
             nativeQuery = sqlQuery.unwrap(NativeQueryImpl.class).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
-        }else{
+        } else {
             //使用hibernate注解
-            if (returnType.isAnnotationPresent(Entity.class)){
+            if (returnType.isAnnotationPresent(Entity.class)) {
                 nativeQuery = sqlQuery.addEntity(returnType);
-            }else{
+            } else {
                 //判断是否有使用别名，如果使用别名就不转换
                 Boolean useAlias = aliasMap.get(sql);
-                if (useAlias == null){
+                if (useAlias == null) {
                     useAlias = Pattern.compile(aliasRegex, Pattern.CASE_INSENSITIVE).matcher(sql).matches();
-                    aliasMap.put(sql,useAlias);
+                    aliasMap.put(sql, useAlias);
                 }
-                if(useAlias){
+                if (useAlias) {
                     nativeQuery = sqlQuery.unwrap(NativeQueryImpl.class).setResultTransformer(Transformers.aliasToBean(returnType));
-                }else{
+                } else {
                     //没有使用别名需要实现转换
                     nativeQuery = sqlQuery.unwrap(NativeQueryImpl.class).setResultTransformer(new ResultTransformer() {
                         @Override
                         public Object transformTuple(Object[] values, String[] columns) {
-                            Map<String,Object> map = new HashMap<>();
+                            Map<String, Object> map = new HashMap<>();
                             int i = 0;
                             for (String column : columns) {
                                 map.put(column, values[i++]);
                             }
                             return map;
                         }
+
                         @Override
                         public List<E> transformList(List list) {
                             List<E> es = JSON.parseArray(JSON.toJSONString(list), returnType);
@@ -79,10 +80,10 @@ public class HibernateQueryORM extends AbstractQueryORM implements QueryORM {
                 }
             }
         }
-        if (params != null && params.size() > 0){
-            params.forEach((k,v)->{
-                if (sql.contains(":"+k)){
-                    nativeQuery.setParameter(k,v);
+        if (params != null && params.size() > 0) {
+            params.forEach((k, v) -> {
+                if (sql.contains(":" + k)) {
+                    nativeQuery.setParameter(k, v);
                 }
             });
         }
@@ -92,7 +93,7 @@ public class HibernateQueryORM extends AbstractQueryORM implements QueryORM {
 
     @Override
     public <E> List<E> selectList(QuerySQL querySQL, QueryParams queryParams, Class<E> returnType) {
-        return selectList(querySQL.getExecuteSQL(),queryParams.getParams(),returnType);
+        return selectList(querySQL.getExecuteSQL(), queryParams.getParams(), returnType);
     }
 
     @Override

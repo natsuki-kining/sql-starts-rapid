@@ -1,9 +1,7 @@
 package com.natsuki_kining.ssr.core.utils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * TODO
@@ -25,13 +23,13 @@ public class Constant {
     /**
      * 分页常量
      */
-    public interface QueryPage{
+    public interface QueryPage {
         int QUERY_ALL = -1;
         //默认一页10条数据
         int DEFAULT_PAGE_SIZE = 10;
     }
 
-    public interface Condition{
+    public interface Condition {
         String LEFT_LIKE = "ll";
         String RIGHT_LIKE = "rl";
         String ALL_LIKE = "al";
@@ -40,12 +38,12 @@ public class Constant {
 
         String DEFAULT_CONNECT = "AND";
 
-        List<String> QUERY_CONNECT_LIST = new ArrayList<String>(){{
+        List<String> QUERY_CONNECT_LIST = new ArrayList<String>() {{
             add("AND");
             add("OR");
         }};
 
-        List<String> QUERY_OPERATIONAL_CHARACTER_LIST = new ArrayList<String>(){{
+        List<String> QUERY_OPERATIONAL_CHARACTER_LIST = new ArrayList<String>() {{
             add("=");
             add("<>");
             add("!=");
@@ -55,7 +53,7 @@ public class Constant {
             add("<=");
         }};
 
-        List<String> QUERY_LIKE_OPERATIONAL_CHARACTER_LIST = new ArrayList<String>(){{
+        List<String> QUERY_LIKE_OPERATIONAL_CHARACTER_LIST = new ArrayList<String>() {{
             add("ll");
             add("rl");
             add("al");
@@ -63,7 +61,7 @@ public class Constant {
 
     }
 
-    public interface Intercept{
+    public interface Intercept {
         /**
          * 最后一个拦截器的code
          */

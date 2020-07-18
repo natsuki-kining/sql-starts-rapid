@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 /**
@@ -36,12 +35,12 @@ public class SQLImpl implements SQL {
         if (QueryCodeType.SINGLE_QUERY == queryRule.getQueryCodeType()) {
             String formatSQL = ssrTemplate.formatSQL(queryRule.getDynamicSql().getSqlTemplate(), queryParams);
             sql = new StringBuilder(formatSQL);
-        }else{
-            sql = new StringBuilder(generator.generateQuerySQL(queryRule,queryParams));
+        } else {
+            sql = new StringBuilder(generator.generateQuerySQL(queryRule, queryParams));
         }
         querySQL.setSimpleSQL(sql.toString());
-        generator.generateSortSQL(sql,queryRule,queryParams);
-        generator.generatePageSQL(sql,queryRule,queryParams);
+        generator.generateSortSQL(sql, queryRule, queryParams);
+        generator.generatePageSQL(sql, queryRule, queryParams);
         querySQL.setProcessedSQL(sql.toString());
         return querySQL;
     }

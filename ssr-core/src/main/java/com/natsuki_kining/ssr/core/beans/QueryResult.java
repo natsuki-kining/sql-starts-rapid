@@ -16,6 +16,19 @@ public class QueryResult implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public QueryResult() {
+    }
+
+    public QueryResult(QueryStatus queryStatus) {
+        this.code = queryStatus.value();
+        this.message = queryStatus.getReasonPhrase();
+    }
+
+    public QueryResult(QueryStatus queryStatus,String message) {
+        this.code = queryStatus.value();
+        this.message = message;
+    }
+
     private Object data;
 
     private Integer code;

@@ -16,7 +16,7 @@ public interface SQL {
     /**
      * 获取查询SQL
      *
-     * @param queryRule 查询规则
+     * @param queryRule   查询规则
      * @param queryParams 查询参数
      * @return QuerySQL
      */

@@ -46,22 +46,22 @@ public class DefaultCache implements SSRCache {
     @Override
     public <T> T get(String code, Class<T> clazz) {
         reSetQueryCount(code);
-        return (T)cache.get(code);
+        return (T) cache.get(code);
     }
 
     @Override
-    public boolean save(String code,Object object) {
+    public boolean save(String code, Object object) {
         try {
             //移除不常用
             if (cache.size() == maxLength) {
                 Iterator<QueryIndex> iterator = queryCountList.iterator();
                 int removeCount = 0;
-                while (iterator.hasNext()){
-                    removeCount ++;
+                while (iterator.hasNext()) {
+                    removeCount++;
                     QueryIndex q = iterator.next();
                     cache.remove(q.getQueryCode());
                     iterator.remove();
-                    if (removeCount == rarely){
+                    if (removeCount == rarely) {
                         break;
                     }
                 }
@@ -70,7 +70,7 @@ public class DefaultCache implements SSRCache {
             reSetQueryCount(code);
             return true;
         } catch (Exception e) {
-            log.error(e.getMessage(),e);
+            log.error(e.getMessage(), e);
             return false;
         }
     }
@@ -84,7 +84,7 @@ public class DefaultCache implements SSRCache {
 
     @Override
     public SSRDynamicSQL getSSRDynamicSQL(String queryCode) {
-        return get(queryCode,SSRDynamicSQL.class);
+        return get(queryCode, SSRDynamicSQL.class);
     }
 
     @Data
@@ -93,6 +93,7 @@ public class DefaultCache implements SSRCache {
             this.count = count;
             this.queryCode = queryCode;
         }
+
         private Integer count;
         private String queryCode;
     }
@@ -103,7 +104,7 @@ public class DefaultCache implements SSRCache {
         queryCountList.add(index, new QueryIndex(count, queryCode));
     }
 
-    private Integer deleteQueryCountList(String queryCode){
+    private Integer deleteQueryCountList(String queryCode) {
         QueryIndex queryIndex = null;
         Integer count = -1;
         for (QueryIndex q : queryCountList) {

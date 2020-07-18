@@ -70,7 +70,7 @@ public class QueryParams implements Serializable {
     }
 
     public int getPageSize() {
-        if (pageSize == Constant.QueryPage.QUERY_ALL){
+        if (pageSize == Constant.QueryPage.QUERY_ALL) {
             return pageSize;
         }
         if (pageSize < 1) {
@@ -87,8 +87,8 @@ public class QueryParams implements Serializable {
         return getPageEnd() - getPageSize();
     }
 
-    public boolean isPageQuery(){
-        if (getPageSize() == Constant.QueryPage.QUERY_ALL){
+    public boolean isPageQuery() {
+        if (getPageSize() == Constant.QueryPage.QUERY_ALL) {
             return false;
         }
         return generatePage;

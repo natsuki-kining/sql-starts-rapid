@@ -31,14 +31,14 @@ public class QueryCondition implements Serializable {
     private String groupConnect;
 
     public String getConnect() {
-        if (connect == null){
+        if (connect == null) {
             return null;
         }
         return connect.trim();
     }
 
     public String getOperational() {
-        if (operational == null){
+        if (operational == null) {
             return null;
         }
         return operational.trim();

@@ -1,6 +1,5 @@
 package com.natsuki_kining.ssr.core.data.cache;
 
-import com.natsuki_kining.ssr.core.beans.SSRDynamicSQL;
 import com.natsuki_kining.ssr.core.data.SSRData;
 
 /**
@@ -13,29 +12,30 @@ public interface SSRCache extends SSRData {
 
     /**
      * 根据code获取缓存中的数据
-     * @param code 缓存的key
+     *
+     * @param code  缓存的key
      * @param clazz 泛型类
-     * @param <T> 泛型
+     * @param <T>   泛型
      * @return 缓存的值
      */
-    <T> T get(String code,Class<T> clazz);
+    <T> T get(String code, Class<T> clazz);
 
     /**
      * 缓存数据
-     * @param code 缓存的key
+     *
+     * @param code   缓存的key
      * @param object 缓存的值
      * @return 是否成功
      */
-    boolean save(String code,Object object);
+    boolean save(String code, Object object);
 
     /**
      * 删除缓存
+     *
      * @param code 缓存的key
      * @return 是否成功
      */
     boolean delete(String code);
-
-
 
 
 }

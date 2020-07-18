@@ -28,7 +28,8 @@
         select * from SSR_DYNAMIC_SQL where id = #{id}
     </select>
 
-    <insert id="insertSSRDynamicSQL" parameterType="com.natsuki_kining.ssr.core.beans.SSRDynamicSQL" useGeneratedKeys="true"
+    <insert id="insertSSRDynamicSQL" parameterType="com.natsuki_kining.ssr.core.beans.SSRDynamicSQL"
+            useGeneratedKeys="true"
             keyProperty="id">
         insert into `SSR_DYNAMIC_SQL`(`ID`,`QUERY_CODE`,`QUERY_NAME`,`QUERY_TYPE`,
                                     `SQL_TEMPLATE`,`PRE_SCRIPT`,`BEFORE_SCRIPT`,

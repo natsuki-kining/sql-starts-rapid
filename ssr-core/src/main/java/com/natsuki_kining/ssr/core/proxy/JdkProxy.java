@@ -77,29 +77,29 @@ public class JdkProxy implements InvocationHandler, SSRProxy {
     private Object invoke(Method method, Object[] args, Map<String, Object> preDate, SSRDynamicSQL dynamicSql, QueryParams queryParams) throws InvocationTargetException, IllegalAccessException {
         //调用拦截器的查询前方法
         QueryInfo queryInfo = new QueryInfo((QuerySQL) args[0]);
-        queryBefore(queryParams,queryInfo, dynamicSql, preDate);
+        queryBefore(queryParams, queryInfo, dynamicSql, preDate);
 
         //设置执行的SQL
         QuerySQL querySQL = queryInfo.getQuerySQL();
-        if (StringUtils.isBlank(querySQL.getExecuteSQL())){
+        if (StringUtils.isBlank(querySQL.getExecuteSQL())) {
             querySQL.setExecuteSQL(querySQL.getProcessedSQL());
         }
         args[0] = querySQL;
 
         //转换为指定的类型
         String resultType = dynamicSql.getResultType();
-        if (StringUtils.isNotBlank(resultType)){
+        if (StringUtils.isNotBlank(resultType)) {
             String[] resultMapper = resultType.split(",");
             for (String rm : resultMapper) {
                 String[] split = rm.split(":");
                 String queryCode = split[0];
                 String className = split[1];
 
-                if (dynamicSql.getQueryCode().equals(queryCode)){
-                    try{
+                if (dynamicSql.getQueryCode().equals(queryCode)) {
+                    try {
                         Class<?> clazz = Class.forName(className);
                         args[2] = clazz;
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         log.warn(e.getMessage());
                     }
                     break;
@@ -113,12 +113,12 @@ public class JdkProxy implements InvocationHandler, SSRProxy {
         queryInfo.setQueryEndTime(System.currentTimeMillis());
 
         //调用拦截器的查询后方法
-        queryData = queryAfter(queryParams,queryInfo, dynamicSql, preDate, queryData);
+        queryData = queryAfter(queryParams, queryInfo, dynamicSql, preDate, queryData);
 
         return queryData;
     }
 
-    private Object queryAfter(QueryParams queryParams,QueryInfo queryInfo, SSRDynamicSQL dynamicSql, Map<String, Object> preData, Object queryData) {
+    private Object queryAfter(QueryParams queryParams, QueryInfo queryInfo, SSRDynamicSQL dynamicSql, Map<String, Object> preData, Object queryData) {
         //master拦截器
         AbstractQueryJavaIntercept javaMasterIntercept = proxyConfig.getJavaMasterIntercept();
         if (javaMasterIntercept != null) {
@@ -140,7 +140,7 @@ public class JdkProxy implements InvocationHandler, SSRProxy {
         return queryData;
     }
 
-    private void queryBefore(QueryParams queryParams,QueryInfo queryInfo, SSRDynamicSQL dynamicSql, Map<String, Object> preData) {
+    private void queryBefore(QueryParams queryParams, QueryInfo queryInfo, SSRDynamicSQL dynamicSql, Map<String, Object> preData) {
         //master拦截器
         AbstractQueryJavaIntercept javaMasterIntercept = proxyConfig.getJavaMasterIntercept();
         if (javaMasterIntercept != null) {

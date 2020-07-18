@@ -35,11 +35,12 @@ public interface QueryIntercept {
 
     /**
      * 查询之后
+     *
      * @param queryParams 查询之后
-     * @param queryInfo 查询的相关信息->sql，查询耗时等
-     * @param dynamicSql 查询sql模板、脚本等
-     * @param preData 上一次执行的结果集
-     * @param queryData 查询得到的结果
+     * @param queryInfo   查询的相关信息->sql，查询耗时等
+     * @param dynamicSql  查询sql模板、脚本等
+     * @param preData     上一次执行的结果集
+     * @param queryData   查询得到的结果
      * @return 查询处理后的数据
      */
     Object queryAfter(QueryParams queryParams, QueryInfo queryInfo, SSRDynamicSQL dynamicSql, Map<String, Object> preData, Object queryData);

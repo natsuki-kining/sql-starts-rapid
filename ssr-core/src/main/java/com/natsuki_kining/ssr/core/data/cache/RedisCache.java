@@ -34,39 +34,39 @@ public class RedisCache implements SSRCache {
     private HashOperations<String, String, String> operations;
 
     @PostConstruct
-    private void init(){
+    private void init() {
         operations = redisTemplate.opsForHash();
     }
 
     @Override
-    public <T> T get(String code,Class<T> clazz) {
-        return JSON.parseObject(operations.get(cacheKey,code),clazz);
+    public <T> T get(String code, Class<T> clazz) {
+        return JSON.parseObject(operations.get(cacheKey, code), clazz);
     }
 
     @Override
-    public boolean save(String code,Object object) {
-        try{
-            operations.put(cacheKey,code, JSON.toJSONString(object));
+    public boolean save(String code, Object object) {
+        try {
+            operations.put(cacheKey, code, JSON.toJSONString(object));
             return true;
-        }catch (Exception e){
-            log.error(e.getMessage(),e);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
             return false;
         }
     }
 
     @Override
     public boolean delete(String code) {
-        try{
-            operations.delete(cacheKey,code);
+        try {
+            operations.delete(cacheKey, code);
             return true;
-        }catch (Exception e){
-            log.error(e.getMessage(),e);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
             return false;
         }
     }
 
     @Override
     public SSRDynamicSQL getSSRDynamicSQL(String queryCode) {
-        return get(queryCode,SSRDynamicSQL.class);
+        return get(queryCode, SSRDynamicSQL.class);
     }
 }

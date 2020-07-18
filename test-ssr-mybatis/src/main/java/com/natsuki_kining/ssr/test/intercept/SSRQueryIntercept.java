@@ -27,7 +27,7 @@ public class SSRQueryIntercept extends AbstractQueryJavaIntercept {
     }
 
     @Override
-    public Object queryAfter(QueryParams queryParams,QueryInfo queryInfo, SSRDynamicSQL ssrDynamicSQL, Map<String, Object> map, Object data) {
+    public Object queryAfter(QueryParams queryParams, QueryInfo queryInfo, SSRDynamicSQL ssrDynamicSQL, Map<String, Object> map, Object data) {
         return data;
     }
 }

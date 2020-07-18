@@ -17,7 +17,7 @@ public class SSRDynamicSQL implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public SSRDynamicSQL(){
+    public SSRDynamicSQL() {
     }
 
     public SSRDynamicSQL(String queryCode) {

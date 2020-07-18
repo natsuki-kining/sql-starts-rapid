@@ -13,19 +13,19 @@ import com.natsuki_kining.ssr.core.utils.Constant;
 public class GenerateByMySQL extends AbstractGeneratorByMySQL implements Generator {
 
     @Override
-    protected String likeConditionHandel(String replacement,String placeholderParam) {
+    protected String likeConditionHandel(String replacement, String placeholderParam) {
         if (Constant.Condition.ALL_LIKE.equals(replacement)) {
-            return "LIKE concat(concat('%',"+placeholderParam+"),'%') ";
-        }else if (Constant.Condition.LEFT_LIKE.equals(replacement)) {
-            return "LIKE concat('%',"+placeholderParam+") ";
-        }else{
-            return "LIKE concat("+placeholderParam+",'%') ";
+            return "LIKE concat(concat('%'," + placeholderParam + "),'%') ";
+        } else if (Constant.Condition.LEFT_LIKE.equals(replacement)) {
+            return "LIKE concat('%'," + placeholderParam + ") ";
+        } else {
+            return "LIKE concat(" + placeholderParam + ",'%') ";
         }
     }
 
     @Override
     protected String placeholderParam(String queryCode) {
-        return "#{"+queryCode+"} ";
+        return "#{" + queryCode + "} ";
     }
 
 
