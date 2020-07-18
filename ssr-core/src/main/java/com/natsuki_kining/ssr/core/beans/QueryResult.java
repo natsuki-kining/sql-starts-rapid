@@ -1,10 +1,9 @@
 package com.natsuki_kining.ssr.core.beans;
 
-import com.natsuki_kining.ssr.core.enums.QueryResultCode;
+import com.natsuki_kining.ssr.core.enums.QueryStatus;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * 查询结果
@@ -33,8 +32,8 @@ public class QueryResult implements Serializable {
         return this;
     }
 
-    public QueryResult setCode(QueryResultCode queryResultCode) {
-        this.code = queryResultCode.getCode();
+    public QueryResult setCode(QueryStatus queryStatus) {
+        this.code = queryStatus.value();
         return this;
     }
 

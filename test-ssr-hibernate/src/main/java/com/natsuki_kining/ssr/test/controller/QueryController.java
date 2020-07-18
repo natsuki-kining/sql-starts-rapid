@@ -22,7 +22,7 @@ public class QueryController {
     private Query query;
 
     @PostMapping("page")
-    public Object page(@RequestBody QueryParams queryParams) throws ClassNotFoundException {
+    public Object page(@RequestBody QueryParams queryParams) {
         return this.query.queryResult(queryParams);
     }
 }
