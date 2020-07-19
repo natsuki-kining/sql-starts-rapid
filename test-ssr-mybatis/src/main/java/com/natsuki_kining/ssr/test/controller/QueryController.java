@@ -2,6 +2,7 @@ package com.natsuki_kining.ssr.test.controller;
 
 import com.natsuki_kining.ssr.core.beans.QueryParams;
 import com.natsuki_kining.ssr.core.beans.SSRDynamicSQL;
+import com.natsuki_kining.ssr.core.data.cache.SSRCache;
 import com.natsuki_kining.ssr.core.query.Query;
 import com.natsuki_kining.ssr.test.service.SSRDynamicSQLService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,8 @@ import java.util.Map;
  * @Date : 2020/5/23 23:43
  */
 @RestController
-@RequestMapping("dynamicSql")
-public class SSRDynamicSQLController {
+@RequestMapping("query")
+public class QueryController {
 
     @Autowired
     private SSRDynamicSQLService dynamicSqlService;
@@ -53,5 +54,14 @@ public class SSRDynamicSQLController {
     public Object page(@RequestBody QueryParams queryParams) throws ClassNotFoundException {
         Class<?> aClass = Class.forName("com.natsuki_kining.ssr.test.entity.SSRUser");
         return this.query.queryResult(queryParams, aClass);
+    }
+
+
+    @Autowired
+    private SSRCache cache;
+
+    @GetMapping("clean")
+    public Object clean(){
+        return cache.clean();
     }
 }

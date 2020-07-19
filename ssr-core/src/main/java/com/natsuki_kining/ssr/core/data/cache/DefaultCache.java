@@ -7,10 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -85,6 +82,12 @@ public class DefaultCache implements SSRCache {
     @Override
     public SSRDynamicSQL getSSRDynamicSQL(String queryCode) {
         return get(queryCode, SSRDynamicSQL.class);
+    }
+
+    @Override
+    public boolean clean() {
+        cache.clear();
+        return true;
     }
 
     @Data

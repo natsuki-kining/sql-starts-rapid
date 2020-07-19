@@ -37,5 +37,9 @@ public interface SSRCache extends SSRData {
      */
     boolean delete(String code);
 
-
+    /**
+     * 清楚全部缓存
+     * @return
+     */
+    boolean clean();
 }

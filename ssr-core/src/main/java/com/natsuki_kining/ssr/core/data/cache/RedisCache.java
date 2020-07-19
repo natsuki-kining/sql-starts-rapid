@@ -12,6 +12,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.Set;
 
 /**
  * redis缓存
@@ -63,6 +64,13 @@ public class RedisCache implements SSRCache {
             log.error(e.getMessage(), e);
             return false;
         }
+    }
+
+    @Override
+    public boolean clean() {
+        Set<String> keys = operations.keys(cacheKey);
+        keys.stream().forEach(this::delete);
+        return true;
     }
 
     @Override
