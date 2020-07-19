@@ -10,7 +10,6 @@ CREATE TABLE `ssr_dynamic_sql`
     `QUERY_NAME`    varchar(100)  DEFAULT NULL COMMENT '查询的名称',
     `QUERY_TYPE`    varchar(50)   DEFAULT NULL COMMENT '查询的类型',
     `SQL_TEMPLATE`  text         NOT NULL COMMENT 'sql模板',
-    `PRE_SCRIPT`    text COMMENT '预处理脚本',
     `BEFORE_SCRIPT` text COMMENT '查询之前脚本',
     `AFTER_SCRIPT`  text COMMENT '查询之后脚本',
     `VERSION`       varchar(20)   DEFAULT NULL COMMENT '版本号',
@@ -26,20 +25,4 @@ CREATE TABLE `ssr_dynamic_sql`
     PRIMARY KEY (`ID`),
     UNIQUE KEY `UNIQUE` (`QUERY_CODE`)
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
-
-
--- test
-DROP TABLE IF EXISTS `ssr_user`;
-
-CREATE TABLE `ssr_user`
-(
-    `ID`        int(32) NOT NULL AUTO_INCREMENT,
-    `NAME`      varchar(32) DEFAULT NULL,
-    `USER_NAME` varchar(32) DEFAULT NULL,
-    `CODE`      varchar(32) DEFAULT NULL,
-    `PASSWORD`  varchar(32) DEFAULT NULL,
-    PRIMARY KEY (`ID`)
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 3
   DEFAULT CHARSET = utf8;
