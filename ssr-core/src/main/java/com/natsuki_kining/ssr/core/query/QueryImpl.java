@@ -29,19 +29,31 @@ import java.util.Map;
 public class QueryImpl implements Query {
 
     private final QuerySQL proxySQL = null;
+
     @Autowired
     private QueryORM orm;
     @Autowired
     private ObjectFactory<SSRProxy> proxy;
 
     @Override
-    public List<Map> query(QueryParams queryParams) {
-        return query(queryParams, Map.class);
+    public <T> Object query(QueryParams queryParams, Class<T> clazz) {
+        return proxy.getObject().getInstance(orm).selectList(proxySQL, queryParams, clazz);
     }
 
     @Override
-    public <E> List<E> query(QueryParams queryParams, Class<E> clazz) {
-        return proxy.getObject().getInstance(orm).selectList(proxySQL, queryParams, clazz);
+    public Object query(QueryParams queryParams) {
+        return query(queryParams, Map.class);
+    }
+
+
+    @Override
+    public List<Map> queryList(QueryParams queryParams) {
+        return queryList(queryParams, Map.class);
+    }
+
+    @Override
+    public <T> List<T> queryList(QueryParams queryParams, Class<T> clazz) {
+        return (List<T>) query(queryParams, clazz);
     }
 
     @Override
@@ -66,6 +78,6 @@ public class QueryImpl implements Query {
             log.error(e.getMessage(), e);
             return new QueryResult(QueryStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
-
     }
+
 }

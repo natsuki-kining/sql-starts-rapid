@@ -39,14 +39,14 @@ public class QueryController {
 
     @PostMapping("query")
     public Object query(@RequestBody QueryParams queryParams) {
-        List<Map> result = this.query.query(queryParams);
+        List<Map> result = this.query.queryList(queryParams);
         return result;
     }
 
     @PostMapping("queryUser")
     public Object queryUser(@RequestBody QueryParams queryParams) throws ClassNotFoundException {
         Class<?> aClass = Class.forName("com.natsuki_kining.ssr.test.entity.SSRUser");
-        List<?> result = this.query.query(queryParams, aClass);
+        List<?> result = this.query.queryList(queryParams, aClass);
         return result;
     }
 

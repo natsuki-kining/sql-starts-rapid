@@ -14,13 +14,17 @@ import java.util.Map;
  **/
 public interface Query {
 
+    <T> Object query(QueryParams queryParams, Class<T> clazz);
+
+    Object query(QueryParams queryParams);
+
     /**
      * 查询返回map list
      *
      * @param queryParams 查询参数
      * @return map的集合
      */
-    List<Map> query(QueryParams queryParams);
+    List<Map> queryList(QueryParams queryParams);
 
     /**
      * 查询返回泛型list
@@ -30,7 +34,7 @@ public interface Query {
      * @param <T>         泛型
      * @return 泛型的集合
      */
-    <T> List<T> query(QueryParams queryParams, Class<T> clazz);
+    <T> List<T> queryList(QueryParams queryParams, Class<T> clazz);
 
     /**
      * 查询返回QueryResult封装类型
