@@ -31,11 +31,29 @@
     脚本在file文件夹里
 
 ##### 3.2 引入依赖
+根据需求引入相应的依赖包
+默认实现了mybatis跟hibernate，如果项目是使用其他的orm框架的，可以引入ssr-core
+
+    <dependency>
+         <groupId>com.natsuki_kining.ssr</groupId>
+         <artifactId>ssr-core</artifactId>
+         <version>1.0.0</version>
+    </dependency>
+然后实现QueryORM接口，如果是使用mybatis的可以直接引入
+
     <dependency>
          <groupId>com.natsuki_kining.ssr</groupId>
          <artifactId>ssr-mybatis</artifactId>
          <version>1.0.0</version>
     </dependency>
+    
+如果是使用hibernate的则引入
+
+        <dependency>
+             <groupId>com.natsuki_kining.ssr</groupId>
+             <artifactId>ssr-hibernate</artifactId>
+             <version>1.0.0</version>
+        </dependency>
 
 ##### 3.3 添加包扫描路径
     com.natsuki_kining
