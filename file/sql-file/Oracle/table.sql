@@ -1,29 +1,64 @@
-CREATE DATABASE /*!32312 IF NOT EXISTS */`ssr` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `ssr`;
-
-DROP TABLE IF EXISTS `ssr_dynamic_sql`;
-
-CREATE TABLE `ssr_dynamic_sql`
+-- Create table
+create table SSR_DYNAMIC_SQL
 (
-    `ID`            varchar2(32)  NOT NULL COMMENT '主键',
-    `QUERY_CODE`    varchar2(100) NOT NULL COMMENT '查询的code',
-    `QUERY_NAME`    varchar2(100)  DEFAULT NULL COMMENT '查询的名称',
-    `QUERY_TYPE`    varchar2(50)   DEFAULT NULL COMMENT '查询的类型',
-    `SQL_TEMPLATE`  CLOB         NOT NULL COMMENT 'sql模板',
-    `BEFORE_SCRIPT` CLOB COMMENT '查询之前脚本',
-    `AFTER_SCRIPT`  CLOB COMMENT '查询之后脚本',
-    `VERSION`       varchar2(20)   DEFAULT NULL COMMENT '版本号',
-    `DEL_FLAG`      NUMBER(1)        DEFAULT NULL COMMENT '是否删除。1：是，0：否。',
-    `ORDER_NUM`     NUMBER(11)       DEFAULT NULL COMMENT '排序编号。正序。',
-    `CREATE_NAME`   varchar2(60)   DEFAULT NULL COMMENT '创建人名称',
-    `CREATE_Id`     varchar2(64)   DEFAULT NULL COMMENT '创建人id',
-    `CREATE_TIME`   TIMESTAMP      DEFAULT NULL COMMENT '创建时间',
-    `UPDATE_NAME`   varchar2(60)   DEFAULT NULL COMMENT '修改人名称',
-    `UPDATE_Id`     varchar2(64)   DEFAULT NULL COMMENT '修改人id',
-    `UPDATE_TIME`   TIMESTAMP      DEFAULT NULL COMMENT '修改时间',
-    `REMARK`        varchar2(1000) DEFAULT NULL COMMENT '备注',
-    PRIMARY KEY (`ID`),
-    UNIQUE KEY `UNIQUE` (`QUERY_CODE`)
+  id            VARCHAR2(32) not null,
+  query_code    VARCHAR2(100) not null,
+  query_name    VARCHAR2(100),
+  query_type    VARCHAR2(50),
+  sql_template  CLOB not null,
+  before_script CLOB,
+  after_script  CLOB,
+  version       VARCHAR2(20),
+  del_flag      NUMBER(1),
+  order_num     NUMBER(11),
+  create_name   VARCHAR2(60),
+  create_id     VARCHAR2(64),
+  create_time   TIMESTAMP(6),
+  update_name   VARCHAR2(60),
+  update_id     VARCHAR2(64),
+  update_time   TIMESTAMP(6),
+  remark        VARCHAR2(1000)
 );
-
-
+-- Add comments to the table 
+comment on table SSR_DYNAMIC_SQL
+  is '动态SQL';
+-- Add comments to the columns 
+comment on column SSR_DYNAMIC_SQL.id
+  is '主键';
+comment on column SSR_DYNAMIC_SQL.query_code
+  is '查询的code';
+comment on column SSR_DYNAMIC_SQL.query_name
+  is '查询的名称';
+comment on column SSR_DYNAMIC_SQL.query_type
+  is '查询的类型';
+comment on column SSR_DYNAMIC_SQL.sql_template
+  is 'sql模板';
+comment on column SSR_DYNAMIC_SQL.before_script
+  is '查询之前的处理脚本。';
+comment on column SSR_DYNAMIC_SQL.after_script
+  is '查询之后的处理脚本。';
+comment on column SSR_DYNAMIC_SQL.version
+  is '版本号';
+comment on column SSR_DYNAMIC_SQL.del_flag
+  is '是否删除。1：是，0：否。';
+comment on column SSR_DYNAMIC_SQL.order_num
+  is '排序编号。正序。';
+comment on column SSR_DYNAMIC_SQL.create_name
+  is '创建人名称';
+comment on column SSR_DYNAMIC_SQL.create_id
+  is '创建人id';
+comment on column SSR_DYNAMIC_SQL.create_time
+  is '创建时间';
+comment on column SSR_DYNAMIC_SQL.update_name
+  is '修改人名称';
+comment on column SSR_DYNAMIC_SQL.update_id
+  is '修改人id';
+comment on column SSR_DYNAMIC_SQL.update_time
+  is '修改时间';
+comment on column SSR_DYNAMIC_SQL.remark
+  is '备注';
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table SSR_DYNAMIC_SQL
+  add constraint SSR_PRIMARY primary key (ID);
+alter table SSR_DYNAMIC_SQL
+  add constraint SSR_UNIQUE unique (QUERY_CODE);
