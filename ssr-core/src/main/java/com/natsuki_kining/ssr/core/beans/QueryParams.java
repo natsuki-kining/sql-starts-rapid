@@ -37,11 +37,15 @@ public class QueryParams implements Serializable {
      * value->sort
      */
     private LinkedHashMap<String, String> sort;
+
+    /**
+     * 是否返回封装类型
+     */
+    private boolean queryResultModel = true;
     /**
      * 是否生成排序
      */
     private boolean generateSort = true;
-
     /**
      * 自动生成sql用
      * 自动生成sql where 条件用

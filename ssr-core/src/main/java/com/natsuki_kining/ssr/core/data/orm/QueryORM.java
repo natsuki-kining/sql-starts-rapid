@@ -25,9 +25,9 @@ public interface QueryORM extends SSRData {
      * @param <E>         泛型、返回的结果集里的数据类型
      * @return 查询的结果集
      */
-    <E> List<E> selectList(QuerySQL querySQL, QueryParams queryParams, Class<E> returnType);
+    <E> Object select(QuerySQL querySQL, QueryParams queryParams, Class<E> returnType);
 
     <E> List<E> selectList(String sql, Map<String, Object> params, Class<E> returnType);
 
-    <T> QueryResult queryResult(QuerySQL querySQL, QueryParams queryParams, Class<T> returnType);
+    <T> Map<String, Object> queryPage(QuerySQL querySQL, QueryParams queryParams, Class<T> returnType);
 }

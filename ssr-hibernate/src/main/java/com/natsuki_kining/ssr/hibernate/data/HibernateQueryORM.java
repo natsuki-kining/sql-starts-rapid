@@ -91,10 +91,7 @@ public class HibernateQueryORM extends AbstractQueryORM implements QueryORM {
         return list;
     }
 
-    @Override
-    public <E> List<E> selectList(QuerySQL querySQL, QueryParams queryParams, Class<E> returnType) {
-        return selectList(querySQL.getExecuteSQL(), queryParams.getParams(), returnType);
-    }
+
 
     @Override
     protected String getQuerySSRDynamicSQL() {

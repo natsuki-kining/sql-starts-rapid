@@ -4,9 +4,6 @@ import com.natsuki_kining.ssr.core.beans.QueryParams;
 import com.natsuki_kining.ssr.core.beans.QueryResult;
 import com.natsuki_kining.ssr.core.beans.QuerySQL;
 import com.natsuki_kining.ssr.core.data.orm.QueryORM;
-import com.natsuki_kining.ssr.core.enums.QueryStatus;
-import com.natsuki_kining.ssr.core.exception.CodeNotFoundException;
-import com.natsuki_kining.ssr.core.exception.SSRException;
 import com.natsuki_kining.ssr.core.proxy.SSRProxy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectFactory;
@@ -37,14 +34,13 @@ public class QueryImpl implements Query {
 
     @Override
     public <T> Object query(QueryParams queryParams, Class<T> clazz) {
-        return proxy.getObject().getInstance(orm).selectList(proxySQL, queryParams, clazz);
+        return proxy.getObject().getInstance(orm).select(proxySQL, queryParams, clazz);
     }
 
     @Override
     public Object query(QueryParams queryParams) {
         return query(queryParams, Map.class);
     }
-
 
     @Override
     public List<Map> queryList(QueryParams queryParams) {
@@ -63,21 +59,7 @@ public class QueryImpl implements Query {
 
     @Override
     public <T> QueryResult queryResult(QueryParams queryParams, Class<T> clazz) {
-        try {
-            return proxy.getObject().getInstance(orm).queryResult(proxySQL, queryParams, clazz);
-        } catch (IllegalArgumentException e) {
-            log.error(e.getMessage(), e);
-            return new QueryResult(QueryStatus.BAD_REQUEST, e.getMessage());
-        } catch (CodeNotFoundException e) {
-            log.error(e.getMessage(), e);
-            return new QueryResult(QueryStatus.NOT_FOUND, e.getMessage());
-        } catch (SSRException e) {
-            log.error(e.getMessage(), e);
-            return new QueryResult(QueryStatus.NOT_IMPLEMENTED, e.getMessage());
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            return new QueryResult(QueryStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-        }
+        return (QueryResult) query(queryParams, clazz);
     }
 
 }

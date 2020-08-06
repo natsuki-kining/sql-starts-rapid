@@ -35,12 +35,6 @@ public class MyBatisQueryORM extends AbstractQueryORM implements QueryORM {
 
     private String querySSRDynamicSQL = "SELECT QUERY_CODE,SQL_TEMPLATE,BEFORE_SCRIPT,AFTER_SCRIPT FROM SSR_DYNAMIC_SQL SDS WHERE SDS.QUERY_CODE = #{code} limit 1";
 
-    @Override
-    public <E> List<E> selectList(QuerySQL querySQL, QueryParams queryParams, Class<E> returnType) {
-        return selectList(querySQL.getExecuteSQL(), queryParams.getParams(), returnType);
-    }
-
-
     @PostConstruct
     private void init() {
         configuration = sqlSession.getConfiguration();
