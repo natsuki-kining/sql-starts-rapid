@@ -76,7 +76,7 @@ public abstract class AbstractQueryORM implements QueryORM {
     @Override
     public <T> Map<String, Object> queryPage(QuerySQL querySQL, QueryParams queryParams, Class<T> clazz) {
         Map<String, Object> result = new HashMap<>();
-        String countSQL = "SELECT COUNT(1) AS TOTAL FROM (" + querySQL.getSimpleSQL() + " A) B";
+        String countSQL = "SELECT COUNT(1) AS TOTAL FROM (" + querySQL.getSimpleSQL() + " ) B";
         List<Map> maps = selectList(countSQL, queryParams.getParams(), Map.class);
         int total = Integer.parseInt(maps.get(0).get("TOTAL") + "");
         result.put("count", total);
