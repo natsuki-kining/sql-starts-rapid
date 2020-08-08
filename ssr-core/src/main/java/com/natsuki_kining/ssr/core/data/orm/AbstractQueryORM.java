@@ -54,7 +54,7 @@ public abstract class AbstractQueryORM implements QueryORM {
         //QueryResult
         if (queryParams.isQueryResultModel()){
             try {
-                return new QueryResult().setData(data).setCode(QueryStatus.OK);
+                return new QueryResult().setResult(data).setCode(QueryStatus.OK);
             } catch (IllegalArgumentException e) {
                 log.error(e.getMessage(), e);
                 return new QueryResult(QueryStatus.BAD_REQUEST, e.getMessage());

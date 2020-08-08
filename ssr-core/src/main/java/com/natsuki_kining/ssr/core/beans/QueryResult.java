@@ -29,14 +29,14 @@ public class QueryResult implements Serializable {
         this.message = message;
     }
 
-    private Object data;
+    private Object result;
 
     private Integer code;
 
     private String message;
 
-    public QueryResult setData(Object data) {
-        this.data = data;
+    public QueryResult setResult(Object result) {
+        this.result = result;
         return this;
     }
 
