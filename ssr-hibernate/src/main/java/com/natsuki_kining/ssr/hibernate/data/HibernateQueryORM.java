@@ -29,8 +29,6 @@ import java.util.regex.Pattern;
 @Component
 public class HibernateQueryORM extends AbstractQueryORM implements QueryORM {
 
-    protected String querySSRDynamicSQL = "SELECT QUERY_CODE \"queryCode\",SQL_TEMPLATE \"sqlTemplate\",BEFORE_SCRIPT \"beforeScript\",AFTER_SCRIPT \"afterScript\" FROM SSR_DYNAMIC_SQL SDS WHERE SDS.QUERY_CODE = :code";
-
     private String aliasRegex = "^select\\s+[`?\\w+`?\\s+as?\\s+'?\"?\\w+'?\"?\\s{0,n},?]+\\s+from.*$";
 
     private Map<String, Boolean> aliasMap = new HashMap<>();
@@ -95,6 +93,6 @@ public class HibernateQueryORM extends AbstractQueryORM implements QueryORM {
 
     @Override
     protected String getQuerySSRDynamicSQL() {
-        return querySSRDynamicSQL;
+        return "SELECT QUERY_CODE \"queryCode\",SQL_TEMPLATE \"sqlTemplate\",BEFORE_SCRIPT \"beforeScript\",AFTER_SCRIPT \"afterScript\" FROM "+dynamicSqlTableName+" SDS WHERE SDS.QUERY_CODE = :code";
     }
 }

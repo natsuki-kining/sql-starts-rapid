@@ -33,8 +33,6 @@ public class MyBatisQueryORM extends AbstractQueryORM implements QueryORM {
     private Configuration configuration;
     private LanguageDriver languageDriver;
 
-    private String querySSRDynamicSQL = "SELECT QUERY_CODE,SQL_TEMPLATE,BEFORE_SCRIPT,AFTER_SCRIPT FROM SSR_DYNAMIC_SQL SDS WHERE SDS.QUERY_CODE = #{code} limit 1";
-
     @PostConstruct
     private void init() {
         configuration = sqlSession.getConfiguration();
@@ -91,6 +89,6 @@ public class MyBatisQueryORM extends AbstractQueryORM implements QueryORM {
 
     @Override
     protected String getQuerySSRDynamicSQL() {
-        return querySSRDynamicSQL;
+        return "SELECT QUERY_CODE,SQL_TEMPLATE,BEFORE_SCRIPT,AFTER_SCRIPT FROM "+dynamicSqlTableName+" SDS WHERE SDS.QUERY_CODE = #{code} limit 1";
     }
 }

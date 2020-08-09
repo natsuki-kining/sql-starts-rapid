@@ -9,6 +9,7 @@ import com.natsuki_kining.ssr.core.exception.CodeNotFoundException;
 import com.natsuki_kining.ssr.core.exception.SSRException;
 import com.natsuki_kining.ssr.core.utils.Assert;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +23,9 @@ import java.util.Map;
  */
 @Slf4j
 public abstract class AbstractQueryORM implements QueryORM {
+
+    @Value("${ssr.dynamicSql.TableName:SSR_DYNAMIC_SQL}")
+    protected String dynamicSqlTableName;
 
     protected abstract String getQuerySSRDynamicSQL();
 
