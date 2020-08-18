@@ -111,7 +111,7 @@ public class DefaultCache implements SSRCache {
         QueryIndex queryIndex = null;
         Integer count = -1;
         for (QueryIndex q : queryCountList) {
-            if (queryCode.equals(q.getQueryCode())) {
+            if (q != null && queryCode.equals(q.getQueryCode())) {
                 queryIndex = q;
                 count = q.getCount();
                 break;
