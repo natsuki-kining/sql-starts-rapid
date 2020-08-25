@@ -49,6 +49,8 @@ public class QueryImpl implements Query {
 
     @Override
     public <T> List<T> queryList(QueryParams queryParams, Class<T> clazz) {
+        queryParams.setQueryResultModel(false);
+        queryParams.setGeneratePage(false);
         return (List<T>) query(queryParams, clazz);
     }
 
