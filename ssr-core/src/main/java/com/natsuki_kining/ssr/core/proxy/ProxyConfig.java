@@ -14,6 +14,8 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Pattern;
 
 /**
  * 代理类配置
@@ -25,6 +27,8 @@ import java.util.concurrent.ConcurrentHashMap;
 class ProxyConfig {
 
     private Map<String, AbstractQueryJavaIntercept> queryJavaInterceptMap = new ConcurrentHashMap<>();
+    private Map<String, AbstractQueryJavaIntercept> queryJavaPatternInterceptMap = new ConcurrentHashMap<>();
+
 
     private AbstractQueryJavaIntercept javaMasterIntercept = null;
 
@@ -37,7 +41,25 @@ class ProxyConfig {
     }
 
     AbstractQueryJavaIntercept getJavaIntercept(String code) {
-        return queryJavaInterceptMap.get(code);
+        AbstractQueryJavaIntercept javaIntercept = queryJavaInterceptMap.get(code);
+        if (javaIntercept != null){
+            return javaIntercept;
+        }
+        javaIntercept = queryJavaPatternInterceptMap.get(code);
+        if (javaIntercept != null){
+            return javaIntercept;
+        }
+        AtomicReference<AbstractQueryJavaIntercept> abstractQueryJavaIntercept = null;
+        queryJavaInterceptMap.forEach((k, v)->{
+            if(Pattern.matches(k, code)){
+                abstractQueryJavaIntercept.set(v);
+            }
+        });
+        javaIntercept = abstractQueryJavaIntercept.get();
+        if (javaIntercept != null){
+            queryJavaPatternInterceptMap.put(code,javaIntercept);
+        }
+        return javaIntercept;
     }
 
     SQL getSQL() {
