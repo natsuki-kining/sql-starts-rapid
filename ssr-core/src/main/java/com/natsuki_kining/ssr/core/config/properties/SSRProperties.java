@@ -16,38 +16,25 @@ import org.springframework.stereotype.Component;
 public class SSRProperties {
 
     /**
-     * 是否开启根据实体生成SQL
+     * 开关配置
      */
-    private boolean generateByEntityEnable = false;
+    private EnableProperties enable;
 
     /**
-     * 是否开启根据表名生成SQL
+     * 脚本相关配置
      */
-    private boolean generateByTableEnable = false;
+    private ScriptProperties script;
 
     /**
-     * 缓存最大数量
+     * 缓存相关配置
      */
-    private int cacheMaxLength = 500;
-
-    /**
-     * 缓存达到最大数时，一次移除不常用的数量
-     */
-    private int cacheMaxRarely = 500;
-
-    /**
-     * redis 缓存key
-     */
-    private String cacheRedisKey = "ssr-cache";
+    private CacheProperties cache;
 
     /**
      * 动态sql表表名
      */
-    protected String dynamicSqlTableName = "SSR_DYNAMIC_SQL";
+    private String dynamicSqlTableName = "SSR_DYNAMIC_SQL";
 
-    /**
-     * 是否开启打印查询信息
-     */
-    private boolean showQueryInfoEnable = true;
+
 
 }
