@@ -49,7 +49,7 @@ class ProxyConfig {
         if (javaIntercept != null){
             return javaIntercept;
         }
-        AtomicReference<AbstractQueryJavaIntercept> abstractQueryJavaIntercept = null;
+        AtomicReference<AbstractQueryJavaIntercept> abstractQueryJavaIntercept = new AtomicReference<>();
         queryJavaInterceptMap.forEach((k, v)->{
             if(Pattern.matches(k, code)){
                 abstractQueryJavaIntercept.set(v);

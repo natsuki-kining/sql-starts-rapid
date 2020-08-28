@@ -15,7 +15,7 @@ import java.util.Map;
  * @Author natsuki_kining
  **/
 @Component
-@QueryCode("query-user")
+@QueryCode("query-.*")
 public class QueryUserIntercept extends AbstractQueryJavaIntercept {
 
     @Override
@@ -25,7 +25,7 @@ public class QueryUserIntercept extends AbstractQueryJavaIntercept {
 
     @Override
     public void queryBefore(QueryParams queryParams, QueryInfo queryInfo, SSRDynamicSQL ssrDynamicSQL, Map<String, Object> map) {
-
+        System.out.println("query-.*:"+queryParams.getQueryCode());
     }
 
     @Override

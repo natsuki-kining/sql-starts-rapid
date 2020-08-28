@@ -23,7 +23,7 @@ public class SSRQueryIntercept extends AbstractQueryJavaIntercept {
 
     @Override
     public void queryBefore(QueryParams queryParams, QueryInfo queryInfo, SSRDynamicSQL ssrDynamicSQL, Map<String, Object> map) {
-
+        System.out.println("master intercept:"+queryParams.getQueryCode());
     }
 
     @Override
