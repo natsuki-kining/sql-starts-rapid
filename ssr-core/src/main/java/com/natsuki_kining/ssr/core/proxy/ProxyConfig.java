@@ -24,43 +24,7 @@ import java.util.regex.Pattern;
  **/
 @Component
 @Slf4j
-class ProxyConfig {
-
-    private Map<String, AbstractQueryJavaIntercept> queryJavaInterceptMap = new ConcurrentHashMap<>();
-    private Map<String, AbstractQueryJavaIntercept> queryJavaPatternInterceptMap = new ConcurrentHashMap<>();
-
-
-    private AbstractQueryJavaIntercept javaMasterIntercept = null;
-
-    AbstractQueryScriptIntercept getScriptIntercept() {
-        return scriptIntercept;
-    }
-
-    AbstractQueryJavaIntercept getJavaMasterIntercept() {
-        return javaMasterIntercept;
-    }
-
-    AbstractQueryJavaIntercept getJavaIntercept(String code) {
-        AbstractQueryJavaIntercept javaIntercept = queryJavaInterceptMap.get(code);
-        if (javaIntercept != null){
-            return javaIntercept;
-        }
-        javaIntercept = queryJavaPatternInterceptMap.get(code);
-        if (javaIntercept != null){
-            return javaIntercept;
-        }
-        AtomicReference<AbstractQueryJavaIntercept> abstractQueryJavaIntercept = new AtomicReference<>();
-        queryJavaInterceptMap.forEach((k, v)->{
-            if(Pattern.matches(k, code)){
-                abstractQueryJavaIntercept.set(v);
-            }
-        });
-        javaIntercept = abstractQueryJavaIntercept.get();
-        if (javaIntercept != null){
-            queryJavaPatternInterceptMap.put(code,javaIntercept);
-        }
-        return javaIntercept;
-    }
+public class ProxyConfig {
 
     SQL getSQL() {
         return this.sql;
@@ -83,28 +47,7 @@ class ProxyConfig {
     @Autowired
     private SSRCache cache;
 
-    @Autowired(required = false)
-    private AbstractQueryScriptIntercept scriptIntercept;
 
-    @Autowired(required = false)
-    private List<AbstractQueryJavaIntercept> queryJavaIntercepts;
 
-    @PostConstruct
-    private void init() {
-        if (queryJavaIntercepts == null || queryJavaIntercepts.size() == 0) {
-            return;
-        }
-        for (AbstractQueryJavaIntercept queryJavaIntercept : queryJavaIntercepts) {
-            if (queryJavaIntercept.getClass().isAnnotationPresent(QueryCode.class)) {
-                QueryCode annotation = queryJavaIntercept.getClass().getAnnotation(QueryCode.class);
-                queryJavaInterceptMap.put(annotation.value(), queryJavaIntercept);
-            } else {
-                if (javaMasterIntercept == null) {
-                    javaMasterIntercept = queryJavaIntercept;
-                } else {
-                    log.warn("已经存在一个master的java拦截器");
-                }
-            }
-        }
-    }
+
 }
