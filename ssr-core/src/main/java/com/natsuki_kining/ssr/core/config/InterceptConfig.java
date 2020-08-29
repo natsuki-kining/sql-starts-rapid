@@ -7,11 +7,9 @@ import com.natsuki_kining.ssr.core.beans.SSRDynamicSQL;
 import com.natsuki_kining.ssr.core.intercept.AbstractQueryJavaIntercept;
 import com.natsuki_kining.ssr.core.intercept.AbstractQueryScriptIntercept;
 import com.natsuki_kining.ssr.core.intercept.QueryIntercept;
-import com.natsuki_kining.ssr.core.proxy.ProxyConfig;
 import com.natsuki_kining.ssr.core.utils.Constant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -42,14 +40,6 @@ public class InterceptConfig extends SSRConfig implements QueryIntercept {
 
     private AbstractQueryJavaIntercept javaMasterIntercept = null;
 
-    AbstractQueryScriptIntercept getScriptIntercept() {
-        return scriptIntercept;
-    }
-
-    AbstractQueryJavaIntercept getJavaMasterIntercept() {
-        return javaMasterIntercept;
-    }
-
     AbstractQueryJavaIntercept getJavaIntercept(String code) {
         AbstractQueryJavaIntercept javaIntercept = queryJavaInterceptMap.get(code);
         if (javaIntercept != null){
@@ -74,7 +64,6 @@ public class InterceptConfig extends SSRConfig implements QueryIntercept {
 
     @Override
     public boolean preHandle(QueryParams queryParams) {
-        AbstractQueryJavaIntercept javaMasterIntercept = getJavaMasterIntercept();
         if (javaMasterIntercept != null && !javaMasterIntercept.preHandle(queryParams)) {
             return false;
         }
@@ -82,14 +71,12 @@ public class InterceptConfig extends SSRConfig implements QueryIntercept {
         if (queryCodeIntercept != null && !queryCodeIntercept.preHandle(queryParams)) {
             return false;
         }
-        AbstractQueryScriptIntercept scriptIntercept = getScriptIntercept();
         return scriptIntercept == null || scriptIntercept.preHandle(queryParams);
     }
 
     @Override
     public void queryBefore(QueryParams queryParams, QueryInfo queryInfo, SSRDynamicSQL dynamicSql, Map<String, Object> preData) {
         //master拦截器
-        AbstractQueryJavaIntercept javaMasterIntercept = getJavaMasterIntercept();
         if (javaMasterIntercept != null) {
             javaMasterIntercept.queryBefore(queryParams, queryInfo, dynamicSql, preData);
         }
@@ -99,7 +86,6 @@ public class InterceptConfig extends SSRConfig implements QueryIntercept {
             queryCodeIntercept.queryBefore(queryParams, queryInfo, dynamicSql, preData);
         }
         //脚本拦截器
-        AbstractQueryScriptIntercept scriptIntercept = getScriptIntercept();
         if (scriptIntercept != null) {
             scriptIntercept.queryBefore(queryParams, queryInfo, dynamicSql, preData);
         }
@@ -113,7 +99,6 @@ public class InterceptConfig extends SSRConfig implements QueryIntercept {
     @Override
     public Object queryAfter(QueryParams queryParams, QueryInfo queryInfo, SSRDynamicSQL dynamicSql, Map<String, Object> preData, Object queryData) {
         //master拦截器
-        AbstractQueryJavaIntercept javaMasterIntercept = getJavaMasterIntercept();
         if (javaMasterIntercept != null) {
             queryData = javaMasterIntercept.queryAfter(queryParams, queryInfo, dynamicSql, preData, queryData);
         }
@@ -121,7 +106,6 @@ public class InterceptConfig extends SSRConfig implements QueryIntercept {
         if (queryCodeIntercept != null) {
             queryData = queryCodeIntercept.queryAfter(queryParams, queryInfo, dynamicSql, preData, queryData);
         }
-        AbstractQueryScriptIntercept scriptIntercept = getScriptIntercept();
         if (scriptIntercept != null) {
             queryData = scriptIntercept.queryAfter(queryParams, queryInfo, dynamicSql, preData, queryData);
         }
@@ -146,7 +130,7 @@ public class InterceptConfig extends SSRConfig implements QueryIntercept {
                 if (javaMasterIntercept == null) {
                     javaMasterIntercept = queryJavaIntercept;
                 } else {
-                    log.warn("已经存在一个master的java拦截器");
+                    log.warn("已经存在一个master的java拦截器,");
                 }
             }
         }
