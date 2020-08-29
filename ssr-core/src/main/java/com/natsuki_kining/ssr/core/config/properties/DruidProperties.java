@@ -17,8 +17,8 @@ import java.sql.SQLException;
  */
 @Data
 @Slf4j
-@Component
-@ConfigurationProperties(prefix = "spring.datasource")
+//@Component
+//@ConfigurationProperties(prefix = "spring.datasource")
 public class DruidProperties {
 
     private String url;
