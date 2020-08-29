@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * TODO
+ * 查询相关信息实体
  *
  * @Author natsuki_kining
  * @Date 2020/6/6 17:45

@@ -3,7 +3,7 @@ package com.natsuki_kining.ssr.core.utils;
 import java.util.Collection;
 
 /**
- * TODO
+ * Collection Utils
  *
  * @Author natsuki_kining
  * @Date 2020/6/6 20:34

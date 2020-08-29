@@ -1,7 +1,7 @@
 package com.natsuki_kining.ssr.test.entity;
 
 /**
- * TODO
+ * 测试实体
  *
  * @Author : natsuki_kining
  * @Date : 2020/5/23 23:37

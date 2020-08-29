@@ -1,7 +1,7 @@
 package com.natsuki_kining.ssr.core.exception;
 
 /**
- * TODO
+ * 没有找到code异常类
  *
  * @Author : natsuki_kining
  * @Date : 2020/7/18 16:00

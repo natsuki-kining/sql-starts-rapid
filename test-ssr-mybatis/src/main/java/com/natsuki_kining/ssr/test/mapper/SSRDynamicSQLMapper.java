@@ -4,7 +4,7 @@ package com.natsuki_kining.ssr.test.mapper;
 import com.natsuki_kining.ssr.core.beans.SSRDynamicSQL;
 
 /**
- * TODO
+ * SSRDynamicSQL Mapper
  *
  * @Author : natsuki_kining
  * @Date : 2020/5/24 10:21

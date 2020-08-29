@@ -4,7 +4,7 @@ import com.natsuki_kining.ssr.core.beans.QueryParams;
 import com.natsuki_kining.ssr.core.beans.QueryRule;
 
 /**
- * TODO
+ * mysql 生成sql 抽象类
  *
  * @Author : natsuki_kining
  * @Date : 2020/6/22 22:48

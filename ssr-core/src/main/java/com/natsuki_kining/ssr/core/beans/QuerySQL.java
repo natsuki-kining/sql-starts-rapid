@@ -3,7 +3,7 @@ package com.natsuki_kining.ssr.core.beans;
 import lombok.Data;
 
 /**
- * TODO
+ * 查询相关sql的实体
  *
  * @Author : natsuki_kining
  * @Date : 2020/6/25 15:36

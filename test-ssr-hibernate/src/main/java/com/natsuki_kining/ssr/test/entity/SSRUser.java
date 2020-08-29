@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 /**
- * TODO
+ * 测试实体
  *
  * @Author : natsuki_kining
  * @Date : 2020/5/23 23:37

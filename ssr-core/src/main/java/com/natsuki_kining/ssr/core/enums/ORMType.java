@@ -1,7 +1,7 @@
 package com.natsuki_kining.ssr.core.enums;
 
 /**
- * TODO
+ * orm type
  *
  * @Author : natsuki_kining
  * @Date : 2020/5/30 15:52

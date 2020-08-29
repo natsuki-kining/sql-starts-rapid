@@ -6,7 +6,7 @@ import com.natsuki_kining.ssr.core.sql.generator.Generator;
 import com.natsuki_kining.ssr.core.utils.Constant;
 
 /**
- * TODO
+ * 生成oracle查询sql类
  *
  * @Author : natsuki_kining
  * @Date : 2020/5/31 21:36

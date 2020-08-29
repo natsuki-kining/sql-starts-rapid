@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * TODO
+ * 查询抽象类
  *
  * @Author : natsuki_kining
  * @Date : 2020/5/30 15:12

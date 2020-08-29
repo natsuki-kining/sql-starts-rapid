@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
- * TODO
+ * 配置参数类
  *
  * @Author : natsuki_kining
  * @Date : 2020/8/28 22:25

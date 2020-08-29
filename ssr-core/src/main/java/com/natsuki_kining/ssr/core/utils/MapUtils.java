@@ -3,7 +3,7 @@ package com.natsuki_kining.ssr.core.utils;
 import java.util.Map;
 
 /**
- * TODO
+ * map util
  *
  * @Author natsuki_kining
  * @Date 2020/6/6 20:34

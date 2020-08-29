@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO
+ * 常量类
  *
  * @Author : natsuki_kining
  * @Date : 2020/5/31 0:12
