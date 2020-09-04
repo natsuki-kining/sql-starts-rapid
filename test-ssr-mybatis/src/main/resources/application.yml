@@ -1,0 +1,51 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    username: root
+    password: root
+    url: jdbc:mysql://localhost:3306/ssr?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC&zeroDateTimeBehavior=convertToNull
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+    type: com.alibaba.druid.pool.DruidDataSource
+    filters: stat,wall,stat,slf4j,default
+    web-stat-filter:
+      enabled: true
+      url-pattern: /*
+      exclusions: "*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*"
+
+logging:
+  level:
+    druid:
+      sql:
+        Statement: DEBUG
+
+  freemarker:
+    checkTemplateLocation: false
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    password: 123456
+
+mybatis:
+  mapper-locations: classpath:mybatis/*Mapper.xml
+  type-aliases-package: com.natsuki_kining
+
+
+
+# ssr
+ssr:
+  enable:
+    generate-by-table: true
+  script:
+    type: javaScript
+  datasource:
+    multi-datasource-open: true
+    username: root
+    password: root
+    url: jdbc:mysql://localhost:3306/ur?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC&zeroDateTimeBehavior=convertToNull
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  show-query-info:
+    enable: false
