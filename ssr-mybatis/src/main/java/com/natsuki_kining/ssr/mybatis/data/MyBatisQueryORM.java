@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.sql.DataSource;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,15 +34,16 @@ public class MyBatisQueryORM extends AbstractQueryORM implements QueryORM {
     private SqlSession sqlSession;
 
     @Autowired
-    private DynamicDataSource dynamicDataSource;
+    private DynamicSqlSession dynamicSqlSession;
 
     private Configuration configuration;
     private LanguageDriver languageDriver;
 
     @PostConstruct
     private void init() {
-//        configuration = sqlSession.getConfiguration();
-//        languageDriver = configuration.getDefaultScriptingLanguageInstance();
+        sqlSession = dynamicSqlSession.getSqlSession("backSqlSessionFactory");
+        configuration = sqlSession.getConfiguration();
+        languageDriver = configuration.getDefaultScriptingLanguageInstance();
     }
 
     /**

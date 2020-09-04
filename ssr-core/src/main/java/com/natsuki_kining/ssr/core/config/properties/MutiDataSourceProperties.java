@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
  * @author xiongneng
  * @since 2017/6/23 23:05
  */
-@Component
-@ConfigurationProperties(prefix = "ssr.datasource")
+//@Component
+//@ConfigurationProperties(prefix = "ssr.datasource")
 public class MutiDataSourceProperties {
 
     private String url;

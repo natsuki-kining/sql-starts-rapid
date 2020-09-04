@@ -19,7 +19,7 @@ import java.util.HashMap;
  * @Author : natsuki_kining
  * @Date : 2020/9/4 22:25
  */
-@Configuration
+//@Configuration
 public class MultiSourceConfig {
 
     @Autowired
@@ -81,4 +81,7 @@ public class MultiSourceConfig {
         dynamicDataSource.setDefaultTargetDataSource(coreDataSource);
         return dynamicDataSource;
     }
+
+
+
 }
