@@ -21,7 +21,7 @@ import java.util.Map;
 @RequestMapping("query")
 public class QueryController {
 
-    @Autowired
+//    @Autowired
     private SSRDynamicSQLService dynamicSqlService;
 
     @Autowired

@@ -12,7 +12,7 @@ import java.util.UUID;
  * @Author : natsuki_kining
  * @Date : 2020/5/24 10:21
  */
-@Service
+//@Service
 public class SSRDynamicSQLService {
 
     @Autowired

@@ -2,6 +2,8 @@ package com.natsuki_kining.ssr.core.proxy;
 
 import com.natsuki_kining.ssr.core.beans.*;
 import com.natsuki_kining.ssr.core.config.InterceptConfig;
+import com.natsuki_kining.ssr.core.config.multi.DSEnum;
+import com.natsuki_kining.ssr.core.config.multi.DataSourceContextHolder;
 import com.natsuki_kining.ssr.core.data.cache.SSRCache;
 import com.natsuki_kining.ssr.core.data.orm.QueryORM;
 import com.natsuki_kining.ssr.core.enums.QueryCodeType;
@@ -54,6 +56,8 @@ public class JdkProxy implements InvocationHandler, SSRProxy {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        DataSourceContextHolder.setDataSourceType(DSEnum.DATA_SOURCE_BIZ);
+
         QueryParams queryParams = (QueryParams) args[1];
         //调用拦截器的预处理方法判断是否需要往下执行
         boolean preHandle = interceptConfig.preHandle(queryParams);
