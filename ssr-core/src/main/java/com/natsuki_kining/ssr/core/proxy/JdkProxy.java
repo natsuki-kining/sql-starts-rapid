@@ -56,7 +56,7 @@ public class JdkProxy implements InvocationHandler, SSRProxy {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        DataSourceContextHolder.setDataSourceType("backSqlSessionFactory");
+        DataSourceContextHolder.setDataSourceType("primarySqlSessionFactory");
 
         QueryParams queryParams = (QueryParams) args[1];
         //调用拦截器的预处理方法判断是否需要往下执行
