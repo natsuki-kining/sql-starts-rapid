@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
  * @Author : natsuki_kining
  * @Date : 2020/5/23 23:43
  */
-@RestController
+//@RestController
 @RequestMapping("user")
 public class SSRUserController {
 

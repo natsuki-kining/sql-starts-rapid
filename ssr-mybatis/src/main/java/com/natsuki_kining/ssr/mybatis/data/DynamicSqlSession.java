@@ -1,6 +1,7 @@
 package com.natsuki_kining.ssr.mybatis.data;
 
 import com.natsuki_kining.ssr.core.config.multi.AbstractDynamicSqlSession;
+import com.natsuki_kining.ssr.core.config.multi.DataSourceContextHolder;
 import com.natsuki_kining.ssr.core.utils.StringUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -21,11 +22,9 @@ public class DynamicSqlSession extends AbstractDynamicSqlSession {
     private ApplicationContext appContext;
 
     @Override
-    public SqlSession getSqlSession(String name){
-        if(StringUtils.isBlank(name)){
-            throw new RuntimeException("name can't be empty");
-        }
-        SqlSessionFactory bean = appContext.getBean(name, SqlSessionFactory.class);
+    public SqlSession getSqlSession(){
+        String sessionFactoryName = DataSourceContextHolder.getDataSourceType();
+        SqlSessionFactory bean = appContext.getBean(sessionFactoryName, SqlSessionFactory.class);
         return bean.openSession();
     }
 

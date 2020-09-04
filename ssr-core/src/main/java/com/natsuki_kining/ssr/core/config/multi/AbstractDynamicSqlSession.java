@@ -8,5 +8,5 @@ package com.natsuki_kining.ssr.core.config.multi;
  */
 public abstract class AbstractDynamicSqlSession {
 
-    public abstract Object getSqlSession(String name);
+    public abstract Object getSqlSession();
 }

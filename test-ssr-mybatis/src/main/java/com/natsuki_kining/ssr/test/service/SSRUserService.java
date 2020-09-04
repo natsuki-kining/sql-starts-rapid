@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
  * @Author : natsuki_kining
  * @Date : 2020/5/24 10:34
  */
-@Service
+//@Service
 public class SSRUserService {
 
     @Autowired

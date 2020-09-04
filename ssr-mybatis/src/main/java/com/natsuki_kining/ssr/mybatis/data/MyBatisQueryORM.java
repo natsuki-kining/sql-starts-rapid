@@ -30,18 +30,16 @@ import java.util.Map;
 @Component
 public class MyBatisQueryORM extends AbstractQueryORM implements QueryORM {
 
-//    @Autowired
-    private SqlSession sqlSession;
-
     @Autowired
     private DynamicSqlSession dynamicSqlSession;
 
+    private SqlSession sqlSession;
     private Configuration configuration;
     private LanguageDriver languageDriver;
 
-    @PostConstruct
+//    @PostConstruct
     private void init() {
-        sqlSession = dynamicSqlSession.getSqlSession("backSqlSessionFactory");
+        sqlSession = dynamicSqlSession.getSqlSession();
         configuration = sqlSession.getConfiguration();
         languageDriver = configuration.getDefaultScriptingLanguageInstance();
     }
@@ -57,6 +55,9 @@ public class MyBatisQueryORM extends AbstractQueryORM implements QueryORM {
      */
     @Override
     public <E> List<E> selectList(String sql, Map<String, Object> params, Class<E> resultType) {
+        if(sqlSession == null){
+            init();
+        }
         String mapperId = sql;
         if (!configuration.hasStatement(mapperId, false)) {
             List<ResultMap> resultMaps = new ArrayList<>();

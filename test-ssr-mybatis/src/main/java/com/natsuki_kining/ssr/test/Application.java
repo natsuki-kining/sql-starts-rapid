@@ -13,7 +13,7 @@ import org.springframework.context.annotation.ComponentScan;
  */
 @SpringBootApplication
 @ComponentScan({"com.natsuki_kining"})
-@MapperScan(basePackages = {"com.natsuki_kining.ssr.test"})
+//@MapperScan(basePackages = {"com.natsuki_kining.ssr.test"})
 public class Application {
 
     public static void main(String[] args) {
