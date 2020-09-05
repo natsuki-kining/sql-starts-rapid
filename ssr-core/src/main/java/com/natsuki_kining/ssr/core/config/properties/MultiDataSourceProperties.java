@@ -16,5 +16,5 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "ssr.datasource")
 public class MultiDataSourceProperties {
 
-    private Map<String,DruidProperties> multiSource;
+    private Map<String,String> map;
 }

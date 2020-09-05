@@ -42,7 +42,7 @@ ssr:
   script:
     type: javaScript
   datasource:
-    multi-source:
+    map:
       datasourceName1:
         username: root1
         password: root2
