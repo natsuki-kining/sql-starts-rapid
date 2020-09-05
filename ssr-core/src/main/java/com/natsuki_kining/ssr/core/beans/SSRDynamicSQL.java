@@ -45,6 +45,8 @@ public class SSRDynamicSQL implements Serializable {
      */
     private String queryType;
 
+    private String dataSourceName;
+
     /**
      * sql模板
      */

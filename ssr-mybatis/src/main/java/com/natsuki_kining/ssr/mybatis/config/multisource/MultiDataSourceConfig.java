@@ -1,4 +1,4 @@
-package com.natsuki_kining.ssr.mybatis.data;
+package com.natsuki_kining.ssr.mybatis.config.multisource;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;

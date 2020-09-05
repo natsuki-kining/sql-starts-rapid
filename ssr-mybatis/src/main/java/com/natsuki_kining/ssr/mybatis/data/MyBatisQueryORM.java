@@ -1,13 +1,11 @@
 package com.natsuki_kining.ssr.mybatis.data;
 
-import com.alibaba.druid.pool.DruidDataSource;
 import com.natsuki_kining.ssr.core.annotation.FieldName;
-import com.natsuki_kining.ssr.core.beans.QueryParams;
-import com.natsuki_kining.ssr.core.beans.QuerySQL;
-import com.natsuki_kining.ssr.core.config.multi.DynamicDataSource;
 import com.natsuki_kining.ssr.core.data.orm.AbstractQueryORM;
 import com.natsuki_kining.ssr.core.data.orm.QueryORM;
 import com.natsuki_kining.ssr.core.utils.StringUtils;
+import com.natsuki_kining.ssr.mybatis.beans.MyBatisSelectInfo;
+import com.natsuki_kining.ssr.mybatis.config.multisource.DynamicSqlSession;
 import org.apache.ibatis.mapping.*;
 import org.apache.ibatis.scripting.LanguageDriver;
 import org.apache.ibatis.session.Configuration;
@@ -15,8 +13,6 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import javax.sql.DataSource;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,17 +29,6 @@ public class MyBatisQueryORM extends AbstractQueryORM implements QueryORM {
     @Autowired
     private DynamicSqlSession dynamicSqlSession;
 
-    private SqlSession sqlSession;
-    private Configuration configuration;
-    private LanguageDriver languageDriver;
-
-//    @PostConstruct
-    private void init() {
-        sqlSession = dynamicSqlSession.getSqlSession();
-        configuration = sqlSession.getConfiguration();
-        languageDriver = configuration.getDefaultScriptingLanguageInstance();
-    }
-
     /**
      * 查询
      *
@@ -55,16 +40,17 @@ public class MyBatisQueryORM extends AbstractQueryORM implements QueryORM {
      */
     @Override
     public <E> List<E> selectList(String sql, Map<String, Object> params, Class<E> resultType) {
-        if(sqlSession == null){
-            init();
-        }
+        MyBatisSelectInfo myBatisSelectInfo = dynamicSqlSession.getMyBatisSelectInfo();
+        SqlSession sqlSession = myBatisSelectInfo.getSqlSession();
+        Configuration configuration = myBatisSelectInfo.getConfiguration();
+        LanguageDriver languageDriver = myBatisSelectInfo.getLanguageDriver();
         String mapperId = sql;
         if (!configuration.hasStatement(mapperId, false)) {
             List<ResultMap> resultMaps = new ArrayList<>();
             if (Map.class == resultType) {
                 resultMaps.add(new ResultMap.Builder(configuration, "id", resultType, new ArrayList<>(0)).build());
             } else {
-                addResultMapper(resultMaps, resultType);
+                addResultMapper(resultMaps, resultType,configuration);
             }
             SqlSource sqlSource = languageDriver.createSqlSource(configuration, sql, Map.class);
             MappedStatement mappedStatement = new MappedStatement.Builder(configuration, mapperId, sqlSource, SqlCommandType.SELECT)
@@ -75,7 +61,7 @@ public class MyBatisQueryORM extends AbstractQueryORM implements QueryORM {
         return sqlSession.selectList(mapperId, params);
     }
 
-    private void addResultMapper(List<ResultMap> resultMaps, Class<?> resultType) {
+    private void addResultMapper(List<ResultMap> resultMaps, Class<?> resultType,Configuration configuration) {
         Field[] fields = resultType.getDeclaredFields();
         List<ResultMapping> resultMappingList = new ArrayList<ResultMapping>(fields.length);
         ResultMapping resultMapping;

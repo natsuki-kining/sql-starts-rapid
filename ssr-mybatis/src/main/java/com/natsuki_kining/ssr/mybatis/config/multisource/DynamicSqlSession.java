@@ -1,8 +1,11 @@
-package com.natsuki_kining.ssr.mybatis.data;
+package com.natsuki_kining.ssr.mybatis.config.multisource;
 
 import com.natsuki_kining.ssr.core.config.multi.AbstractDynamicSqlSession;
 import com.natsuki_kining.ssr.core.config.multi.DataSourceContextHolder;
 import com.natsuki_kining.ssr.core.utils.StringUtils;
+import com.natsuki_kining.ssr.mybatis.beans.MyBatisSelectInfo;
+import org.apache.ibatis.scripting.LanguageDriver;
+import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,16 @@ public class DynamicSqlSession extends AbstractDynamicSqlSession {
         String sessionFactoryName = DataSourceContextHolder.getDataSourceType();
         SqlSessionFactory bean = appContext.getBean(sessionFactoryName, SqlSessionFactory.class);
         return bean.openSession();
+    }
+
+    public MyBatisSelectInfo getMyBatisSelectInfo(){
+        String sessionFactoryName = DataSourceContextHolder.getDataSourceType();
+        SqlSessionFactory bean = appContext.getBean(sessionFactoryName, SqlSessionFactory.class);
+        SqlSession sqlSession = bean.openSession();
+        Configuration configuration = sqlSession.getConfiguration();
+        LanguageDriver languageDriver = configuration.getDefaultScriptingLanguageInstance();
+        MyBatisSelectInfo myBatisSelectInfo = new MyBatisSelectInfo(sqlSession,configuration,languageDriver);
+        return myBatisSelectInfo;
     }
 
 }
