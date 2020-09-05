@@ -27,7 +27,7 @@ public class DruidProperties {
 
     private String password;
 
-    private String driverClassName = "com.mysql.cj.jdbc.Driver";
+    private String driverClassName;
 
     private Integer initialSize = 10;
 

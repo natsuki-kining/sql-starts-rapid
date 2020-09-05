@@ -5,19 +5,25 @@ import com.natsuki_kining.ssr.core.config.multisource.DynamicDataSource;
 import com.natsuki_kining.ssr.core.config.properties.DruidProperties;
 import com.natsuki_kining.ssr.core.config.properties.MutiDataSourceProperties;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * TODO
  *
  * @Author : natsuki_kining
- * @Date : 2020/9/4 22:25
+ * @Date : 2020/9/4 22:25 multisource
  */
-//@Configuration
+@Component
+@ConfigurationProperties(prefix = "ssr.datasource")
 public class MultiSourceConfig {
+
+    private Map<String,DruidProperties> multiSource;
 
     @Autowired
     DruidProperties druidProperties;

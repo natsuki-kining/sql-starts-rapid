@@ -3,6 +3,7 @@ package com.natsuki_kining.ssr.core.proxy;
 import com.natsuki_kining.ssr.core.beans.*;
 import com.natsuki_kining.ssr.core.config.InterceptConfig;
 import com.natsuki_kining.ssr.core.config.multisource.DataSourceContextHolder;
+import com.natsuki_kining.ssr.core.config.multisource.MultiSourceConfig;
 import com.natsuki_kining.ssr.core.data.cache.SSRCache;
 import com.natsuki_kining.ssr.core.data.orm.QueryORM;
 import com.natsuki_kining.ssr.core.enums.QueryCodeType;
@@ -31,6 +32,9 @@ import java.util.Map;
 @Slf4j
 @Component
 public class JdkProxy implements InvocationHandler, SSRProxy {
+
+    @Autowired
+    private MultiSourceConfig multiSourceConfig;
 
     @Autowired
     private Rule rule;

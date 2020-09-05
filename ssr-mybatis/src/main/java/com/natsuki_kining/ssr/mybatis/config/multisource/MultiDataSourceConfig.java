@@ -43,9 +43,9 @@ public class MultiDataSourceConfig {
         return bean.getObject();
     }
 
-    @Bean(name = "backDatasource")
-    @Qualifier("backDatasource")
-    @ConfigurationProperties(prefix = "ssr.datasource")
+//    @Bean(name = "backDatasource")
+//    @Qualifier("backDatasource")
+//    @ConfigurationProperties(prefix = "ssr.datasource")
     public DruidDataSource backDatasource(){
         return DruidDataSourceBuilder.create().build();
     }

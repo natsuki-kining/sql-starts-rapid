@@ -42,6 +42,18 @@ ssr:
   script:
     type: javaScript
   datasource:
+    multiSource:
+      datasourceName1:
+        username: root1
+        password: root2
+        url: jdbc:mysql://localhost:3306/ssr?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC&zeroDateTimeBehavior=convertToNull
+        driver-class-name: com.mysql.cj.jdbc.Driver
+      datasourceName2:
+        username: root2
+        password: root2
+        url: jdbc:mysql://localhost:3306/ssr?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC&zeroDateTimeBehavior=convertToNull
+        driver-class-name: com.mysql.cj.jdbc.Driver
+
     multi-datasource-open: true
     username: root
     password: root
