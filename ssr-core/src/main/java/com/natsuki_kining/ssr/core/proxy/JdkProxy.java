@@ -56,7 +56,6 @@ public class JdkProxy implements InvocationHandler, SSRProxy {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        DataSourceContextHolder.setDataSourceType("primarySqlSessionFactory");
 
         QueryParams queryParams = (QueryParams) args[1];
         //调用拦截器的预处理方法判断是否需要往下执行
@@ -74,16 +73,20 @@ public class JdkProxy implements InvocationHandler, SSRProxy {
                 QueryRule entryValue = entry.getValue();
                 args[0] = sql.getQuerySQL(entryValue, queryParams);
                 SSRDynamicSQL dynamicSql = entryValue.getDynamicSql();
+                DataSourceContextHolder.setDataSourceType(dynamicSql.getDataSourceName());
                 value = invoke(method, args, preDate, dynamicSql, queryParams);
                 cache.save(dynamicSql.getQueryCode(), dynamicSql);
                 preDate.put(entry.getKey(), value);
+                DataSourceContextHolder.clearDataSourceType();
             }
             return value;
         } else {
             args[0] = sql.getQuerySQL(queryRule, queryParams);
             SSRDynamicSQL dynamicSql = queryRule.getDynamicSql();
+            DataSourceContextHolder.setDataSourceType(dynamicSql.getDataSourceName());
             Object invoke = invoke(method, args, null, dynamicSql, queryParams);
             cache.save(dynamicSql.getQueryCode(), dynamicSql);
+            DataSourceContextHolder.clearDataSourceType();
             return invoke;
         }
     }
