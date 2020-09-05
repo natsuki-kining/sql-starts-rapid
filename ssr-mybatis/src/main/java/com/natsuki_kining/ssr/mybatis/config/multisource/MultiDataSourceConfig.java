@@ -19,7 +19,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
  * @Author : natsuki_kining
  * @Date : 2020/9/4 23:35
  */
-@Configuration
+//@Configuration
 public class MultiDataSourceConfig {
 
     @Autowired

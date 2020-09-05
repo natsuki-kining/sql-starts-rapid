@@ -1,13 +1,8 @@
 package com.natsuki_kining.ssr.core.config.multisource;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.natsuki_kining.ssr.core.config.multisource.DynamicDataSource;
 import com.natsuki_kining.ssr.core.config.properties.DruidProperties;
-import com.natsuki_kining.ssr.core.config.properties.MutiDataSourceProperties;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
+import com.natsuki_kining.ssr.core.config.properties.MultiDataSourceProperties;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -19,17 +14,17 @@ import java.util.Map;
  * @Author : natsuki_kining
  * @Date : 2020/9/4 22:25 multisource
  */
-@Component
-@ConfigurationProperties(prefix = "ssr.datasource")
+//@Component
+//@ConfigurationProperties(prefix = "ssr.datasource")
 public class MultiSourceConfig {
 
     private Map<String,DruidProperties> multiSource;
 
-    @Autowired
+//    @Autowired
     DruidProperties druidProperties;
 
-    @Autowired
-    MutiDataSourceProperties mutiDataSourceProperties;
+//    @Autowired
+    MultiDataSourceProperties multiDataSourceProperties;
 
     /**
      * 核心数据源
@@ -46,7 +41,7 @@ public class MultiSourceConfig {
     private DruidDataSource bizDataSource() {
         DruidDataSource dataSource = new DruidDataSource();
         druidProperties.config(dataSource);
-        mutiDataSourceProperties.config(dataSource);
+//        multiDataSourceProperties.config(dataSource);
         return dataSource;
     }
 
@@ -62,7 +57,7 @@ public class MultiSourceConfig {
     /**
      * 多数据源连接池配置
      */
-    @Bean
+//    @Bean
 //    @ConditionalOnProperty(prefix = "xncoding", name = "muti-datasource-open", havingValue = "true")
     public DynamicDataSource multiDataSource() {
 
