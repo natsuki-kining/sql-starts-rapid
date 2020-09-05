@@ -1,14 +1,11 @@
-package com.natsuki_kining.ssr.core.config;
+package com.natsuki_kining.ssr.core.config.multisource;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.natsuki_kining.ssr.core.config.multi.DSEnum;
-import com.natsuki_kining.ssr.core.config.multi.DynamicDataSource;
+import com.natsuki_kining.ssr.core.config.multisource.DynamicDataSource;
 import com.natsuki_kining.ssr.core.config.properties.DruidProperties;
 import com.natsuki_kining.ssr.core.config.properties.MutiDataSourceProperties;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -75,8 +72,6 @@ public class MultiSourceConfig {
 
         DynamicDataSource dynamicDataSource = new DynamicDataSource();
         HashMap<Object, Object> hashMap = new HashMap<>();
-        hashMap.put(DSEnum.DATA_SOURCE_CORE, coreDataSource);
-        hashMap.put(DSEnum.DATA_SOURCE_BIZ, bizDataSource);
         dynamicDataSource.setTargetDataSources(hashMap);
         dynamicDataSource.setDefaultTargetDataSource(coreDataSource);
         return dynamicDataSource;

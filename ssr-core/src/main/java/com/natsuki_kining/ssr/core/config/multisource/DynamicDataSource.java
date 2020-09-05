@@ -1,4 +1,4 @@
-package com.natsuki_kining.ssr.core.config.multi;
+package com.natsuki_kining.ssr.core.config.multisource;
 
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
