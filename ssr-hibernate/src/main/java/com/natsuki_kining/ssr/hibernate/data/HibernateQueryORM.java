@@ -12,6 +12,7 @@ import org.hibernate.query.internal.NativeQueryImpl;
 import org.hibernate.transform.ResultTransformer;
 import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.Entity;
@@ -34,10 +35,11 @@ public class HibernateQueryORM extends AbstractQueryORM implements QueryORM {
     private Map<String, Boolean> aliasMap = new HashMap<>();
 
     @Autowired
-    private EntityManagerFactory entityManagerFactory;
+    private ApplicationContext appContext;
 
     @Override
     public <E> List<E> selectList(String sql, Map<String, Object> params, Class<E> returnType) {
+        EntityManagerFactory entityManagerFactory = appContext.getBean(EntityManagerFactory.class);
         Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
         NativeQuery sqlQuery = session.createSQLQuery(sql);
         NativeQuery nativeQuery;

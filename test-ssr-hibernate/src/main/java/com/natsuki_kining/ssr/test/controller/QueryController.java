@@ -21,8 +21,8 @@ public class QueryController {
     @Autowired
     private Query query;
 
-    @PostMapping("page")
-    public Object page(@RequestBody QueryParams queryParams) {
-        return this.query.queryResult(queryParams);
+    @PostMapping("query")
+    public Object query(@RequestBody QueryParams queryParams) {
+        return this.query.query(queryParams);
     }
 }
