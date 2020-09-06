@@ -25,4 +25,9 @@ public class EnableProperties {
      * 是否开启打印查询信息
      */
     private boolean showQueryInfo = true;
+
+    /**
+     * 是否开启多数据源
+     */
+    private boolean multiDataSourceOpen = false;
 }

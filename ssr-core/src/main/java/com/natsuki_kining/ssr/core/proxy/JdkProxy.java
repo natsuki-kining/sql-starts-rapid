@@ -1,10 +1,10 @@
 package com.natsuki_kining.ssr.core.proxy;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import com.natsuki_kining.ssr.core.beans.*;
 import com.natsuki_kining.ssr.core.config.InterceptConfig;
 import com.natsuki_kining.ssr.core.config.multisource.DataSourceContextHolder;
-import com.natsuki_kining.ssr.core.config.multisource.MultiSourceConfig;
-import com.natsuki_kining.ssr.core.config.properties.MultiDataSourceProperties;
+import com.natsuki_kining.ssr.core.config.properties.SSRProperties;
 import com.natsuki_kining.ssr.core.data.cache.SSRCache;
 import com.natsuki_kining.ssr.core.data.orm.QueryORM;
 import com.natsuki_kining.ssr.core.enums.QueryCodeType;
@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.sql.DataSource;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -35,7 +36,7 @@ import java.util.Map;
 public class JdkProxy implements InvocationHandler, SSRProxy {
 
     @Autowired
-    private MultiDataSourceProperties multiSourceConfig;
+    private SSRProperties ssrProperties;
 
     @Autowired
     private Rule rule;
@@ -60,7 +61,7 @@ public class JdkProxy implements InvocationHandler, SSRProxy {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-
+//        String dataSourceName = "master";
         QueryParams queryParams = (QueryParams) args[1];
         //调用拦截器的预处理方法判断是否需要往下执行
         boolean preHandle = interceptConfig.preHandle(queryParams);
@@ -77,20 +78,20 @@ public class JdkProxy implements InvocationHandler, SSRProxy {
                 QueryRule entryValue = entry.getValue();
                 args[0] = sql.getQuerySQL(entryValue, queryParams);
                 SSRDynamicSQL dynamicSql = entryValue.getDynamicSql();
-                DataSourceContextHolder.setDataSourceType(dynamicSql.getDataSourceName());
+//                DataSourceContextHolder.setDataSourceType(dataSourceName);
                 value = invoke(method, args, preDate, dynamicSql, queryParams);
                 cache.save(dynamicSql.getQueryCode(), dynamicSql);
                 preDate.put(entry.getKey(), value);
-                DataSourceContextHolder.clearDataSourceType();
+//                DataSourceContextHolder.clearDataSourceType();
             }
             return value;
         } else {
             args[0] = sql.getQuerySQL(queryRule, queryParams);
             SSRDynamicSQL dynamicSql = queryRule.getDynamicSql();
-            DataSourceContextHolder.setDataSourceType(dynamicSql.getDataSourceName());
+//            DataSourceContextHolder.setDataSourceType(dataSourceName);
             Object invoke = invoke(method, args, null, dynamicSql, queryParams);
             cache.save(dynamicSql.getQueryCode(), dynamicSql);
-            DataSourceContextHolder.clearDataSourceType();
+//            DataSourceContextHolder.clearDataSourceType();
             return invoke;
         }
     }

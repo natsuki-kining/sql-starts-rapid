@@ -4,6 +4,8 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
 /**
  * 配置参数类
  *
@@ -35,6 +37,10 @@ public class SSRProperties {
      */
     private String dynamicSqlTableName = "SSR_DYNAMIC_SQL";
 
+    /**
+     * 多数据源属性
+     */
+    private Map<String,DruidProperties> multiDataSource;
 
 
 }

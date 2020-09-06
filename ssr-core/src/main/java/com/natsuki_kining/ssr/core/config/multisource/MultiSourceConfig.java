@@ -2,11 +2,16 @@ package com.natsuki_kining.ssr.core.config.multisource;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.natsuki_kining.ssr.core.config.properties.DruidProperties;
-import com.natsuki_kining.ssr.core.config.properties.MultiDataSourceProperties;
+import com.natsuki_kining.ssr.core.config.properties.SSRProperties;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+
 
 /**
  * TODO
@@ -14,70 +19,65 @@ import java.util.Map;
  * @Author : natsuki_kining
  * @Date : 2020/9/4 22:25 multisource
  */
-//@Component
-//@ConfigurationProperties(prefix = "ssr.datasource")
+@Component
 public class MultiSourceConfig {
 
-    private Map<String,DruidProperties> multiSource;
+    @Autowired
+    private SSRProperties ssrProperties;
 
-//    @Autowired
-    DruidProperties druidProperties;
-
-//    @Autowired
-    MultiDataSourceProperties multiDataSourceProperties;
+    @Autowired
+    private DruidProperties druidProperties;
 
     /**
-     * 核心数据源
+     * 主数据源
      */
-    private DruidDataSource coreDataSource() {
+    private DruidDataSource masterDataSource() {
         DruidDataSource dataSource = new DruidDataSource();
         druidProperties.config(dataSource);
         return dataSource;
     }
 
-    /**
-     * 另一个数据源
-     */
-    private DruidDataSource bizDataSource() {
-        DruidDataSource dataSource = new DruidDataSource();
-        druidProperties.config(dataSource);
-//        multiDataSourceProperties.config(dataSource);
-        return dataSource;
-    }
 
     /**
      * 单数据源连接池配置
      */
 //    @Bean
-//    @ConditionalOnProperty(prefix = "xncoding", name = "muti-datasource-open", havingValue = "false")
+//    @ConditionalOnProperty(prefix = "ssr.enable", name = "multi-data-source-open", havingValue = "false")
 //    public DruidDataSource singleDatasource() {
-//        return coreDataSource();
+//        return masterDataSource();
 //    }
 
     /**
      * 多数据源连接池配置
      */
-//    @Bean
-//    @ConditionalOnProperty(prefix = "xncoding", name = "muti-datasource-open", havingValue = "true")
+    @Bean
+    @ConditionalOnProperty(prefix = "ssr.enable", name = "multi-data-source-open", havingValue = "true")
     public DynamicDataSource multiDataSource() {
 
-        DruidDataSource coreDataSource = coreDataSource();
-        DruidDataSource bizDataSource = bizDataSource();
-
-        try {
-            coreDataSource.init();
-            bizDataSource.init();
-        } catch (SQLException sql) {
-            sql.printStackTrace();
+        DruidDataSource masterDataSource = masterDataSource();
+        Map<Object, Object> multiDruidDataSourceMap = new HashMap<>();
+        multiDruidDataSourceMap.put("master", masterDataSource);
+        if (ssrProperties.getMultiDataSource() != null && ssrProperties.getMultiDataSource().size() > 0) {
+            ssrProperties.getMultiDataSource().forEach((k, v) -> {
+                DruidDataSource druidDataSource = new DruidDataSource();
+                v.config(druidDataSource);
+                multiDruidDataSourceMap.put(k, druidDataSource);
+            });
         }
 
+        multiDruidDataSourceMap.entrySet().forEach(v -> {
+            try {
+                ((DruidDataSource) v.getValue()).init();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+
         DynamicDataSource dynamicDataSource = new DynamicDataSource();
-        HashMap<Object, Object> hashMap = new HashMap<>();
-        dynamicDataSource.setTargetDataSources(hashMap);
-        dynamicDataSource.setDefaultTargetDataSource(coreDataSource);
+        dynamicDataSource.setDefaultTargetDataSource(masterDataSource);
+        dynamicDataSource.setTargetDataSources(multiDruidDataSourceMap);
         return dynamicDataSource;
     }
-
 
 
 }
