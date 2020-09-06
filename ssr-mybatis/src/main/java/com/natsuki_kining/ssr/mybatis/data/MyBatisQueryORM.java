@@ -5,7 +5,6 @@ import com.natsuki_kining.ssr.core.config.multisource.DataSourceContextHolder;
 import com.natsuki_kining.ssr.core.data.orm.AbstractQueryORM;
 import com.natsuki_kining.ssr.core.data.orm.QueryORM;
 import com.natsuki_kining.ssr.core.utils.StringUtils;
-import com.natsuki_kining.ssr.mybatis.beans.MyBatisSelectInfo;
 import com.natsuki_kining.ssr.mybatis.config.multisource.DynamicSqlSession;
 import org.apache.ibatis.mapping.*;
 import org.apache.ibatis.scripting.LanguageDriver;
@@ -48,7 +47,7 @@ public class MyBatisQueryORM extends AbstractQueryORM implements QueryORM {
      */
     @Override
     public <E> List<E> selectList(String sql, Map<String, Object> params, Class<E> resultType) {
-        DataSourceContextHolder.setDataSourceType("master");
+        DataSourceContextHolder.setDataSourceName("master");
 
         SqlSession sqlSession = appContext.getBean(SqlSession.class);
         Configuration configuration = sqlSession.getConfiguration();
@@ -68,7 +67,7 @@ public class MyBatisQueryORM extends AbstractQueryORM implements QueryORM {
             configuration.addMappedStatement(mappedStatement);
         }
         List<E> objects = sqlSession.selectList(mapperId, params);
-        DataSourceContextHolder.clearDataSourceType();
+        DataSourceContextHolder.clearDataSourceName();
         return objects;
     }
 
@@ -94,6 +93,6 @@ public class MyBatisQueryORM extends AbstractQueryORM implements QueryORM {
 
     @Override
     protected String getQuerySSRDynamicSQL() {
-        return "SELECT QUERY_CODE,SQL_TEMPLATE,BEFORE_SCRIPT,AFTER_SCRIPT FROM "+dynamicSqlTableName+" SDS WHERE SDS.QUERY_CODE = #{code} limit 1";
+        return "SELECT QUERY_CODE,DATA_SOURCE_NAME,SQL_TEMPLATE,BEFORE_SCRIPT,AFTER_SCRIPT FROM "+dynamicSqlTableName+" SDS WHERE SDS.QUERY_CODE = #{code} limit 1";
     }
 }

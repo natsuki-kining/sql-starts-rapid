@@ -14,21 +14,21 @@ public class DataSourceContextHolder {
      * @param dataSourceType 数据库类型
      * @Description: 设置数据源类型
      */
-    public static void setDataSourceType(String dataSourceType) {
+    public static void setDataSourceName(String dataSourceType) {
         contextHolder.set(dataSourceType);
     }
 
     /**
      * @Description: 获取数据源类型
      */
-    public static String getDataSourceType() {
+    public static String getDataSourceName() {
         return contextHolder.get();
     }
 
     /**
      * @Description: 清除数据源类型
      */
-    public static void clearDataSourceType() {
+    public static void clearDataSourceName() {
         contextHolder.remove();
     }
 }

@@ -3,6 +3,7 @@ package com.natsuki_kining.ssr.core.config.multisource;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.natsuki_kining.ssr.core.config.properties.DruidProperties;
 import com.natsuki_kining.ssr.core.config.properties.SSRProperties;
+import com.natsuki_kining.ssr.core.utils.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -56,7 +57,7 @@ public class MultiSourceConfig {
 
         DruidDataSource masterDataSource = masterDataSource();
         Map<Object, Object> multiDruidDataSourceMap = new HashMap<>();
-        multiDruidDataSourceMap.put("master", masterDataSource);
+        multiDruidDataSourceMap.put(Constant.MultiDataSource.masterDataSourceName, masterDataSource);
         if (ssrProperties.getMultiDataSource() != null && ssrProperties.getMultiDataSource().size() > 0) {
             ssrProperties.getMultiDataSource().forEach((k, v) -> {
                 DruidDataSource druidDataSource = new DruidDataSource();

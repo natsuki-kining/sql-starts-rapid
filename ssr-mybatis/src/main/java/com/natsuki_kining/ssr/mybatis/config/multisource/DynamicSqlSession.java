@@ -25,13 +25,13 @@ public class DynamicSqlSession extends AbstractDynamicSqlSession {
 
     @Override
     public SqlSession getSqlSession(){
-        String sessionFactoryName = DataSourceContextHolder.getDataSourceType();
+        String sessionFactoryName = DataSourceContextHolder.getDataSourceName();
         SqlSessionFactory bean = appContext.getBean(sessionFactoryName, SqlSessionFactory.class);
         return bean.openSession();
     }
 
     public MyBatisSelectInfo getMyBatisSelectInfo(){
-        String sessionFactoryName = DataSourceContextHolder.getDataSourceType();
+        String sessionFactoryName = DataSourceContextHolder.getDataSourceName();
         SqlSessionFactory bean = appContext.getBean(sessionFactoryName, SqlSessionFactory.class);
         SqlSession sqlSession = bean.openSession();
         Configuration configuration = sqlSession.getConfiguration();

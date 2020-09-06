@@ -67,4 +67,8 @@ public class Constant {
          */
         String SSR_LAST_INTERCEPT = "ssr-last-intercept";
     }
+
+    public interface MultiDataSource{
+        String masterDataSourceName = "masterDataSource";
+    }
 }
