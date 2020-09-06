@@ -1,11 +1,9 @@
 package com.natsuki_kining.ssr.mybatis.data;
 
 import com.natsuki_kining.ssr.core.annotation.FieldName;
-import com.natsuki_kining.ssr.core.config.multisource.DataSourceContextHolder;
 import com.natsuki_kining.ssr.core.data.orm.AbstractQueryORM;
 import com.natsuki_kining.ssr.core.data.orm.QueryORM;
 import com.natsuki_kining.ssr.core.utils.StringUtils;
-import com.natsuki_kining.ssr.mybatis.config.multisource.DynamicSqlSession;
 import org.apache.ibatis.mapping.*;
 import org.apache.ibatis.scripting.LanguageDriver;
 import org.apache.ibatis.session.Configuration;
@@ -28,12 +26,6 @@ import java.util.Map;
 public class MyBatisQueryORM extends AbstractQueryORM implements QueryORM {
 
     @Autowired
-    private DynamicSqlSession dynamicSqlSession;
-
-//    @Autowired
-//    private SqlSession sqlSession;
-
-    @Autowired
     private ApplicationContext appContext;
 
     /**
@@ -47,8 +39,6 @@ public class MyBatisQueryORM extends AbstractQueryORM implements QueryORM {
      */
     @Override
     public <E> List<E> selectList(String sql, Map<String, Object> params, Class<E> resultType) {
-        DataSourceContextHolder.setDataSourceName("master");
-
         SqlSession sqlSession = appContext.getBean(SqlSession.class);
         Configuration configuration = sqlSession.getConfiguration();
         LanguageDriver languageDriver = configuration.getDefaultScriptingLanguageInstance();
@@ -67,7 +57,6 @@ public class MyBatisQueryORM extends AbstractQueryORM implements QueryORM {
             configuration.addMappedStatement(mappedStatement);
         }
         List<E> objects = sqlSession.selectList(mapperId, params);
-        DataSourceContextHolder.clearDataSourceName();
         return objects;
     }
 
