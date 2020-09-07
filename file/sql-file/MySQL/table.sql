@@ -9,6 +9,7 @@ CREATE TABLE `ssr_dynamic_sql`
     `QUERY_CODE`    varchar(100) NOT NULL COMMENT '查询的code',
     `QUERY_NAME`    varchar(100)  DEFAULT NULL COMMENT '查询的名称',
     `QUERY_TYPE`    varchar(50)   DEFAULT NULL COMMENT '查询的类型',
+    `DATA_SOURCE_NAME` varchar(100) DEFAULT NULL COMMENT '数据源名称，空则使用默认数据源',
     `SQL_TEMPLATE`  text         NOT NULL COMMENT 'sql模板',
     `BEFORE_SCRIPT` text COMMENT '查询之前脚本',
     `AFTER_SCRIPT`  text COMMENT '查询之后脚本',

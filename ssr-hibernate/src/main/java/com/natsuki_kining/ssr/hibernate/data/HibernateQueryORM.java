@@ -1,8 +1,6 @@
 package com.natsuki_kining.ssr.hibernate.data;
 
 import com.alibaba.fastjson.JSON;
-import com.natsuki_kining.ssr.core.beans.QueryParams;
-import com.natsuki_kining.ssr.core.beans.QuerySQL;
 import com.natsuki_kining.ssr.core.data.orm.AbstractQueryORM;
 import com.natsuki_kining.ssr.core.data.orm.QueryORM;
 import org.hibernate.Session;
@@ -95,6 +93,6 @@ public class HibernateQueryORM extends AbstractQueryORM implements QueryORM {
 
     @Override
     protected String getQuerySSRDynamicSQL() {
-        return "SELECT QUERY_CODE \"queryCode\",SQL_TEMPLATE \"sqlTemplate\",BEFORE_SCRIPT \"beforeScript\",AFTER_SCRIPT \"afterScript\" FROM "+dynamicSqlTableName+" SDS WHERE SDS.QUERY_CODE = :code";
+        return "SELECT QUERY_CODE \"queryCode\",DATA_SOURCE_NAME \"dataSourceName\",SQL_TEMPLATE \"sqlTemplate\",BEFORE_SCRIPT \"beforeScript\",AFTER_SCRIPT \"afterScript\" FROM "+dynamicSqlTableName+" SDS WHERE SDS.QUERY_CODE = :code";
     }
 }

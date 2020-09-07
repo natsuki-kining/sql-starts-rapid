@@ -38,23 +38,11 @@ public class MultiSourceConfig {
         return dataSource;
     }
 
-
-    /**
-     * 单数据源连接池配置
-     */
-//    @Bean
-//    @ConditionalOnProperty(prefix = "ssr.enable", name = "multi-data-source-open", havingValue = "false")
-//    public DruidDataSource singleDatasource() {
-//        return masterDataSource();
-//    }
-
     /**
      * 多数据源连接池配置
      */
     @Bean
-    @ConditionalOnProperty(prefix = "ssr.enable", name = "multi-data-source-open", havingValue = "true")
     public DynamicDataSource multiDataSource() {
-
         DruidDataSource masterDataSource = masterDataSource();
         Map<Object, Object> multiDruidDataSourceMap = new HashMap<>();
         multiDruidDataSourceMap.put(Constant.MultiDataSource.masterDataSourceName, masterDataSource);

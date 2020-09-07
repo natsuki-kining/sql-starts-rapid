@@ -29,5 +29,5 @@ public class EnableProperties {
     /**
      * 是否开启多数据源
      */
-    private boolean multiDataSourceOpen = false;
+//    private boolean multiDataSourceOpen = false;
 }
