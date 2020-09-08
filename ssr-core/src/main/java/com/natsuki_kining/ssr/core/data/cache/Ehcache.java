@@ -6,7 +6,7 @@ import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import javax.annotation.PostConstruct;
 
 /**
  * TODO
@@ -17,8 +17,14 @@ import java.util.List;
 @Component
 public class Ehcache implements SSRCache {
 
-    private CacheManager cacheManager = CacheManager.getInstance();
-    private Cache cache = cacheManager.getCache("queryCodeCache");
+    private CacheManager cacheManager;
+    private Cache cache;
+
+    @PostConstruct
+    private void init(){
+        cacheManager = CacheManager.getInstance();
+        cache = cacheManager.getCache("queryCodeCache");
+    }
 
     @Override
     public <T> T get(String queryCode, Class<T> clazz) {
@@ -52,6 +58,6 @@ public class Ehcache implements SSRCache {
 
     @Override
     public SSRDynamicSQL getSSRDynamicSQL(String queryCode) {
-        return null;
+        return get(queryCode,SSRDynamicSQL.class);
     }
 }

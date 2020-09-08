@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Date 2020/6/11 19:17
  **/
 @Slf4j
-@Component
+//@Component
 public class DefaultCache implements SSRCache {
 
     /**
