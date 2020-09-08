@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,18 @@ public class MyBatisQueryORM extends AbstractQueryORM implements QueryORM {
     @Autowired
     private ApplicationContext appContext;
 
+    @Autowired
+    private SqlSession sqlSession;
+
+    private Configuration configuration;
+    private LanguageDriver languageDriver;
+
+    @PostConstruct
+    private void init() {
+        configuration = sqlSession.getConfiguration();
+        languageDriver = configuration.getDefaultScriptingLanguageInstance();
+    }
+
     /**
      * 查询
      *
@@ -39,9 +52,6 @@ public class MyBatisQueryORM extends AbstractQueryORM implements QueryORM {
      */
     @Override
     public <E> List<E> selectList(String sql, Map<String, Object> params, Class<E> resultType) {
-        SqlSession sqlSession = appContext.getBean(SqlSession.class);
-        Configuration configuration = sqlSession.getConfiguration();
-        LanguageDriver languageDriver = configuration.getDefaultScriptingLanguageInstance();
         String mapperId = sql;
         if (!configuration.hasStatement(mapperId, false)) {
             List<ResultMap> resultMaps = new ArrayList<>();
