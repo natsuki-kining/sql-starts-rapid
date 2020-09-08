@@ -1,5 +1,8 @@
 package com.natsuki_kining.ssr.hibernate.sql.generator;
 
+import com.natsuki_kining.ssr.core.config.multisource.DynamicDataSource;
+import com.natsuki_kining.ssr.core.sql.generator.AbstractGeneratorSQL;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -21,6 +24,13 @@ public class GeneratorConfig {
     @Bean(name = {"oracle.jdbc.driver.OracleDriver", "oracle.jdbc.OracleDriver"})
     public GenerateByOracle generateByOracle() {
         return new GenerateByOracle();
+    }
+
+    @Autowired
+    private DynamicDataSource dynamicDataSource;
+
+    public AbstractGeneratorSQL generatorSQL(){
+        return null;
     }
 
 }

@@ -13,29 +13,29 @@ public interface SSRCache extends SSRData {
     /**
      * 根据code获取缓存中的数据
      *
-     * @param code  缓存的key
+     * @param queryCode  缓存的key
      * @param clazz 泛型类
      * @param <T>   泛型
      * @return 缓存的值
      */
-    <T> T get(String code, Class<T> clazz);
+    <T> T get(String queryCode, Class<T> clazz);
 
     /**
      * 缓存数据
      *
-     * @param code   缓存的key
+     * @param queryCode   缓存的key
      * @param object 缓存的值
      * @return 是否成功
      */
-    boolean save(String code, Object object);
+    boolean save(String queryCode, Object object);
 
     /**
      * 删除缓存
      *
-     * @param code 缓存的key
+     * @param queryCode 缓存的key
      * @return 是否成功
      */
-    boolean delete(String code);
+    boolean delete(String queryCode);
 
     /**
      * 清楚全部缓存
