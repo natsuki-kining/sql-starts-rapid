@@ -29,6 +29,9 @@ public abstract class AbstractQueryORM implements QueryORM {
     @Value("${ssr.dynamicSql.TableName:SSR_DYNAMIC_SQL}")
     protected String dynamicSqlTableName;
 
+    @Value("${ssr.dynamicSql.TableDataSource:"+Constant.MultiDataSource.masterDataSourceName+"}")
+    protected String dynamicSqlTableDataSource;
+
     protected abstract String getQuerySSRDynamicSQL();
 
     protected Map<String, Object> getQuerySSRDynamicSQLParams(String code) {
@@ -39,7 +42,9 @@ public abstract class AbstractQueryORM implements QueryORM {
 
     @Override
     public SSRDynamicSQL getSSRDynamicSQL(String code) {
+        DataSourceContextHolder.setDataSourceName(dynamicSqlTableDataSource);
         List<SSRDynamicSQL> list = selectList(getQuerySSRDynamicSQL(), getQuerySSRDynamicSQLParams(code), SSRDynamicSQL.class);
+        DataSourceContextHolder.clearDataSourceName();
         if (list != null && list.size() > 0) {
             SSRDynamicSQL ssrDynamicSql = list.get(0);
             Assert.isBlank(ssrDynamicSql.getSqlTemplate(), "根据" + code + "查询的sql模板为空，请检查code是否正确。");
