@@ -4,6 +4,7 @@ import com.natsuki_kining.ssr.core.beans.SSRDynamicSQL;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -15,6 +16,7 @@ import javax.annotation.PostConstruct;
  * @Date : 2020/9/8 22:20
  */
 @Component
+@ConditionalOnProperty(prefix = "ssr", name = "cache.type", havingValue = "ehcache")
 public class Ehcache implements SSRCache {
 
     private CacheManager cacheManager;

@@ -14,10 +14,6 @@ spring:
       enabled: true
       url-pattern: /*
       exclusions: "*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*"
-  cache:
-    type: ehcache
-    ehcache:
-      config: classpath:/ehcache.xml
 
 logging:
   level:
@@ -57,6 +53,7 @@ ssr:
       password: root
       url: jdbc:mysql://localhost:3306/ur?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC&zeroDateTimeBehavior=convertToNull
       driver-class-name: com.mysql.cj.jdbc.Driver
-
   show-query-info:
     enable: false
+  cache:
+    type: ehcache

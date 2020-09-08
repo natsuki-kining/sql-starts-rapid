@@ -21,7 +21,7 @@
     <cache
             name = "queryCodeCache"
             eternal = "true"
-            maxElementsInMemory = "1000"
+            maxElementsInMemory = "3000"
             overflowToDisk = "false"
             diskPersistent = "false"
             memoryStoreEvictionPolicy = "LRU"/>

@@ -4,6 +4,7 @@ import com.natsuki_kining.ssr.core.beans.SSRDynamicSQL;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -17,7 +18,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Date 2020/6/11 19:17
  **/
 @Slf4j
-//@Component
+@Component
+@ConditionalOnProperty(prefix = "ssr", name = "cache.type", havingValue = "default")
 public class DefaultCache implements SSRCache {
 
     /**
