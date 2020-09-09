@@ -64,6 +64,19 @@ INSERT INTO `ssr_dynamic_sql` (`ID`, `QUERY_CODE`, `SQL_TEMPLATE`) VALUES ('1', 
 ![query-user](file/img/2.1.2-3.png)
 > 输出的查询sql语句为 select * from ssr_user  where 1=1 and NAME like CONCAT('%',?,'%') and USER_NAME like CONCAT('%',?,'%')
 
+### 2.1.3 返回封装的类型
+* 在query接口里传入需要转换的类型
+```java
+    @PostMapping("queryUser")
+    public Object queryUser(@RequestBody QueryParams queryParams) throws ClassNotFoundException {
+        Class<?> aClass = Class.forName("com.natsuki_kining.ssr.test.entity.SSRUser");
+        List<?> result = this.query.queryList(queryParams, aClass);
+        return result;
+    }
+```
+* postman请求  
+![query-user](file/img/2.1.3-1.png)
+
 ## 2.2 快速入门
 
 ### 2.2.1 新增表 SSR_DYNAMIC_SQL
