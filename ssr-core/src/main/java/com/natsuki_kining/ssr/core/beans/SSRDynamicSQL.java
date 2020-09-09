@@ -24,6 +24,11 @@ public class SSRDynamicSQL implements Serializable {
         this.queryCode = queryCode;
     }
 
+    public SSRDynamicSQL(String queryCode,String dataSourceName) {
+        this.queryCode = queryCode;
+        this.dataSourceName = dataSourceName;
+    }
+
     /**
      * 主键
      */

@@ -56,14 +56,17 @@ public class RuleImpl implements Rule {
     }
 
     private QueryRule getQueryRule(String queryCode) {
+        String indexFlag = ":";
         QueryCodeType queryCodeType;
-        int index = queryCode.indexOf(":");
+        String dataSourceName = null;
+        int index = queryCode.indexOf(indexFlag);
         if (index == -1) {
             queryCodeType = QueryCodeType.SINGLE_QUERY;
             SSRDynamicSQL dynamicSql = data.getSSRDynamicSQL(queryCode);
             return new QueryRule(queryCode, dynamicSql, queryCodeType, null);
         } else {
-            String queryType = queryCode.substring(index + 1);
+            String[] split = queryCode.split(indexFlag);
+            String queryType = split[1];
             if (Constant.QueryCodeType.GENERATE_BY_ENTITY.equals(queryType)) {
                 queryCodeType = QueryCodeType.GENERATE_QUERY_BY_ENTITY;
                 Assert.isFalse(generateByEntityEnable, "如果需要使用通过实体来生成sql，请设置ssr.generate-by-entity.enable=true");
@@ -76,8 +79,11 @@ public class RuleImpl implements Rule {
                 throw new SSRException(queryCode + "没有指定的查询类型：" + queryType);
             }
             queryCode = queryCode.substring(0, index);
+            if (split.length == 3){
+                dataSourceName = split[2];
+            }
         }
-        SSRDynamicSQL dynamicSql = new SSRDynamicSQL(queryCode);
+        SSRDynamicSQL dynamicSql = new SSRDynamicSQL(queryCode,dataSourceName);
         return new QueryRule(queryCode, dynamicSql, queryCodeType, null);
     }
 
