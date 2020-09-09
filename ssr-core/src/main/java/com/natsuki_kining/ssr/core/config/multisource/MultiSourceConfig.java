@@ -29,6 +29,8 @@ public class MultiSourceConfig {
     @Autowired
     private DruidProperties druidProperties;
 
+    private Map<String,String> dbTypeMap = new HashMap<>();
+
     /**
      * 主数据源
      */
@@ -42,7 +44,7 @@ public class MultiSourceConfig {
      * 多数据源连接池配置
      */
     @Bean
-    public DynamicDataSource multiDataSource() {
+    private DynamicDataSource multiDataSource() {
         DruidDataSource masterDataSource = masterDataSource();
         Map<Object, Object> multiDruidDataSourceMap = new HashMap<>();
         multiDruidDataSourceMap.put(Constant.MultiDataSource.masterDataSourceName, masterDataSource);
@@ -62,10 +64,23 @@ public class MultiSourceConfig {
             }
         });
 
+        multiDruidDataSourceMap.forEach((k,v)->{
+            DruidDataSource value = ((DruidDataSource) v);
+            dbTypeMap.put((String)k,value.getDbType());
+        });
+
         DynamicDataSource dynamicDataSource = new DynamicDataSource();
         dynamicDataSource.setDefaultTargetDataSource(masterDataSource);
         dynamicDataSource.setTargetDataSources(multiDruidDataSourceMap);
         return dynamicDataSource;
+    }
+
+    /**
+     * 获取当前执行的数据类型
+     * @return
+     */
+    public String getCurrentThreadDbType(){
+        return dbTypeMap.get(DataSourceContextHolder.getDataSourceName());
     }
 
 

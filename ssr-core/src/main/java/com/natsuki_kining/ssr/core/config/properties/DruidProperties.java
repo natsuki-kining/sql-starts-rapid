@@ -21,6 +21,8 @@ import java.sql.SQLException;
 @ConfigurationProperties(prefix = "spring.datasource")
 public class DruidProperties {
 
+    private String dbType;
+
     private String url;
 
     private String username;
@@ -60,7 +62,7 @@ public class DruidProperties {
     private String filters = "stat";
 
     public void config(DruidDataSource dataSource) {
-        dataSource.setDbType(JdbcConstants.MYSQL);
+        dataSource.setDbType(dbType);
         dataSource.setUrl(url);
         dataSource.setUsername(username);
         dataSource.setPassword(password);

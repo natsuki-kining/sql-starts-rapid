@@ -16,7 +16,7 @@ import javax.annotation.PostConstruct;
  * @Date : 2020/9/8 22:20
  */
 @Component
-@ConditionalOnProperty(prefix = "ssr", name = "cache.type", havingValue = "ehcache")
+//@ConditionalOnProperty(prefix = "ssr", name = "cache.type", havingValue = "ehcache")
 public class Ehcache implements SSRCache {
 
     private CacheManager cacheManager;

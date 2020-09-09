@@ -1,6 +1,8 @@
 package com.natsuki_kining.ssr.mybatis.data;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import com.natsuki_kining.ssr.core.annotation.FieldName;
+import com.natsuki_kining.ssr.core.config.multisource.DynamicDataSource;
 import com.natsuki_kining.ssr.core.data.orm.AbstractQueryORM;
 import com.natsuki_kining.ssr.core.data.orm.QueryORM;
 import com.natsuki_kining.ssr.core.utils.StringUtils;
@@ -9,7 +11,6 @@ import org.apache.ibatis.scripting.LanguageDriver;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -27,9 +28,6 @@ import java.util.Map;
 public class MyBatisQueryORM extends AbstractQueryORM implements QueryORM {
 
     @Autowired
-    private ApplicationContext appContext;
-
-    @Autowired
     private SqlSession sqlSession;
 
     private Configuration configuration;
@@ -40,6 +38,9 @@ public class MyBatisQueryORM extends AbstractQueryORM implements QueryORM {
         configuration = sqlSession.getConfiguration();
         languageDriver = configuration.getDefaultScriptingLanguageInstance();
     }
+
+    @Autowired
+    private DynamicDataSource dynamicDataSource;
 
     /**
      * 查询
