@@ -99,6 +99,8 @@ public class QueryController {
 
 ## 2.1 快速入门
 ### 2.1.1 简单sql查询
+* ssr_user中的数据
+![query-user](file/img/2.1.1-0.png)
 * 在ssr_dynamic_sql 表中新增数据：
 ```sql
 INSERT INTO `ssr_dynamic_sql` (`ID`, `QUERY_CODE`, `SQL_TEMPLATE`) VALUES ('1', 'query-user', 'select * from ssr_user');
@@ -108,9 +110,26 @@ INSERT INTO `ssr_dynamic_sql` (`ID`, `QUERY_CODE`, `SQL_TEMPLATE`) VALUES ('1', 
 ![query-user-result](file/img/2.1.1-2.png)
 
 ### 2.1.2 带查询条件查询
+* 使用freemark为sql添加查询条件
+```sql
+INSERT INTO `ssr_dynamic_sql` (`ID`, `QUERY_CODE`, `SQL_TEMPLATE`) VALUES ('1', 'query-user', 'select * from ssr_user \r\nwhere 1=1\r\n<#noparse>\r\n	<#if name??>\r\n	and NAME like \'%#{name}%\'\r\n	</#if>\r\n	<#if userName??>\r\n	and USER_NAME like \'%#{userName}%\'\r\n	</#if>\r\n	<#if code??>\r\n	and `CODE` = \'#{code}\'\r\n	</#if>\r\n</#noparse>');
+```
+![query-user](file/img/2.1.2-1.png)
+> 其中<if>为添加判断，<#noparse>为freemarker`#{}`转义
+* postman请求
+![query-user](file/img/2.1.2-2.png)
+> 输出的查询sql语句为 select * from ssr_user  where 1=1 and NAME like CONCAT('%',?,'%')
 
+![query-user](file/img/2.1.2-3.png)
+> 输出的查询sql语句为 select * from ssr_user  where 1=1 and NAME like CONCAT('%',?,'%') and USER_NAME like CONCAT('%',?,'%')
 
 ## 2.2 进阶
+
+### 类型转换
+
+### 分页
+
+### 排序
 
 ### 2.2.1 拦截器使用
 #### 2.2.2 正则匹配
