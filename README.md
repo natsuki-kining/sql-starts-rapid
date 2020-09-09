@@ -37,7 +37,7 @@
 
 ## 2.1 快速体验（运行的是test-ssr-mybatis项目）
 
-* ssr_user中的数据   
+* ssr_user中的数据     
 ![query-user](file/img/2.1-0.png)
 
 ### 2.1.1 简单sql查询
@@ -47,7 +47,7 @@
 INSERT INTO `ssr_dynamic_sql` (`ID`, `QUERY_CODE`, `SQL_TEMPLATE`) VALUES ('1', 'query-user', 'select * from ssr_user');
 ``` 
 
-* postman请求 
+* postman请求   
 ![query-user-result](file/img/2.1.1-2.png)
 
 ### 2.1.2 带查询条件查询
@@ -57,10 +57,10 @@ INSERT INTO `ssr_dynamic_sql` (`ID`, `QUERY_CODE`, `SQL_TEMPLATE`) VALUES ('1', 
 ```
 ![query-user](file/img/2.1.2-1.png)
 > 其中`<#if>`为添加判断，`<#noparse>`为freemarker`#{}`转义
-* postman请求 
+* postman请求      
 ![query-user](file/img/2.1.2-2.png)
 > 输出的查询sql语句为 select * from ssr_user  where 1=1 and NAME like CONCAT('%',?,'%')
-
+* postman请求      
 ![query-user](file/img/2.1.2-3.png)
 > 输出的查询sql语句为 select * from ssr_user  where 1=1 and NAME like CONCAT('%',?,'%') and USER_NAME like CONCAT('%',?,'%')
 
