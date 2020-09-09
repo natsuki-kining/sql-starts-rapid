@@ -2,6 +2,7 @@ package com.natsuki_kining.ssr.core.sql.generator;
 
 import com.natsuki_kining.ssr.core.beans.QueryParams;
 import com.natsuki_kining.ssr.core.beans.QueryRule;
+import com.natsuki_kining.ssr.core.config.multisource.DataSourceContextHolder;
 import com.natsuki_kining.ssr.core.config.multisource.MultiSourceConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -37,6 +38,11 @@ public class GeneratorSQL implements Generator {
     }
 
     private Generator generator(){
-        return (Generator) applicationContext.getBean("generator-"+multiSourceConfig.getCurrentThreadDbType());
+        Generator generator = DataSourceContextHolder.getGeneratorType();
+        if (generator==null){
+            generator = (Generator) applicationContext.getBean("generator-"+multiSourceConfig.getCurrentThreadDbType());
+            DataSourceContextHolder.setGeneratorType(generator);
+        }
+        return generator;
     }
 }

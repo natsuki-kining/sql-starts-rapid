@@ -1,5 +1,7 @@
 package com.natsuki_kining.ssr.core.config.multisource;
 
+import com.natsuki_kining.ssr.core.sql.generator.Generator;
+
 /**
  * datasource的上下文
  *
@@ -8,27 +10,44 @@ package com.natsuki_kining.ssr.core.config.multisource;
  */
 public class DataSourceContextHolder {
 
-    private static final ThreadLocal<String> contextHolder = new ThreadLocal<String>();
+    private static final ThreadLocal<String> dataSource = new ThreadLocal<>();
+
+    private static final ThreadLocal<Generator> generatorType = new ThreadLocal<>();
 
     /**
      * @param dataSourceType 数据库类型
      * @Description: 设置数据源类型
      */
     public static void setDataSourceName(String dataSourceType) {
-        contextHolder.set(dataSourceType);
+        dataSource.set(dataSourceType);
     }
 
     /**
      * @Description: 获取数据源类型
      */
     public static String getDataSourceName() {
-        return contextHolder.get();
+        return dataSource.get();
     }
 
     /**
-     * @Description: 清除数据源类型
+     * @Description: 清除数据源类型，以及sql生成类型
      */
     public static void clearDataSourceName() {
-        contextHolder.remove();
+        dataSource.remove();
+        generatorType.remove();
+    }
+    /**
+     * @param generator sql生成类型
+     * @Description: 设置sql生成类型
+     */
+    public static void setGeneratorType(Generator generator) {
+        generatorType.set(generator);
+    }
+
+    /**
+     * @Description: 获取sql生成类型
+     */
+    public static Generator getGeneratorType() {
+        return generatorType.get();
     }
 }
