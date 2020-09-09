@@ -19,8 +19,8 @@ import java.util.concurrent.ConcurrentHashMap;
  **/
 @Slf4j
 @Component
-@ConditionalOnProperty(prefix = "ssr", name = "cache.type", havingValue = "default")
-public class DefaultCache implements SSRCache {
+@ConditionalOnProperty(prefix = "ssr", name = "cache.type", havingValue = "mapcache")
+public class MapCache implements SSRCache {
 
     /**
      * 缓存最大数量
