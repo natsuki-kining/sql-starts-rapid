@@ -4,8 +4,8 @@ import com.alibaba.druid.pool.DruidDataSource;
 import com.natsuki_kining.ssr.core.config.properties.DruidProperties;
 import com.natsuki_kining.ssr.core.config.properties.SSRProperties;
 import com.natsuki_kining.ssr.core.utils.Constant;
+import com.natsuki_kining.ssr.core.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -80,7 +80,11 @@ public class MultiSourceConfig {
      * @return
      */
     public String getCurrentThreadDbType(){
-        return dbTypeMap.get(DataSourceContextHolder.getDataSourceName());
+        String dataSourceName = DataSourceContextHolder.getDataSourceName();
+        if (StringUtils.isBlank(dataSourceName)){
+            dataSourceName = Constant.MultiDataSource.masterDataSourceName;
+        }
+        return dbTypeMap.get(dataSourceName);
     }
 
 

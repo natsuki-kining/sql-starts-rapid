@@ -2,6 +2,7 @@ package com.natsuki_kining.ssr.core.rule;
 
 import com.natsuki_kining.ssr.core.beans.QueryRule;
 import com.natsuki_kining.ssr.core.beans.SSRDynamicSQL;
+import com.natsuki_kining.ssr.core.config.properties.SSRProperties;
 import com.natsuki_kining.ssr.core.data.SSRData;
 import com.natsuki_kining.ssr.core.enums.QueryCodeType;
 import com.natsuki_kining.ssr.core.exception.SSRException;
@@ -30,11 +31,8 @@ public class RuleImpl implements Rule {
     @Qualifier("SSRDataImpl")
     private SSRData data;
 
-    @Value("${ssr.generate-by-entity.enable:false}")
-    private boolean generateByEntityEnable;
-
-    @Value("${ssr.generate-by-table.enable:false}")
-    private boolean generateByTableEnable;
+    @Autowired
+    private SSRProperties ssrProperties;
 
     @Override
     public QueryRule analysis(String queryCode) {
@@ -69,10 +67,10 @@ public class RuleImpl implements Rule {
             String queryType = split[1];
             if (Constant.QueryCodeType.GENERATE_BY_ENTITY.equals(queryType)) {
                 queryCodeType = QueryCodeType.GENERATE_QUERY_BY_ENTITY;
-                Assert.isFalse(generateByEntityEnable, "如果需要使用通过实体来生成sql，请设置ssr.generate-by-entity.enable=true");
+                Assert.isFalse(ssrProperties.getEnable().isGenerateByEntity(), "如果需要使用通过实体来生成sql，请设置ssr.enable.generate-by-entity=true");
             } else if (Constant.QueryCodeType.GENERATE_BY_TABLE.equals(queryType)) {
                 queryCodeType = QueryCodeType.GENERATE_QUERY_BY_TABLE;
-                Assert.isFalse(generateByTableEnable, "如果需要使用通过表名来生成sql，请设置ssr.generate-by-table.enable=true");
+                Assert.isFalse(ssrProperties.getEnable().isGenerateByTable(), "如果需要使用通过表名来生成sql，请设置ssr.enable.generate-by-table=true");
             } else if (Constant.QueryCodeType.SINGLE.equals(queryType)) {
                 queryCodeType = QueryCodeType.SINGLE_QUERY;
             } else {
