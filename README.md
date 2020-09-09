@@ -88,22 +88,34 @@ public class QueryController {
 ##### 3.7 示例
 
 
+#目录
+
+# 一 介绍
+
+## 功能介绍
+## 使用场景
+
+# 二 使用说明
+
+## 2.1 快速入门
+### 2.1.1 简单sql查询
+* 在ssr_dynamic_sql 表中新增数据：
+```sql
+INSERT INTO `ssr_dynamic_sql` (`ID`, `QUERY_CODE`, `SQL_TEMPLATE`) VALUES ('1', 'query-user', 'select * from ssr_user');
+```
+![query-user](file/img/2.1.1-1.png)
+* postman请求
+![query-user-result](file/img/2.1.1-2.png)
+
+### 2.1.2 带查询条件查询
 
 
-# 介绍
+## 2.2 进阶
 
-# 使用说明
-
-## 快速入门
-### 简单sql查询
-### 带查询条件查询
-
-## 进阶
-
-### 拦截器使用
-#### 正则匹配
-#### 使用场景
-#### 自定义拦截器
+### 2.2.1 拦截器使用
+#### 2.2.2 正则匹配
+#### 2.2.3 使用场景
+#### 2.2.4 自定义拦截器
 
 ### 数据处理脚本
 #### JavaScript
