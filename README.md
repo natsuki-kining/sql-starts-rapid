@@ -135,3 +135,4 @@ public class QueryController {
 ### bean说明文档
 #### QueryParams
 
+### [使用示例](https://gitee.com/natsuki_kining/ultra-rare)
