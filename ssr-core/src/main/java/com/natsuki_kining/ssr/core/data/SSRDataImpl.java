@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SSRDataImpl implements SSRData {
 
-    @Autowired
+    @Autowired(required=false)
     private SSRCache cache;
     @Autowired
     private QueryORM orm;
@@ -28,9 +28,9 @@ public class SSRDataImpl implements SSRData {
      */
     @Override
     public SSRDynamicSQL getSSRDynamicSQL(String queryCode) {
-        SSRDynamicSQL dynamicSQL = cache.getSSRDynamicSQL(queryCode);
-        if (dynamicSQL == null) {
-            return orm.getSSRDynamicSQL(queryCode);
+        SSRDynamicSQL dynamicSQL;
+        if (cache == null || (dynamicSQL = cache.getSSRDynamicSQL(queryCode)) == null){
+            dynamicSQL = orm.getSSRDynamicSQL(queryCode);
         }
         return dynamicSQL;
     }

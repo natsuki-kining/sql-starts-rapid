@@ -38,7 +38,7 @@ public class JdkProxy implements InvocationHandler, SSRProxy {
     @Autowired
     private SQL sql;
 
-    @Autowired
+    @Autowired(required = false)
     private SSRCache cache;
 
     @Autowired

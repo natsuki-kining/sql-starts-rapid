@@ -1,8 +1,6 @@
 package com.natsuki_kining.ssr.mybatis.data;
 
-import com.alibaba.druid.pool.DruidDataSource;
 import com.natsuki_kining.ssr.core.annotation.FieldName;
-import com.natsuki_kining.ssr.core.config.multisource.DynamicDataSource;
 import com.natsuki_kining.ssr.core.data.orm.AbstractQueryORM;
 import com.natsuki_kining.ssr.core.data.orm.QueryORM;
 import com.natsuki_kining.ssr.core.utils.StringUtils;
@@ -38,9 +36,6 @@ public class MyBatisQueryORM extends AbstractQueryORM implements QueryORM {
         configuration = sqlSession.getConfiguration();
         languageDriver = configuration.getDefaultScriptingLanguageInstance();
     }
-
-    @Autowired
-    private DynamicDataSource dynamicDataSource;
 
     /**
      * 查询

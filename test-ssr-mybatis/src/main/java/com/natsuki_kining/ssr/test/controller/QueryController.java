@@ -39,7 +39,13 @@ public class QueryController {
 
     @PostMapping("query")
     public Object query(@RequestBody QueryParams queryParams) {
-        List<Map> result = this.query.queryList(queryParams);
+        Object result = this.query.query(queryParams);
+        return result;
+    }
+
+    @PostMapping("queryList")
+    public Object queryList(@RequestBody QueryParams queryParams) {
+        Object result = this.query.queryList(queryParams);
         return result;
     }
 
@@ -57,7 +63,7 @@ public class QueryController {
     }
 
 
-    @Autowired
+    @Autowired(required = false)
     private SSRCache cache;
 
     @GetMapping("clean")
