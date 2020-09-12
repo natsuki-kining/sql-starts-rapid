@@ -1,11 +1,14 @@
 package com.natsuki_kining.ssr.test.entity;
 
+import com.natsuki_kining.ssr.core.annotation.TableName;
+
 /**
  * 测试实体
  *
  * @Author : natsuki_kining
  * @Date : 2020/5/23 23:37
  */
+@TableName("ssr_user")
 public class SSRUser {
 
     private Integer id;

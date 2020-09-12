@@ -220,13 +220,27 @@ ssr:
 DATA_SOURCE_NAME列为空，则使用默认数据源。
 
 * 自动生成
-queryCode：[表名/实体名]:[generateByTable/generateByEntity]:数据源的名称   
+queryCode：[表名/类名]:[generateByTable/generateByEntity]:[数据源的名称]   
 
 
-### sql生成
-#### 根据表名生成
+### 2.3.4 sql生成
+不需要在表中插入查询的sql数据  
+
+#### 2.3.4.1 根据表名生成
+* 在配置文件夹中加入ssr.enable.generate-by-table=true
+* queryCode写法规则：[表名]:[generateByTable]:[数据源的名称]
+* 数据源不写则使用默认数据源
+* selectFields：查询字段，多个用英文逗号分隔   
+![query-user](file/img/2.3.4-1.png)   
+
 #### 根据实体名生成
-#### 多数据源sql生成
+* 在配置文件夹中加入ssr.enable.generate-by-entity=true
+* queryCode写法规则：[类名]:[generateByEntity]:[数据源的名称]
+* 数据源不写则使用默认数据源
+* 类似需要加上注解`@TableName`,如果不加则按驼峰规则转换成表名
+* selectFields：查询字段，多个用英文逗号分隔   
+![query-user](file/img/2.3.4-2.png)   
+
 
 ### 缓存
 #### 内置缓存

@@ -39,6 +39,7 @@ mybatis:
 ssr:
   enable:
     generate-by-table: true
+    generate-by-entity: true
   script:
     type: javaScript
   multi-data-source:
