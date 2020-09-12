@@ -21,21 +21,8 @@ import java.util.Map;
 @RequestMapping("query")
 public class QueryController {
 
-//    @Autowired
-    private SSRDynamicSQLService dynamicSqlService;
-
     @Autowired
     private Query query;
-
-    @GetMapping("get/{id}")
-    public SSRDynamicSQL get(@PathVariable("id") String id) {
-        return dynamicSqlService.get(id);
-    }
-
-    @PostMapping("insert")
-    public Integer insert(@RequestBody SSRDynamicSQL dynamicSql) {
-        return dynamicSqlService.insertSSRDynamicSQL(dynamicSql);
-    }
 
     @PostMapping("query")
     public Object query(@RequestBody QueryParams queryParams) {
