@@ -134,16 +134,16 @@ public class QueryController {
 Query接口里的每个方法都有个重载方法，可传输指定的类型，直接调用为Map类型。
 
 
-### 2.4.1 分页跟排序
+### 2.3.1 分页跟排序
 * 分页
 设置pageNo跟pageSize两个参数即可。    
-![query-user-result](file/img/2.4.1-1.png)  
+![query-user-result](file/img/2.3.1-1.png)  
 输出的sql语句：
 > select * from ssr_user LIMIT 0,2
 
 * 排序
 设置sort参数即可    
-![query-user-result](file/img/2.4.1-2.png)
+![query-user-result](file/img/2.3.1-2.png)
 输出的sql语句：
 > select * from ssr_user ORDER BY NAME DESC
 
