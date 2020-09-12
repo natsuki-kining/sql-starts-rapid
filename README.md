@@ -233,7 +233,7 @@ queryCode：[表名/类名]:[generateByTable/generateByEntity]:[数据源的名�
 * selectFields：查询字段，多个用英文逗号分隔   
 ![query-user](file/img/2.3.4-1.png)   
 
-#### 根据实体名生成
+#### 2.3.4.2 根据实体名生成
 * 在配置文件夹中加入ssr.enable.generate-by-entity=true
 * queryCode写法规则：[类名]:[generateByEntity]:[数据源的名称]
 * 数据源不写则使用默认数据源
@@ -242,10 +242,21 @@ queryCode：[表名/类名]:[generateByTable/generateByEntity]:[数据源的名�
 ![query-user](file/img/2.3.4-2.png)   
 
 
-### 缓存
-#### 内置缓存
-#### MapCache
-#### 自定义缓存
+### 2.3.5 缓存
+只缓存SSRDynamicSQL表的查询数据。
+
+#### 2.3.5.1 内置缓存
+* 内部实现的缓存
+    * ehcache
+    * redis
+* 使用
+需要手动添加配置，指定使用的缓存，例如使用redis：ssr.cache.type=redis
+
+#### 2.3.5.2 自定义缓存
+* 实现接口SSRCache
+* 加上注解`@Component`交给spring管理
+* 也可以添加上配置条件，加上注解`@ConditionalOnProperty(prefix = "ssr", name = "cache.type", havingValue = "自定义缓存key")`
+
 
 ### orm框架
 #### myBatis
