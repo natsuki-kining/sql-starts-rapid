@@ -77,7 +77,7 @@ public class RuleImpl implements Rule {
                 throw new SSRException(queryCode + "没有指定的查询类型：" + queryType);
             }
             queryCode = queryCode.substring(0, index);
-            if (split.length == 3){
+            if (split.length >= 3){
                 dataSourceName = split[2];
             }
         }
