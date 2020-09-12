@@ -140,7 +140,8 @@ Query接口里的每个方法都有个重载方法，可传输指定的类型，
 ![query-user-result](file/img/2.4.1-1.png)
 
 * 排序
-
+设置sort参数即可    
+![query-user-result](file/img/2.4.1-2.png)
 
 ### 2.3.1 拦截器使用
 #### 2.3.2 正则匹配
