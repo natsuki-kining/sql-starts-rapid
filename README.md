@@ -137,16 +137,56 @@ Query接口里的每个方法都有个重载方法，可传输指定的类型，
 ### 2.4.1 分页跟排序
 * 分页
 设置pageNo跟pageSize两个参数即可。    
-![query-user-result](file/img/2.4.1-1.png)
+![query-user-result](file/img/2.4.1-1.png)  
+输出的sql语句：
+> select * from ssr_user LIMIT 0,2
 
 * 排序
 设置sort参数即可    
 ![query-user-result](file/img/2.4.1-2.png)
+输出的sql语句：
+> select * from ssr_user ORDER BY NAME DESC
 
 ### 2.3.1 拦截器使用
+#### 2.3.1.1 Java拦截器
+* 直接继承AbstractQueryJavaIntercept类，然后重写里面方法，交给spring管理。如果没有`@QueryCode`加入这个注解，则默认拦截所有的查询。`@QueryCode`注解支持正则表达式，只拦截匹配的queryCode
+例： 
+```java
+@Component
+public class SSRQueryIntercept extends AbstractQueryJavaIntercept {
+
+    @Override
+    public boolean preHandle(QueryParams queryParams) {
+        return true;
+    }
+    @Override
+    public void queryBefore(QueryParams queryParams, QueryInfo queryInfo, SSRDynamicSQL ssrDynamicSQL, Map<String, Object> map) {
+        System.out.println("master intercept:"+queryParams.getQueryCode());
+    }
+    @Override
+    public Object queryAfter(QueryParams queryParams, QueryInfo queryInfo, SSRDynamicSQL ssrDynamicSQL, Map<String, Object> map, Object data) {
+        return data;
+    }
+}
+```
+* 拦截方法介绍
+    * preHandle 返回true则继续执行，返回false则不执行该查询。
+    * queryBefore 查询前参数处理。可以添加新的查询参数或者修改前端传来的参数。例如添加当前登录用户的id
+    * queryAfter 查询结果处理，例如屏蔽敏感信息。
+
+#### 2.3.1.1 脚本拦截器
+* 可以将数据处理写到数据库里，不需要编写java代码，可动态修改。默认实现了三种脚本处理。
+
+#### 2.3.2 自定义脚本拦截器
+* 继承AbstractQueryScriptIntercept
+* 重写executeScript
+* 加上`@Component`注解交给spring管理
+* 加上`@ConditionalOnProperty`注解，按配置条件注入
+* 在配置文件上加上注解里的条件
+
 #### 2.3.2 正则匹配
 #### 2.3.3 使用场景
-#### 2.3.4 自定义拦截器
+
 
 ### 数据处理脚本
 #### JavaScript

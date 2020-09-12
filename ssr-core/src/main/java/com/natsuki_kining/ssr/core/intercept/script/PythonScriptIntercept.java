@@ -14,8 +14,8 @@ import org.springframework.stereotype.Component;
  * @Author : natsuki_kining
  * @Date : 2020/4/18 20:31
  */
-@ConditionalOnProperty(prefix = "ssr", name = "script.type", havingValue = "pythonScript")
 @Component
+@ConditionalOnProperty(prefix = "ssr", name = "script.type", havingValue = "pythonScript")
 public class PythonScriptIntercept extends AbstractQueryScriptIntercept {
 
     @Override
