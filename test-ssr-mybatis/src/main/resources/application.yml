@@ -39,7 +39,6 @@ mybatis:
 ssr:
   enable:
     generate-by-table: true
-#    multi-data-source-open: true
   script:
     type: javaScript
   multi-data-source:

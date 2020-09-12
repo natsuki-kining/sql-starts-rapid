@@ -147,8 +147,7 @@ Query接口里的每个方法都有个重载方法，可传输指定的类型，
 输出的sql语句：
 > select * from ssr_user ORDER BY NAME DESC
 
-### 2.3.1 拦截器使用
-#### 2.3.1.1 Java拦截器
+### 2.3.1 Java拦截器使用
 * 直接继承AbstractQueryJavaIntercept类，然后重写里面方法，交给spring管理。如果没有`@QueryCode`加入这个注解，则默认拦截所有的查询。`@QueryCode`注解支持正则表达式，只拦截匹配的queryCode
 例： 
 ```java
@@ -177,26 +176,52 @@ public class SSRQueryIntercept extends AbstractQueryJavaIntercept {
 #### 2.3.1.1 脚本拦截器
 * 可以将数据处理写到数据库里，不需要编写java代码，可动态修改。默认实现了三种脚本处理。
 
-#### 2.3.2 自定义脚本拦截器
+#### 2.3.1.2 自定义拦截器
+* 继承AbstractQueryJavaIntercept
+* 重写里面的三个方法
+* 加上`@Component`注解交给spring管理
+* 加上`@QueryCode`注解，根据queryCode拦截，支持正则匹配
+
+### 2.3.2 数据处理脚本
+#### JavaScript
+#### Python
+#### Groovy
+#### 自定义脚本脚本
 * 继承AbstractQueryScriptIntercept
 * 重写executeScript
 * 加上`@Component`注解交给spring管理
 * 加上`@ConditionalOnProperty`注解，按配置条件注入
 * 在配置文件上加上注解里的条件
 
-#### 2.3.2 正则匹配
-#### 2.3.3 使用场景
-
-
-### 数据处理脚本
-#### JavaScript
-#### Python
-#### Groovy
-#### 自定义脚本
-
-### 多数据源
+### 2.3.3 多数据源
 #### 多数据源配置
+```yaml
+ssr:
+  multi-data-source:
+    数据源名称1:
+      username: database username
+      password: database password
+      url: database url
+      driver-class-name: database driver
+      ……
+    数据源名称2:
+      username: database username
+      password: database password
+      url: database url
+      driver-class-name: database driver
+      ……
+    ……
+```
 #### 多数据源使用
+* 数据库表     
+
+![query-user](file/img/2.3.3-1.png)   
+
+DATA_SOURCE_NAME列为空，则使用默认数据源。
+
+* 自动生成
+queryCode：[表名/实体名]:[generateByTable/generateByEntity]:数据源的名称   
+
 
 ### sql生成
 #### 根据表名生成
