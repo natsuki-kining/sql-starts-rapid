@@ -257,13 +257,17 @@ queryCode：[表名/类名]:[generateByTable/generateByEntity]:[数据源的名�
 * 加上注解`@Component`交给spring管理
 * 也可以添加上配置条件，加上注解`@ConditionalOnProperty(prefix = "ssr", name = "cache.type", havingValue = "自定义缓存key")`
 
+### 2.3.5 orm框架
+#### 2.3.5.1 MyBatis
 
-### orm框架
-#### myBatis
-#### hibernate
-#### 自定义orm框架
+#### 2.3.5.2 hibernate
 
-### 自定义SSRDynamicSQL表名
+#### 2.3.5.3 自定义orm框架
+* 主要是实现接口QueryORM，也可以同时实现接口QueryORM跟继承AbstractQueryORM，AbstractQueryORM类默认实现了一些方法，不需要再实现。
+* 加上注解`@Component`交给spring管理
+
+
+### 2.3.6 自定义SSRDynamicSQL表名
 
 ### bean说明文档
 #### QueryParams
