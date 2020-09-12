@@ -73,7 +73,9 @@ public class JdkProxy implements InvocationHandler, SSRProxy {
                 SSRDynamicSQL dynamicSql = entryValue.getDynamicSql();
                 DataSourceContextHolder.setDataSourceName(dynamicSql.getDataSourceName());
                 value = invoke(method, args, preDate, dynamicSql, queryParams);
-                cache.save(dynamicSql.getQueryCode(), dynamicSql);
+                if (cache != null){
+                    cache.save(dynamicSql.getQueryCode(), dynamicSql);
+                }
                 preDate.put(entry.getKey(), value);
                 DataSourceContextHolder.clearDataSourceName();
             }
@@ -83,7 +85,9 @@ public class JdkProxy implements InvocationHandler, SSRProxy {
             SSRDynamicSQL dynamicSql = queryRule.getDynamicSql();
             DataSourceContextHolder.setDataSourceName(dynamicSql.getDataSourceName());
             Object invoke = invoke(method, args, null, dynamicSql, queryParams);
-            cache.save(dynamicSql.getQueryCode(), dynamicSql);
+            if (cache != null){
+                cache.save(dynamicSql.getQueryCode(), dynamicSql);
+            }
             DataSourceContextHolder.clearDataSourceName();
             return invoke;
         }
