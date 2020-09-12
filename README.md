@@ -268,6 +268,7 @@ queryCode：[表名/类名]:[generateByTable/generateByEntity]:[数据源的名�
 
 
 ### 2.3.6 自定义SSRDynamicSQL表名
+可以添加配置：ssr.dynamicSql.TableName=自定义SSRDynamicSQL表名
 
 ### bean说明文档
 #### QueryParams
