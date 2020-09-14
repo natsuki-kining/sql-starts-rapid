@@ -318,14 +318,14 @@ queryCode：[表名/类名]:[generateByTable/generateByEntity]:[数据源的名�
 
 |属性名|属性类型|属性意思|是否必填|
 |-----|-------|-------|------|
-|||||
-|||||
-|||||
-|||||
-|||||
-|||||
-|||||
-|||||
+|queryCode|String|查询code|必填|
+|dynamicSql|SSRDynamicSQL|SSRDynamicSQL|非必填|
+|queryCodeType|QueryCodeType|查询规则类型|必填|
+|queryCodeMap|Map<String, QueryRule>|查询规则|非必填|
+
+
+
+
 
 #### 2.3.7.6 QuerySQL
 
