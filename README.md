@@ -323,23 +323,13 @@ queryCode：[表名/类名]:[generateByTable/generateByEntity]:[数据源的名�
 |queryCodeType|QueryCodeType|查询规则类型|必填|
 |queryCodeMap|Map<String, QueryRule>|查询规则|非必填|
 
-
-
-
-
 #### 2.3.7.6 QuerySQL
 
 |属性名|属性类型|属性意思|是否必填|
 |-----|-------|-------|------|
-|||||
-|||||
-|||||
-|||||
-|||||
-|||||
-|||||
-|||||
-
+|processedSQL|String|查理过sql|非必填|
+|executeSQL|String|当前执行的SQL|非必填|
+|simpleSQL|String|原SQL|必填|
 
 #### 2.3.7.7 SSRDynamicSQL
 
