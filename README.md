@@ -270,7 +270,21 @@ queryCode：[表名/类名]:[generateByTable/generateByEntity]:[数据源的名�
 ### 2.3.6 自定义SSRDynamicSQL表名
 可以添加配置：ssr.dynamicSql.TableName=自定义SSRDynamicSQL表名
 
-### bean说明文档
-#### QueryParams
+### 2.3.7 bean说明文档
+#### 2.3.7.1 QueryParams
+
+|属性名|属性类型|属性意思|是否必填|
+|-----|-------|-------|------|
+|queryCode|String|对应数据库里的QUERY_CODE。如是自动生成sql模式，格式为[表名/类名全名]:[generateByTable/generateByEntity]:[数据源的名称]|必填|
+|params|Map<String, Object>|查询参数。key为sql里的占位符，value为值|非必填|
+|sort|LinkedHashMap<String, String>|排序。key为排序的字段，value为正序或者倒序|非必填|
+|queryResultModel|boolean|是否返回封装类型。true为查询结果返回QueryResult封装的结果集|非必填|
+|generateSort|boolean|是否生成排序。如果为false。则设置了sort属性也不会排序。|非必填|
+|condition|List<QueryCondition>|自动生成sql where 条件用。因为是自动生成sql语句，所以查询条件需要通过此参数来设置。|非必填|
+|selectFields|String|自动生成sql用，查询字段，多个用英文逗号分隔。默认为*。|非必填|
+|pageNo|int|分页用，第几页。|非必填|
+|pageSize|int|分页用，一页多少条。-1则为查询全部。|非必填|
+|generatePage|boolean|是否生成分页。默认为true。|非必填|
+
 
 ### [使用示例](https://gitee.com/natsuki_kining/ultra-rare)
