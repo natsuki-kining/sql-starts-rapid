@@ -335,20 +335,24 @@ queryCode：[表名/类名]:[generateByTable/generateByEntity]:[数据源的名�
 
 |属性名|属性类型|属性意思|是否必填|
 |-----|-------|-------|------|
-|||||
-|||||
-|||||
-|||||
-|||||
-|||||
-|||||
-|||||
-|||||
-|||||
-|||||
-|||||
-|||||
-|||||
-|||||
+|id|String|主键|是|
+|queryCode|String|查询的code。不允许使用英文逗号“,”跟冒号“:”|是|
+|queryName|String|查询的名称|否|
+|queryType|String|查询的类型|否|
+|dataSourceName|String|数据源名称|否|
+|sqlTemplate|String|sql模板|否|
+|resultType|String|返回类型，多个用逗号分割。queryCode:class name|否|
+|beforeScript|String|查询之前处理脚本|否|
+|afterScript|String|查询之后处理脚本|否|
+|version|Integer|版本号|否|
+|delFlag|Integer|是否删除。1：是，0：否|否|
+|orderNum|Integer|排序编号。正序。|否|
+|createName|String|创建人名称|否|
+|createId|String|创建人id|否|
+|createTime|Date|创建时间|否|
+|updateName|String|修改人名称|否|
+|updateId|String|修改人id|否|
+|updateTime|Date|修改时间|否|
+|String|remark|备注|否|
 
 ### [使用示例](https://gitee.com/natsuki_kining/ultra-rare)
