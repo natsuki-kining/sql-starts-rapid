@@ -8,6 +8,7 @@ import com.natsuki_kining.ssr.core.enums.QueryCodeType;
 import com.natsuki_kining.ssr.core.exception.SSRException;
 import com.natsuki_kining.ssr.core.utils.Assert;
 import com.natsuki_kining.ssr.core.utils.Constant;
+import com.natsuki_kining.ssr.core.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -64,7 +65,17 @@ public class RuleImpl implements Rule {
             return new QueryRule(queryCode, dynamicSql, queryCodeType, null);
         } else {
             String[] split = queryCode.split(indexFlag);
-            String queryType = split[1];
+            String queryType = null;
+            if (split.length>1){
+                queryType = split[1];
+            }
+            if(StringUtils.isBlank(queryType)){
+                if (split[0].contains(".")){
+                    queryType = Constant.QueryCodeType.GENERATE_BY_ENTITY;
+                }else{
+                    queryType = Constant.QueryCodeType.GENERATE_BY_TABLE;
+                }
+            }
             if (Constant.QueryCodeType.GENERATE_BY_ENTITY.equals(queryType)) {
                 queryCodeType = QueryCodeType.GENERATE_QUERY_BY_ENTITY;
                 Assert.isFalse(ssrProperties.getEnable().isGenerateByEntity(), "如果需要使用通过实体来生成sql，请设置ssr.enable.generate-by-entity=true");
