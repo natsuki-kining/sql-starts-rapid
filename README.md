@@ -410,6 +410,11 @@ queryCode：[表名/类名]:[generateByTable/generateByEntity]:[数据源的名�
     <T> QueryResult queryResult(QueryParams queryParams, Class<T> clazz);
 ```
 
+#### 2.3.7.9 注解
+* FieldName 用于实体里的属性，标注对应的数据库字段名。
+* TableName 用于实体里的属性，标注对应的数据库表名。
+* QueryCode 用于拦截器类上，如果当前查询的queryCode跟注解里的一样，则会拦截。
+
 ### 2.3.8 项目工程介绍
 #### 2.3.8.1 ssr-core
 主要的实现核心
