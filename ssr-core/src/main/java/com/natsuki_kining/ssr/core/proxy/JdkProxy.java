@@ -70,6 +70,10 @@ public class JdkProxy implements InvocationHandler, SSRProxy {
             for (Map.Entry<String, QueryRule> entry : queryCodeMap.entrySet()) {
                 QueryRule entryValue = entry.getValue();
                 args[0] = sql.getQuerySQL(entryValue, queryParams);
+                if(QueryCodeType.GENERATE_QUERY_BY_ENTITY == entryValue.getQueryCodeType()){
+                    Class<?> aClass = Class.forName(queryRule.getQueryCode());
+                    args[2] = aClass;
+                }
                 SSRDynamicSQL dynamicSql = entryValue.getDynamicSql();
                 DataSourceContextHolder.setDataSourceName(dynamicSql.getDataSourceName());
                 value = invoke(method, args, preDate, dynamicSql, queryParams);
@@ -82,6 +86,10 @@ public class JdkProxy implements InvocationHandler, SSRProxy {
             return value;
         } else {
             args[0] = sql.getQuerySQL(queryRule, queryParams);
+            if(QueryCodeType.GENERATE_QUERY_BY_ENTITY == queryRule.getQueryCodeType()){
+                Class<?> aClass = Class.forName(queryRule.getQueryCode());
+                args[2] = aClass;
+            }
             SSRDynamicSQL dynamicSql = queryRule.getDynamicSql();
             DataSourceContextHolder.setDataSourceName(dynamicSql.getDataSourceName());
             Object invoke = invoke(method, args, null, dynamicSql, queryParams);
