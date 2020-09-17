@@ -66,7 +66,7 @@ INSERT INTO `ssr_dynamic_sql` (`ID`, `QUERY_CODE`, `SQL_TEMPLATE`) VALUES ('1', 
 
 ### 2.1.3 返回封装的类型
 * 在query接口里传入需要转换的类型
-```java
+```
     @PostMapping("queryUser")
     public Object queryUser(@RequestBody QueryParams queryParams) throws ClassNotFoundException {
         Class<?> aClass = Class.forName("com.natsuki_kining.ssr.test.entity.SSRUser");
@@ -409,5 +409,22 @@ queryCode：[表名/类名]:[generateByTable/generateByEntity]:[数据源的名�
      */
     <T> QueryResult queryResult(QueryParams queryParams, Class<T> clazz);
 ```
+
+### 2.3.8 项目工程介绍
+#### 2.3.8.1 ssr-core
+主要的实现核心
+
+#### 2.3.8.2 ssr-hibernate
+实现hibernate的查询
+
+#### 2.3.8.3 ssr-mybatis
+实现mybatis的查询
+
+#### 2.3.8.4 test-ssr-hibernate
+以hibernate作为orm框架的测试项目
+
+#### 2.3.8.5 test-ssr-mybatis
+以mybatis作为orm框架的测试项目
+
 
 ### [使用示例](https://gitee.com/natsuki_kining/ultra-rare)
