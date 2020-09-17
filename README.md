@@ -355,4 +355,59 @@ queryCode：[表名/类名]:[generateByTable/generateByEntity]:[数据源的名�
 |updateTime|Date|修改时间|否|
 |String|remark|备注|否|
 
+#### 2.3.7.8 Query
+```
+    /**
+     * 查询返回Object
+     *
+     * @param queryParams 查询参数
+     * @return Class<T> clazz 转换的类型
+     */
+    <T> Object query(QueryParams queryParams, Class<T> clazz);
+
+    /**
+     * 查询返回Object
+     *
+     * @param queryParams 查询参数
+     */
+    Object query(QueryParams queryParams);
+
+    /**
+     * 查询返回map list
+     *
+     * @param queryParams 查询参数
+     * @return map的集合
+     */
+    List<Map> queryList(QueryParams queryParams);
+
+    /**
+     * 查询返回泛型list
+     *
+     * @param queryParams 查询参数
+     * @param clazz       转换的类型
+     * @param <T>         泛型
+     * @return 泛型的集合
+     */
+    <T> List<T> queryList(QueryParams queryParams, Class<T> clazz);
+
+    /**
+     * 查询返回QueryResult封装类型
+     *
+     * @param queryParams
+     * @param <T>
+     * @return
+     */
+    <T> QueryResult queryResult(QueryParams queryParams);
+
+    /**
+     * 查询返回QueryResult封装类型
+     *
+     * @param queryParams
+     * @param clazz
+     * @param <T>
+     * @return
+     */
+    <T> QueryResult queryResult(QueryParams queryParams, Class<T> clazz);
+```
+
 ### [使用示例](https://gitee.com/natsuki_kining/ultra-rare)
