@@ -65,43 +65,38 @@ public class JdkProxy implements InvocationHandler, SSRProxy {
         QueryRule queryRule = rule.analysis(queryParams.getQueryCode());
         if (QueryCodeType.EACH_QUERY == queryRule.getQueryCodeType()) {
             Map<String, QueryRule> queryCodeMap = queryRule.getQueryCodeMap();
-            Map<String, Object> preDate = new HashMap<>(queryCodeMap.size());
+            Map<String, Object> preData = new HashMap<>(queryCodeMap.size());
             Object value = null;
             for (Map.Entry<String, QueryRule> entry : queryCodeMap.entrySet()) {
                 QueryRule entryValue = entry.getValue();
-                args[0] = sql.getQuerySQL(entryValue, queryParams);
-                if(QueryCodeType.GENERATE_QUERY_BY_ENTITY == entryValue.getQueryCodeType()){
-                    Class<?> aClass = Class.forName(queryRule.getQueryCode());
-                    args[2] = aClass;
-                }
-                SSRDynamicSQL dynamicSql = entryValue.getDynamicSql();
-                DataSourceContextHolder.setDataSourceName(dynamicSql.getDataSourceName());
-                value = invoke(method, args, preDate, dynamicSql, queryParams);
-                if (cache != null){
-                    cache.save(dynamicSql.getQueryCode(), dynamicSql);
-                }
-                preDate.put(entry.getKey(), value);
-                DataSourceContextHolder.clearDataSourceName();
+                value = invokeDataSource(method, args, queryParams, entryValue,preData,entry.getKey());
             }
             return value;
         } else {
-            args[0] = sql.getQuerySQL(queryRule, queryParams);
-            if(QueryCodeType.GENERATE_QUERY_BY_ENTITY == queryRule.getQueryCodeType()){
-                Class<?> aClass = Class.forName(queryRule.getQueryCode());
-                args[2] = aClass;
-            }
-            SSRDynamicSQL dynamicSql = queryRule.getDynamicSql();
-            DataSourceContextHolder.setDataSourceName(dynamicSql.getDataSourceName());
-            Object invoke = invoke(method, args, null, dynamicSql, queryParams);
-            if (cache != null){
-                cache.save(dynamicSql.getQueryCode(), dynamicSql);
-            }
-            DataSourceContextHolder.clearDataSourceName();
-            return invoke;
+            return invokeDataSource(method,args,queryParams,queryRule,null,null);
         }
     }
 
-    private Object invoke(Method method, Object[] args, Map<String, Object> preDate, SSRDynamicSQL dynamicSql, QueryParams queryParams) throws InvocationTargetException, IllegalAccessException {
+    private Object invokeDataSource(Method method,Object[] args, QueryParams queryParams,QueryRule queryRule,Map<String, Object> preData,String key) throws ClassNotFoundException, InvocationTargetException, IllegalAccessException {
+        args[0] = sql.getQuerySQL(queryRule, queryParams);
+        if(QueryCodeType.GENERATE_QUERY_BY_ENTITY == queryRule.getQueryCodeType()){
+            Class<?> aClass = Class.forName(queryRule.getQueryCode());
+            args[2] = aClass;
+        }
+        SSRDynamicSQL dynamicSql = queryRule.getDynamicSql();
+        DataSourceContextHolder.setDataSourceName(dynamicSql.getDataSourceName());
+        Object invoke = invokeIntercept(method, args, null, dynamicSql, queryParams);
+        if (cache != null){
+            cache.save(dynamicSql.getQueryCode(), dynamicSql);
+        }
+        if (preData != null){
+            preData.put(key, invoke);
+        }
+        DataSourceContextHolder.clearDataSourceName();
+        return invoke;
+    }
+
+    private Object invokeIntercept(Method method, Object[] args, Map<String, Object> preDate, SSRDynamicSQL dynamicSql, QueryParams queryParams) throws InvocationTargetException, IllegalAccessException {
         //调用拦截器的查询前方法
         QueryInfo queryInfo = new QueryInfo((QuerySQL) args[0]);
         interceptConfig.queryBefore(queryParams, queryInfo, dynamicSql, preDate);
