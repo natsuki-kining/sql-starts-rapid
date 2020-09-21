@@ -228,19 +228,33 @@ queryCode：[表名/类名]:[generateByTable/generateByEntity]:[数据源的名�
 
 #### 2.3.4.1 根据表名生成
 * 在配置文件夹中加入ssr.enable.generate-by-table=true
-* queryCode写法规则：[表名]:[generateByTable]:[数据源的名称]
+* queryCode写法规则：表名:[generateByTable][:][数据源的名称]  ([]可不填)  
+    * 例如： ssr_user:
 * 数据源不写则使用默认数据源
 * selectFields：查询字段，多个用英文逗号分隔   
 ![query-user](file/img/2.3.4-1.png)   
 
 #### 2.3.4.2 根据实体名生成
 * 在配置文件夹中加入ssr.enable.generate-by-entity=true
-* queryCode写法规则：[类名]:[generateByEntity]:[数据源的名称]
+* queryCode写法规则：类全路径:[generateByEntity][:][数据源的名称]  ([]可不填)
+    * 例如： com.natsuki_kining.ssr.test.entity.SSRUser:
 * 数据源不写则使用默认数据源
 * 类似需要加上注解`@TableName`,如果不加则按驼峰规则转换成表名
 * selectFields：查询字段，多个用英文逗号分隔   
 ![query-user](file/img/2.3.4-2.png)   
 
+#### 2.3.4.3 sql生成自定义查询条件
+* 简单示例：
+![query-user](file/img/2.3.4.3-1.png)  
+> 输出的sql语句：SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.CODE = ? LIMIT 0,10
+
+* 多条件：
+![query-user](file/img/2.3.4.3-2.png)  
+> SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.USER_NAME = ? AND T1.CODE = ? LIMIT 0,10
+
+* 分组查询：
+
+ 
 
 ### 2.3.5 缓存
 只缓存SSRDynamicSQL表的查询数据。
