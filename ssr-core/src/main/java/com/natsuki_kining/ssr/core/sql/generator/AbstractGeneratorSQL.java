@@ -66,7 +66,6 @@ public abstract class AbstractGeneratorSQL implements Generator {
         }
         querySql.append(" T1 WHERE 1=1 ");
 
-        //<String, List<QueryCondition>> queryConditionMap = queryConditionHandle(queryParams);
         //如果有自定义的查询条件，则按自定义的规则来生成，没有则使用默认生成规则
         if (CollectionUtils.isEmpty(queryParams.getCondition())) {
             queryParams.getParams().keySet().stream().forEach(k -> {

@@ -244,15 +244,22 @@ queryCode：[表名/类名]:[generateByTable/generateByEntity]:[数据源的名�
 ![query-user](file/img/2.3.4-2.png)   
 
 #### 2.3.4.3 sql生成自定义查询条件
-* 简单示例：
+* 根据查询参数默认规则生成查询条件   
 ![query-user](file/img/2.3.4.3-1.png)  
-> 输出的sql语句：SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.CODE = ? LIMIT 0,10
+> SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.CODE = ?  AND T1.USER_NAME = ?   LIMIT 0,10
+
+* 自定义查询
+    * 简单示例：右模糊   
+        ![query-user](file/img/2.3.4.3-2.png)  
+        > SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.CODE LIKE concat(? ,'%')   LIMIT 0,10
 
 * 多条件：
-![query-user](file/img/2.3.4.3-2.png)  
+![query-user](file/img/2.3.4.3-3.png)  
 > SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.USER_NAME = ? AND T1.CODE = ? LIMIT 0,10
 
 * 分组查询：
+![query-user](file/img/2.3.4.3-3.png)  
+> SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.USER_NAME = ? AND T1.CODE = ? LIMIT 0,10
 
  
 
