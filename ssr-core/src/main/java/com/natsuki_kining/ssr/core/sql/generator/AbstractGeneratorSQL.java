@@ -85,6 +85,7 @@ public abstract class AbstractGeneratorSQL implements Generator {
             Integer index = 0;
             String paramName = "param";
             queryConditionRecursive(conditions,querySql,params,index,paramName);
+            queryParams.setParams(params);
         }
     }
 
@@ -116,7 +117,10 @@ public abstract class AbstractGeneratorSQL implements Generator {
                 queryConditionHandle(querySql, condition, params, (paramName+index));
                 index++;
             }else{
+                querySql.append(StringUtils.getInListValue(Constant.Condition.QUERY_CONNECT_LIST, condition.getLogicalOperator(), Constant.Condition.DEFAULT_CONNECT));
+                querySql.append("(");
                 queryConditionRecursive(condition.getCondition(),querySql,params,index,paramName);
+                querySql.append(") ");
             }
         }
     }
