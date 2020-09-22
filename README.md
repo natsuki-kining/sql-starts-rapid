@@ -253,9 +253,9 @@ queryCode：[表名/类名]:[generateByTable/generateByEntity]:[数据源的名�
         ![query-user](file/img/2.3.4.3-2.png)  
         > SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.CODE LIKE concat(? ,'%')   LIMIT 0,10
 
-* 多条件：
-![query-user](file/img/2.3.4.3-3.png)  
-> SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.USER_NAME = ? AND T1.CODE = ? LIMIT 0,10
+    * 多条件：   
+        ![query-user](file/img/2.3.4.3-3.png)  
+        > SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.PASSWORD LIKE concat(concat('%',? ),'%')  AND T1.USER_NAME = ?    LIMIT 0,10
 
 * 分组查询：
 ![query-user](file/img/2.3.4.3-3.png)  
