@@ -81,7 +81,7 @@ public abstract class AbstractGeneratorSQL implements Generator {
             List<QueryCondition> conditionList = queryParams.getCondition();
             Map<String, List<QueryCondition>> queryConditionMap = new HashMap<>(conditionList.size());
             conditionList.stream().forEach(c -> {
-                String groupId = c.getGroupId();
+                String groupId = "";
                 if (StringUtils.isBlank(groupId)) {
                     groupId = UUID.randomUUID().toString();
                 }
@@ -100,7 +100,7 @@ public abstract class AbstractGeneratorSQL implements Generator {
                     QueryCondition c = v.get(0);
                     queryConditionHandle(querySql, c, params, paramName + index.get());
                 } else {
-                    querySql.append(StringUtils.getInListValue(Constant.Condition.QUERY_CONNECT_LIST, v.get(0).getConnect().toUpperCase(), Constant.Condition.DEFAULT_CONNECT));
+                    querySql.append(StringUtils.getInListValue(Constant.Condition.QUERY_CONNECT_LIST, v.get(0).getLogicalOperator(), Constant.Condition.DEFAULT_CONNECT));
                     querySql.append(" ( ");
                     v.stream().forEach(c -> {
                         index.getAndIncrement();
@@ -133,24 +133,24 @@ public abstract class AbstractGeneratorSQL implements Generator {
     }
 
     private void queryConditionHandle(StringBuilder querySql, QueryCondition queryCondition, Map<String, Object> params, String paramName) {
-        String queryCode = queryCondition.getQueryCode();
-        String connect = queryCondition.getConnect();
-        String operational = queryCondition.getOperational();
+        String fieldName = queryCondition.getFieldName();
         Object value = queryCondition.getValue();
+        String logicalOperator = queryCondition.getLogicalOperator();
+        String relationalOperator = queryCondition.getRelationalOperator();
 
         params.put(paramName, value);
 
-        connect = StringUtils.getInListValue(Constant.Condition.QUERY_CONNECT_LIST, connect, Constant.Condition.DEFAULT_CONNECT);
-        if (Constant.Condition.QUERY_LIKE_OPERATIONAL_CHARACTER_LIST.contains(operational)) {
-            operational = likeConditionHandel(operational, placeholderParam(paramName));
+        logicalOperator = StringUtils.getInListValue(Constant.Condition.QUERY_CONNECT_LIST, logicalOperator, Constant.Condition.DEFAULT_CONNECT);
+        if (Constant.Condition.QUERY_LIKE_OPERATIONAL_CHARACTER_LIST.contains(relationalOperator)) {
+            relationalOperator = likeConditionHandel(relationalOperator, placeholderParam(paramName));
         } else {
-            operational = StringUtils.getInListValue(Constant.Condition.QUERY_OPERATIONAL_CHARACTER_LIST, operational, Constant.Condition.DEFAULT_OPERATIONAL_CHARACTER) + " " + placeholderParam(paramName) + " ";
+            relationalOperator = StringUtils.getInListValue(Constant.Condition.QUERY_OPERATIONAL_CHARACTER_LIST, relationalOperator, Constant.Condition.DEFAULT_OPERATIONAL_CHARACTER) + " " + placeholderParam(paramName) + " ";
         }
-        querySql.append(connect);
+        querySql.append(logicalOperator);
         querySql.append(" T1.");
-        querySql.append(StringUtils.castFieldToColumn(queryCode));
+        querySql.append(StringUtils.castFieldToColumn(fieldName));
         querySql.append(" ");
-        querySql.append(operational);
+        querySql.append(relationalOperator);
         querySql.append(" ");
     }
 

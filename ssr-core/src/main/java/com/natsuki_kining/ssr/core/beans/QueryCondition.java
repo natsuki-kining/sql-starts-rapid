@@ -3,6 +3,7 @@ package com.natsuki_kining.ssr.core.beans;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 
 /**
  * 查询条件
@@ -16,32 +17,44 @@ public class QueryCondition implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 查询code
+     * 查询条件的字段名
      */
-    private String queryCode;
+    private String fieldName;
 
+    /**
+     * 查询条件的值
+     */
     private Object value;
 
-    private String connect;
+    /**
+     * 逻辑运算符
+     * AND OR
+     * 不填默认AND
+     */
+    private String logicalOperator;
 
-    private String operational;
+    /**
+     * 关系运算符
+     */
+    private String relationalOperator;
 
-    private String groupId;
+    /**
+     * 分组查询条件
+     */
+    private LinkedList<QueryCondition> condition;
 
-    private String groupConnect;
-
-    public String getConnect() {
-        if (connect == null) {
+    public String getLogicalOperator() {
+        if (logicalOperator == null) {
             return null;
         }
-        return connect.trim().toUpperCase();
+        return logicalOperator.trim().toUpperCase();
     }
 
-    public String getOperational() {
-        if (operational == null) {
+    public String getRelationalOperator() {
+        if (relationalOperator == null) {
             return null;
         }
-        return operational.trim();
+        return relationalOperator.trim();
     }
 }
 
