@@ -34,7 +34,7 @@ public class QueryCondition implements Serializable {
         if (connect == null) {
             return null;
         }
-        return connect.trim();
+        return connect.trim().toUpperCase();
     }
 
     public String getOperational() {

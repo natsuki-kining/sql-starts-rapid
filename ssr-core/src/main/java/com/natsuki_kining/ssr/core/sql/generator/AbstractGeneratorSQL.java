@@ -140,7 +140,7 @@ public abstract class AbstractGeneratorSQL implements Generator {
 
         params.put(paramName, value);
 
-        connect = StringUtils.getInListValue(Constant.Condition.QUERY_CONNECT_LIST, connect.toUpperCase(), Constant.Condition.DEFAULT_CONNECT);
+        connect = StringUtils.getInListValue(Constant.Condition.QUERY_CONNECT_LIST, connect, Constant.Condition.DEFAULT_CONNECT);
         if (Constant.Condition.QUERY_LIKE_OPERATIONAL_CHARACTER_LIST.contains(operational)) {
             operational = likeConditionHandel(operational, placeholderParam(paramName));
         } else {
