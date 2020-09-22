@@ -12,8 +12,10 @@ import com.natsuki_kining.ssr.core.utils.MapUtils;
 import com.natsuki_kining.ssr.core.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 生成sql
@@ -49,18 +51,20 @@ public abstract class AbstractGeneratorSQL implements Generator {
             querySql.append(queryRule.getQueryCode());
         }
         //处理查询条件
-        generateWhereSQL(querySql, queryRule, queryParams);
+        generateConditionSQL(querySql, queryRule, queryParams);
         return querySql.toString();
     }
 
+
+
     /**
-     * 生成where条件
+     * 生成查询条件语句
      *
      * @param querySql    sql StringBuilder
      * @param queryRule   查询规则
      * @param queryParams 查询参数
      */
-    protected void generateWhereSQL(StringBuilder querySql, QueryRule queryRule, QueryParams queryParams) {
+    protected void generateConditionSQL(StringBuilder querySql, QueryRule queryRule, QueryParams queryParams) {
         if (MapUtils.isEmpty(queryParams.getParams()) && CollectionUtils.isEmpty(queryParams.getCondition())) {
             return;
         }
@@ -76,41 +80,15 @@ public abstract class AbstractGeneratorSQL implements Generator {
                 querySql.append(" ");
             });
         } else {
-            Map<String, Object> params = new HashMap<>(queryParams.getCondition().size());
-            queryParams.setParams(params);
-            List<QueryCondition> conditionList = queryParams.getCondition();
-            Map<String, List<QueryCondition>> queryConditionMap = new HashMap<>(conditionList.size());
-            conditionList.stream().forEach(c -> {
-                String groupId = "";
-                if (StringUtils.isBlank(groupId)) {
-                    groupId = UUID.randomUUID().toString();
-                }
-                if (queryConditionMap.get(groupId) == null) {
-                    queryConditionMap.put(groupId, new ArrayList<>());
-                }
-                queryConditionMap.get(groupId).add(c);
-            });
-
-
-            AtomicInteger index = new AtomicInteger(0);
-            queryConditionMap.forEach((k, v) -> {
-                String paramName = "param";
-                if (v.size() == 1) {
-                    index.getAndIncrement();
-                    QueryCondition c = v.get(0);
-                    queryConditionHandle(querySql, c, params, paramName + index.get());
-                } else {
-                    querySql.append(StringUtils.getInListValue(Constant.Condition.QUERY_CONNECT_LIST, v.get(0).getLogicalOperator(), Constant.Condition.DEFAULT_CONNECT));
-                    querySql.append(" ( ");
-                    v.stream().forEach(c -> {
-                        index.getAndIncrement();
-                        queryConditionHandle(querySql, c, params, paramName + index.get());
-                    });
-                    querySql.append(" ) ");
-                }
-            });
+            Map<String, Object> params = new HashMap<>();
+            List<QueryCondition> conditions = queryParams.getCondition();
+            Integer index = 0;
+            String paramName = "param";
+            queryConditionRecursive(conditions,querySql,params,index,paramName);
         }
     }
+
+
 
     /**
      * 生成排序
@@ -130,6 +108,17 @@ public abstract class AbstractGeneratorSQL implements Generator {
         Set<Map.Entry<String, String>> sortSet = queryParams.getSort().entrySet();
         sortSet.stream().forEach(e -> querySql.append(StringUtils.castFieldToColumn(e.getKey()) + " " + e.getValue().toUpperCase() + ","));
         querySql.deleteCharAt(querySql.length() - 1);
+    }
+
+    private void queryConditionRecursive(List<QueryCondition> conditions,StringBuilder querySql,Map<String,Object> params,Integer index,String paramName){
+        for (QueryCondition condition : conditions) {
+            if (CollectionUtils.isEmpty(condition.getCondition())){
+                queryConditionHandle(querySql, condition, params, (paramName+index));
+                index++;
+            }else{
+                queryConditionRecursive(condition.getCondition(),querySql,params,index,paramName);
+            }
+        }
     }
 
     private void queryConditionHandle(StringBuilder querySql, QueryCondition queryCondition, Map<String, Object> params, String paramName) {
