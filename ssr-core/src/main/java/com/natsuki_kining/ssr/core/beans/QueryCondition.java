@@ -35,6 +35,7 @@ public class QueryCondition implements Serializable {
 
     /**
      * 关系运算符
+     * like = != > < >= >= 等等
      */
     private String relationalOperator;
 

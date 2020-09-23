@@ -262,41 +262,54 @@ SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.CODE = ?  AND T1.USER_NAME = ?
 ![query-user](file/img/2.3.4.3-1.png)  
 
 
-* 自定义条件查询
-    * 简单示例：右模糊   
-        ![query-user](file/img/2.3.4.3-2.png)  
-        > SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.CODE LIKE concat(? ,'%')   LIMIT 0,10
-
-    * 多条件：   
-        ![query-user](file/img/2.3.4.3-3.png)  
-        > SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.PASSWORD LIKE concat(concat('%',? ),'%')  AND T1.USER_NAME = ?    LIMIT 0,10
-
-    * 分组查询：
-        ![query-user](file/img/2.3.4.3-3.png)  
-        > SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.USER_NAME = ? AND T1.CODE = ? LIMIT 0,10
-        ```json
+* 简单示例：右模糊   
+```json
+{
+	"queryCode":"ssr_user:",
+    "condition":[
         {
-        	"queryCode":"ssr_user:",
+            "fieldName":"code",
+            "relationalOperator":"al"
+        }
+    ]
+}
+```
+
+```sql
+SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.CODE LIKE concat(? ,'%')
+```
+![query-user](file/img/2.3.4.3-2.png)  
+
+* 多条件：   
+![query-user](file/img/2.3.4.3-3.png)  
+> SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.PASSWORD LIKE concat(concat('%',? ),'%')  AND T1.USER_NAME = ?    LIMIT 0,10
+
+* 分组查询：
+![query-user](file/img/2.3.4.3-3.png)  
+> SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.USER_NAME = ? AND T1.CODE = ? LIMIT 0,10
+```json
+{
+    "queryCode":"ssr_user:",
+    "condition":[
+        {
+            "fieldName":"user_name",
+            "value":"管理员",
+            "relationalOperator":"rl"
+        },
+        {
             "condition":[
                 {
-                    "fieldName":"user_name",
-                    "value":"管理员",
-                    "relationalOperator":"rl"
-                },
-                {
-                    "condition":[
-                        {
-                            "fieldName":"code",
-                            "value":"00001"
-                        },{
-                            "fieldName":"password",
-                            "value":"123456"
-                        }
-                    ]
+                    "fieldName":"code",
+                    "value":"00001"
+                },{
+                    "fieldName":"password",
+                    "value":"123456"
                 }
             ]
         }
-        ```
+    ]
+}
+```
  
 
 ### 2.3.5 缓存
