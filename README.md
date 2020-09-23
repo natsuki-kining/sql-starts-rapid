@@ -269,7 +269,7 @@ SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.CODE = ?  AND T1.USER_NAME = ?
     "condition":[
         {
             "fieldName":"code",
-            "relationalOperator":"al"
+            "relationalOperator":"rl"
         }
     ]
 }
@@ -280,9 +280,28 @@ SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.CODE LIKE concat(? ,'%')
 ```
 ![query-user](file/img/2.3.4.3-2.png)  
 
+
 * 多条件：   
+```json
+{
+	"queryCode":"ssr_user:",
+    "condition":[
+        {
+            "fieldName":"password",
+            "relationalOperator":"al"
+        },
+        {
+            "fieldName":"user_name",
+            "logicalOperator":"or"
+        }
+    ]
+}
+```
+
+```sql
+SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.PASSWORD LIKE concat(concat('%',? ),'%')  OR T1.USER_NAME = ?
+```
 ![query-user](file/img/2.3.4.3-3.png)  
-> SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.PASSWORD LIKE concat(concat('%',? ),'%')  AND T1.USER_NAME = ?    LIMIT 0,10
 
 * 分组查询：
 ![query-user](file/img/2.3.4.3-3.png)  
