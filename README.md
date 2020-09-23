@@ -38,7 +38,6 @@
 ## 2.1 快速体验（运行的是test-ssr-mybatis项目）
 
 * ssr_user中的数据     
-![query-user](file/img/2.1-0.png)
 
 ### 2.1.1 简单sql查询
 
@@ -48,20 +47,16 @@ INSERT INTO `ssr_dynamic_sql` (`ID`, `QUERY_CODE`, `SQL_TEMPLATE`) VALUES ('1', 
 ``` 
 
 * postman请求   
-![query-user-result](file/img/2.1.1-2.png)
 
 ### 2.1.2 带查询条件查询
 * 使用freemarker为sql添加查询条件
 ```sql
 INSERT INTO `ssr_dynamic_sql` (`ID`, `QUERY_CODE`, `SQL_TEMPLATE`) VALUES ('1', 'query-user', 'select * from ssr_user \r\nwhere 1=1\r\n<#if name??><#noparse>\r\nand NAME like CONCAT(\'%\',#{name},\'%\')\r\n</#noparse></#if>\r\n<#if userName??><#noparse>\r\nand USER_NAME like CONCAT(\'%\',#{userName},\'%\')\r\n</#noparse></#if>\r\n<#if code??><#noparse>\r\nand `CODE` = #{code}\r\n</#noparse></#if>');
 ```
-![query-user](file/img/2.1.2-1.png)
 > 其中`<#if>`为添加判断，`<#noparse>`为freemarker`#{}`转义
 * postman请求      
-![query-user](file/img/2.1.2-2.png)
 > 输出的查询sql语句为 select * from ssr_user  where 1=1 and NAME like CONCAT('%',?,'%')
 * postman请求      
-![query-user](file/img/2.1.2-3.png)
 > 输出的查询sql语句为 select * from ssr_user  where 1=1 and NAME like CONCAT('%',?,'%') and USER_NAME like CONCAT('%',?,'%')
 
 ### 2.1.3 返回封装的类型
@@ -75,7 +70,6 @@ INSERT INTO `ssr_dynamic_sql` (`ID`, `QUERY_CODE`, `SQL_TEMPLATE`) VALUES ('1', 
     }
 ```
 * postman请求  
-![query-user](file/img/2.1.3-1.png)
 
 ## 2.2 快速入门
 
@@ -137,13 +131,11 @@ Query接口里的每个方法都有个重载方法，可传输指定的类型，
 ### 2.3.1 分页跟排序
 * 分页
 设置pageNo跟pageSize两个参数即可。    
-![query-user-result](file/img/2.3.1-1.png)  
 输出的sql语句：
 > select * from ssr_user LIMIT 0,2
 
 * 排序
 设置sort参数即可    
-![query-user-result](file/img/2.3.1-2.png)
 输出的sql语句：
 > select * from ssr_user ORDER BY NAME DESC
 
@@ -215,8 +207,6 @@ ssr:
 #### 多数据源使用
 * 数据库表     
 
-![query-user](file/img/2.3.3-1.png)   
-
 DATA_SOURCE_NAME列为空，则使用默认数据源。
 
 * 自动生成
@@ -232,7 +222,6 @@ queryCode：[表名/类名]:[generateByTable/generateByEntity]:[数据源的名�
     * 例如： ssr_user:
 * 数据源不写则使用默认数据源
 * selectFields：查询字段，多个用英文逗号分隔   
-![query-user](file/img/2.3.4-1.png)   
 
 #### 2.3.4.2 根据实体名生成
 * 在配置文件夹中加入ssr.enable.generate-by-entity=true
@@ -241,7 +230,6 @@ queryCode：[表名/类名]:[generateByTable/generateByEntity]:[数据源的名�
 * 数据源不写则使用默认数据源
 * 类似需要加上注解`@TableName`,如果不加则按驼峰规则转换成表名
 * selectFields：查询字段，多个用英文逗号分隔   
-![query-user](file/img/2.3.4-2.png)   
 
 #### 2.3.4.3 sql生成自定义查询条件
 * 根据查询参数默认规则生成查询条件   
@@ -259,75 +247,70 @@ SQL：
 ```sql
 SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.CODE = ?  AND T1.USER_NAME = ?  
 ```
-![query-user](file/img/2.3.4.3-1.png)  
 
-
-* 简单示例：右模糊   
+* 简单示例：右模糊
 ```json
-{
-	"queryCode":"ssr_user:",
-    "condition":[
-        {
-            "fieldName":"code",
-            "relationalOperator":"rl"
-        }
-    ]
-}
+    {
+        "queryCode":"ssr_user:",
+        "condition":[
+            {
+                "fieldName":"code",
+                "relationalOperator":"rl"
+            }
+        ]
+    }
 ```
 
 ```sql
 SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.CODE LIKE concat(? ,'%')
 ```
-![query-user](file/img/2.3.4.3-2.png)  
 
 
 * 多条件：   
 ```json
-{
-	"queryCode":"ssr_user:",
-    "condition":[
-        {
-            "fieldName":"password",
-            "relationalOperator":"al"
-        },
-        {
-            "fieldName":"user_name",
-            "logicalOperator":"or"
-        }
-    ]
-}
+    {
+        "queryCode":"ssr_user:",
+        "condition":[
+            {
+                "fieldName":"password",
+                "relationalOperator":"al"
+            },
+            {
+                "fieldName":"user_name",
+                "logicalOperator":"or"
+            }
+        ]
+    }
 ```
 
 ```sql
 SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.PASSWORD LIKE concat(concat('%',? ),'%')  OR T1.USER_NAME = ?
 ```
-![query-user](file/img/2.3.4.3-3.png)  
 
 * 分组查询：
-![query-user](file/img/2.3.4.3-3.png)  
 > SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.USER_NAME = ? AND T1.CODE = ? LIMIT 0,10
 ```json
-{
-    "queryCode":"ssr_user:",
-    "condition":[
-        {
-            "fieldName":"user_name",
-            "value":"管理员",
-            "relationalOperator":"rl"
-        },
-        {
-            "condition":[
-                {
-                    "fieldName":"code",
-                    "value":"00001"
-                },{
-                    "fieldName":"password",
-                    "value":"123456"
-                }
-            ]
-        }
-    ]
-}
+    {
+        "queryCode":"ssr_user:",
+        "condition":[
+            {
+                "fieldName":"user_name",
+                "value":"管理员",
+                "relationalOperator":"rl"
+            },
+            {
+                "condition":[
+                    {
+                        "fieldName":"code",
+                        "value":"00001"
+                    },{
+                        "fieldName":"password",
+                        "value":"123456"
+                    }
+                ]
+            }
+        ]
+    }
 ```
  
 ```sql
@@ -382,12 +365,11 @@ SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.USER_NAME LIKE concat(#{param0} ,'%')
 
 |属性名|属性类型|属性意思|是否必填|
 |-----|-------|-------|------|
-|queryCode|String|对应的queryCode|必填|
+|fieldName|String|查询条件的字段名|必填|
 |value|Object|查询条件的值|必填|
-|connect|String|查询条件|必填|
-|operational|String|条件跟条件关系操作符|非必填（单个条件）|
-|groupId|String|分组查询分组id|分组查询必填|
-|groupConnect|String|分组查询|分组查询必填|
+|logicalOperator|String|逻辑运算符|非必填。取值例如：AND OR 等|
+|relationalOperator|String|关系运算符|非必填。取值例如：like = != > < >= >= 等|
+|condition|QueryCondition|分组查询条件|非必填|
 
 #### 2.3.7.3 QueryInfo
 
