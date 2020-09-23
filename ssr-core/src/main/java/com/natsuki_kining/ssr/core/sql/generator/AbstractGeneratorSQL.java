@@ -118,7 +118,7 @@ public abstract class AbstractGeneratorSQL implements Generator {
                 index++;
             }else{
                 querySql.append(StringUtils.getInListValue(Constant.Condition.QUERY_CONNECT_LIST, condition.getLogicalOperator(), Constant.Condition.DEFAULT_CONNECT));
-                querySql.append("(");
+                querySql.append(" (");
                 queryConditionRecursive(condition.getCondition(),querySql,params,index,paramName);
                 querySql.append(") ");
             }
@@ -139,7 +139,10 @@ public abstract class AbstractGeneratorSQL implements Generator {
         } else {
             relationalOperator = StringUtils.getInListValue(Constant.Condition.QUERY_OPERATIONAL_CHARACTER_LIST, relationalOperator, Constant.Condition.DEFAULT_OPERATIONAL_CHARACTER) + " " + placeholderParam(paramName) + " ";
         }
-        querySql.append(logicalOperator);
+        String trim = querySql.toString().trim();
+        if (!"(".equals(trim.substring(trim.length()-1))){
+            querySql.append(logicalOperator);
+        }
         querySql.append(" T1.");
         querySql.append(StringUtils.castFieldToColumn(fieldName));
         querySql.append(" ");
