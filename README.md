@@ -330,6 +330,9 @@ SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.PASSWORD LIKE concat(concat('%',? ),'
 }
 ```
  
+```sql
+SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.USER_NAME LIKE concat(#{param0} ,'%')  AND(T1.CODE = #{param1}   AND T1.PASSWORD = #{param2}   ) 
+```
 
 ### 2.3.5 缓存
 只缓存SSRDynamicSQL表的查询数据。
