@@ -245,10 +245,24 @@ queryCode：[表名/类名]:[generateByTable/generateByEntity]:[数据源的名�
 
 #### 2.3.4.3 sql生成自定义查询条件
 * 根据查询参数默认规则生成查询条件   
+JSON：
+```json
+    {
+    	"queryCode":"ssr_user:",
+        "params":{
+            "code":"",
+            "user_name":""
+        }
+    }
+```
+SQL：
+```sql
+SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.CODE = ?  AND T1.USER_NAME = ?  
+```
 ![query-user](file/img/2.3.4.3-1.png)  
-> SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.CODE = ?  AND T1.USER_NAME = ?   LIMIT 0,10
 
-* 自定义查询
+
+* 自定义条件查询
     * 简单示例：右模糊   
         ![query-user](file/img/2.3.4.3-2.png)  
         > SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.CODE LIKE concat(? ,'%')   LIMIT 0,10
