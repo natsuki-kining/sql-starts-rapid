@@ -232,6 +232,8 @@ queryCode：[表名/类名]:[generateByTable/generateByEntity]:[数据源的名�
 * selectFields：查询字段，多个用英文逗号分隔   
 
 #### 2.3.4.3 sql生成自定义查询条件
+logicalOperator：默认值"AND"  
+relationalOperator：默认值“=”
 ##### 2.3.4.2.1 根据查询参数默认规则生成查询条件   
 * JSON：
 ```json
@@ -393,8 +395,8 @@ queryCode：[表名/类名]:[generateByTable/generateByEntity]:[数据源的名�
     SELECT * FROM ssr_user T1 WHERE 1=1 AND ( T1.USER_NAME LIKE concat(? ,'%')  AND T1.USER_NAME LIKE concat('%',? )  ) OR ( T1.PASSWORD LIKE concat('%',? )  AND T1.PASSWORD LIKE concat(? ,'%')  ) 
 ```
 * 参数
->Parameters : [李, 问, aa, ea]  
-Types : [VARCHAR, VARCHAR, VARCHAR, VARCHAR]
+> Parameters : [李, 问, aa, ea]    
+> Types : [VARCHAR, VARCHAR, VARCHAR, VARCHAR]
 
 * 结果集
 ```json
