@@ -233,36 +233,80 @@ queryCode：[表名/类名]:[generateByTable/generateByEntity]:[数据源的名�
 
 #### 2.3.4.3 sql生成自定义查询条件
 ##### 2.3.4.2.1 根据查询参数默认规则生成查询条件   
-JSON：
+* JSON：
 ```json
     {
-    	"queryCode":"ssr_user:",
-        "params":{
-            "code":"",
-            "user_name":""
-        }
+        	"queryCode":"ssr_user:",
+            "params":{
+                "code":"227",
+                "user_name":"李会问"
+            }
     }
 ```
-SQL：
+* SQL：
 ```sql
-SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.CODE = ?  AND T1.USER_NAME = ?  
+    SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.CODE = ?  AND T1.USER_NAME = ?
 ```
 
-##### 2.3.4.2.2 简单示例：右模糊
+* 参数
+> Parameters : [227, 李会问]    
+> Types : [VARCHAR, VARCHAR]
+
+* 结果
+```json
+    [
+        {
+            "password": "651860cc8dd74513ae606a02e656a311",
+            "code": "227",
+            "user_name": "李会问",
+            "name": "11b3c4dbc8424171b09cc3d0f280f4bb",
+            "id": 227
+        }
+    ]
+```
+
+##### 2.3.4.2.2 自定义条件查询简单示例：右模糊
+* JSON
 ```json
     {
         "queryCode":"ssr_user:",
         "condition":[
             {
-                "fieldName":"code",
+                "fieldName":"user_name",
+                "value":"李机",
                 "relationalOperator":"rl"
             }
         ]
     }
 ```
 
+* SQL
 ```sql
-SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.CODE LIKE concat(? ,'%')
+    SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.USER_NAME LIKE concat(? ,'%')  
+```
+
+* 参数
+> Parameters : [李机]   
+> Types : [VARCHAR]
+
+* 结果
+```json
+    [
+        {
+            "password": "90c1b9a427e447da982a98641300d3d8",
+            "code": "3114",
+            "user_name": "李机夫",
+            "name": "4af4bfeb0f8c4b85826c22c147836927",
+            "id": 3114
+        },
+        {
+            "password": "4689d61c47ef48b2808bc187fb029c21",
+            "code": "3240",
+            "user_name": "李机写",
+            "name": "7351a02b824e4ce5849f4dd2da6ecba0",
+            "id": 13240
+        }
+    ]
 ```
 
 
