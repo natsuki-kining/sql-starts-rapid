@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 生成sql
@@ -82,7 +83,7 @@ public abstract class AbstractGeneratorSQL implements Generator {
         } else {
             Map<String, Object> params = new HashMap<>();
             List<QueryCondition> conditions = queryParams.getCondition();
-            Integer index = 0;
+            AtomicInteger index = new AtomicInteger();
             String paramName = "param";
             queryConditionRecursive(conditions,querySql,params,index,paramName);
             queryParams.setParams(params);
@@ -111,11 +112,11 @@ public abstract class AbstractGeneratorSQL implements Generator {
         querySql.deleteCharAt(querySql.length() - 1);
     }
 
-    private void queryConditionRecursive(List<QueryCondition> conditions,StringBuilder querySql,Map<String,Object> params,Integer index,String paramName){
+    private void queryConditionRecursive(List<QueryCondition> conditions,StringBuilder querySql,Map<String,Object> params,AtomicInteger index,String paramName){
         for (QueryCondition condition : conditions) {
             if (CollectionUtils.isEmpty(condition.getCondition())){
                 queryConditionHandle(querySql, condition, params, (paramName+index));
-                index++;
+                index.incrementAndGet();
             }else{
                 querySql.append(StringUtils.getInListValue(Constant.Condition.QUERY_CONNECT_LIST, condition.getLogicalOperator(), Constant.Condition.DEFAULT_CONNECT));
                 querySql.append(" (");

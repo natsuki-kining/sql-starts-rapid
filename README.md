@@ -288,24 +288,34 @@ SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.PASSWORD LIKE concat(concat('%',? ),'
 ```
 
 * 分组查询：
-> SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.USER_NAME = ? AND T1.CODE = ? LIMIT 0,10
 ```json
     {
         "queryCode":"ssr_user:",
         "condition":[
             {
-                "fieldName":"user_name",
-                "value":"管理员",
-                "relationalOperator":"rl"
-            },
-            {
                 "condition":[
                     {
-                        "fieldName":"code",
-                        "value":"00001"
+                        "fieldName":"user_name",
+                        "value":"李",
+                        "relationalOperator":"rl"
+                    },{
+                        "fieldName":"user_name",
+                        "value":"问",
+                        "relationalOperator":"ll"
+                    }
+                ]
+            },
+            {
+                "logicalOperator":"or",
+                "condition":[
+                    {
+                        "fieldName":"password",
+                        "value":"aa",
+                        "relationalOperator":"ll"
                     },{
                         "fieldName":"password",
-                        "value":"123456"
+                        "value":"ea",
+                        "relationalOperator":"rl"
                     }
                 ]
             }
@@ -313,8 +323,36 @@ SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.PASSWORD LIKE concat(concat('%',? ),'
     }
 ```
  
+ * SQL
 ```sql
-SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.USER_NAME LIKE concat(#{param0} ,'%')  AND(T1.CODE = #{param1}   AND T1.PASSWORD = #{param2}   ) 
+    SELECT * FROM ssr_user T1 WHERE 1=1 AND ( T1.USER_NAME LIKE concat(? ,'%')  AND T1.USER_NAME LIKE concat('%',? )  ) OR ( T1.PASSWORD LIKE concat('%',? )  AND T1.PASSWORD LIKE concat(? ,'%')  ) 
+```
+
+* 结果集
+```json
+    [
+        {
+            "password": "651860cc8dd74513ae606a02e656a311",
+            "code": "227",
+            "user_name": "李会问",
+            "name": "11b3c4dbc8424171b09cc3d0f280f4bb",
+            "id": 227
+        },
+        {
+            "password": "ea72db827a9247b19fe643b0c489b0aa",
+            "code": "925",
+            "user_name": "吕先真",
+            "name": "ef0ba32ee43e485bb476fa197d24a747",
+            "id": 925
+        },
+        {
+            "password": "d905182a2d394ade8d49193e9de9c582",
+            "code": "1782",
+            "user_name": "李十问",
+            "name": "0ea6786b036f47f2a2c42973fa12139a",
+            "id": 1782
+        }
+    ]
 ```
 
 ### 2.3.5 缓存
