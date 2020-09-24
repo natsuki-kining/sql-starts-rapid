@@ -17,6 +17,16 @@ public class SSRUser {
     private String code;
     private String password;
 
+    public SSRUser() {
+    }
+
+    public SSRUser(String name, String userName, String code, String password) {
+        this.name = name;
+        this.userName = userName;
+        this.code = code;
+        this.password = password;
+    }
+
     public Integer getId() {
         return id;
     }
