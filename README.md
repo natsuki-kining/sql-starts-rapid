@@ -311,24 +311,45 @@ queryCode：[表名/类名]:[generateByTable/generateByEntity]:[数据源的名�
 
 
 ##### 2.3.4.2.3 多条件：   
+* JSON
 ```json
     {
         "queryCode":"ssr_user:",
         "condition":[
             {
-                "fieldName":"password",
-                "relationalOperator":"al"
+                "fieldName":"user_name",
+                "value":"李",
+                "relationalOperator":"rl"
             },
             {
                 "fieldName":"user_name",
-                "logicalOperator":"or"
+                "value":"向",
+                "relationalOperator":"ll"
             }
         ]
     }
 ```
 
+* SQL
 ```sql
-SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.PASSWORD LIKE concat(concat('%',? ),'%')  OR T1.USER_NAME = ?
+    SELECT * FROM ssr_user T1 WHERE 1=1 AND T1.USER_NAME LIKE concat(? ,'%')  AND T1.USER_NAME LIKE concat('%',? )
+```
+
+* 参数
+> Parameters : [李, 向]   
+> Types : [VARCHAR, VARCHAR]
+
+* 结果
+```json
+    [
+        {
+            "password": "b90d9dfbd9bb42baa19a8559eebcc7fb",
+            "code": "267",
+            "user_name": "李口向",
+            "name": "b06bdd2c8f5a4c8fb25e5797597992f3",
+            "id": 267
+        }
+    ]
 ```
 
 ##### 2.3.4.2.4 分组查询
