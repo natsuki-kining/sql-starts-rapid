@@ -108,6 +108,7 @@ INSERT INTO `ssr_dynamic_sql` (`ID`, `QUERY_CODE`, `SQL_TEMPLATE`) VALUES ('1', 
 
 ### 带查询条件查询
 * 使用freemarker为sql添加查询条件
+
 ```sql
 INSERT INTO `ssr_dynamic_sql` (`ID`, `QUERY_CODE`, `SQL_TEMPLATE`) VALUES ('1', 'query-user', 'select * from ssr_user \r\nwhere 1=1\r\n<#if name??><#noparse>\r\nand NAME like CONCAT(\'%\',#{name},\'%\')\r\n</#noparse></#if>\r\n<#if userName??><#noparse>\r\nand USER_NAME like CONCAT(\'%\',#{userName},\'%\')\r\n</#noparse></#if>\r\n<#if code??><#noparse>\r\nand `CODE` = #{code}\r\n</#noparse></#if>');
 ```
@@ -135,7 +136,7 @@ INSERT INTO `ssr_dynamic_sql` (`ID`, `QUERY_CODE`, `SQL_TEMPLATE`) VALUES ('1', 
     脚本在file文件夹里，根据使用的数据库选择对应的脚本
 
 ### 引入依赖
-根据需求引入相应的依赖包
+* 根据需求引入相应的依赖包
 默认实现了mybatis跟hibernate，如果项目是使用其他的orm框架的，可以引入ssr-core
 
     <dependency>
@@ -143,7 +144,8 @@ INSERT INTO `ssr_dynamic_sql` (`ID`, `QUERY_CODE`, `SQL_TEMPLATE`) VALUES ('1', 
          <artifactId>ssr-core</artifactId>
          <version>1.0.0</version>
     </dependency>
-然后实现QueryORM接口，如果是使用mybatis的可以直接引入
+    
+* 然后实现QueryORM接口，如果是使用mybatis的可以直接引入
 
     <dependency>
          <groupId>com.natsuki_kining.ssr</groupId>
@@ -151,7 +153,7 @@ INSERT INTO `ssr_dynamic_sql` (`ID`, `QUERY_CODE`, `SQL_TEMPLATE`) VALUES ('1', 
          <version>1.0.0</version>
     </dependency>
     
-如果是使用hibernate的则引入
+* 如果是使用hibernate的则引入
 
         <dependency>
              <groupId>com.natsuki_kining.ssr</groupId>
