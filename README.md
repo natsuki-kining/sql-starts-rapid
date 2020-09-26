@@ -128,7 +128,6 @@ INSERT INTO `ssr_dynamic_sql` (`ID`, `QUERY_CODE`, `SQL_TEMPLATE`) VALUES ('1', 
         return result;
     }
 ```
-* postman请求  
 
 ## 快速入门
 
@@ -292,8 +291,8 @@ queryCode：[表名/类名]:[generateByTable/generateByEntity]:[数据源的名�
 * selectFields：查询字段，多个用英文逗号分隔   
 
 #### sql生成自定义查询条件
-logicalOperator：默认值"AND"  
-relationalOperator：默认值“=”
+* logicalOperator：默认值"AND"  
+* relationalOperator：默认值“=”
 ##### 根据查询参数默认规则生成查询条件   
 * JSON：
 ```json
