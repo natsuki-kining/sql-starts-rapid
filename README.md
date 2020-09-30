@@ -60,7 +60,9 @@
     * [使用示例](#使用示例)
 ----
 # 介绍
-## 简称：ssr（可以期待下个项目->[ur](https://gitee.com/natsuki_kining/ultra-rare )）
+## 简称：ssr
+> 下个项目->[ur](https://gitee.com/natsuki_kining/ultra-rare )）
+
 
 ## 主要功能
 * 可根据传入的参数动态生成查询sql
