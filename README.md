@@ -61,7 +61,7 @@
 ----
 # 介绍
 ## 简称ssr
-> 下个项目->[ur](https://gitee.com/natsuki_kining/ultra-rare )）
+> 下个项目->[ur](https://gitee.com/natsuki_kining/ultra-rare )
 
 
 ## 主要功能
