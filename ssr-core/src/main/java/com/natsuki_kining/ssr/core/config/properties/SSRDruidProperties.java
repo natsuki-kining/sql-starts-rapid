@@ -19,7 +19,7 @@ import java.sql.SQLException;
 @Slf4j
 @Component
 @ConfigurationProperties(prefix = "spring.datasource")
-public class DruidProperties {
+public class SSRDruidProperties {
 
     private String dbType;
 

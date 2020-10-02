@@ -1,7 +1,7 @@
 package com.natsuki_kining.ssr.core.config.multisource;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.natsuki_kining.ssr.core.config.properties.DruidProperties;
+import com.natsuki_kining.ssr.core.config.properties.SSRDruidProperties;
 import com.natsuki_kining.ssr.core.config.properties.SSRProperties;
 import com.natsuki_kining.ssr.core.utils.Constant;
 import com.natsuki_kining.ssr.core.utils.StringUtils;
@@ -27,7 +27,7 @@ public class MultiSourceConfig {
     private SSRProperties ssrProperties;
 
     @Autowired
-    private DruidProperties druidProperties;
+    private SSRDruidProperties SSRDruidProperties;
 
     private Map<String,String> dbTypeMap = new HashMap<>();
 
@@ -36,7 +36,7 @@ public class MultiSourceConfig {
      */
     private DruidDataSource masterDataSource() {
         DruidDataSource dataSource = new DruidDataSource();
-        druidProperties.config(dataSource);
+        SSRDruidProperties.config(dataSource);
         return dataSource;
     }
 

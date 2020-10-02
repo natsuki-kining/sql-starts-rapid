@@ -1,11 +1,9 @@
 package com.natsuki_kining.ssr.core.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.natsuki_kining.ssr.core.config.properties.DruidProperties;
+import com.natsuki_kining.ssr.core.config.properties.SSRDruidProperties;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
 
@@ -19,12 +17,12 @@ import javax.sql.DataSource;
 public class DataSourceConfig {
 
     @Autowired
-    private DruidProperties druidProperties;
+    private SSRDruidProperties SSRDruidProperties;
 
     @Bean
     public DataSource druidDataSource(){
         DruidDataSource druidDataSource = new DruidDataSource();
-        druidProperties.config(druidDataSource);
+        SSRDruidProperties.config(druidDataSource);
         return druidDataSource;
     }
 

@@ -40,7 +40,7 @@ public class SSRProperties {
     /**
      * 多数据源属性
      */
-    private Map<String,DruidProperties> multiDataSource;
+    private Map<String, SSRDruidProperties> multiDataSource;
 
 
 }
