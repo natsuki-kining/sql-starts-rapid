@@ -50,17 +50,22 @@ public class MyBatisQueryORM extends AbstractQueryORM implements QueryORM {
     public <E> List<E> selectList(String sql, Map<String, Object> params, Class<E> resultType) {
         String mapperId = sql;
         if (!configuration.hasStatement(mapperId, false)) {
-            List<ResultMap> resultMaps = new ArrayList<>();
-            if (Map.class == resultType) {
-                resultMaps.add(new ResultMap.Builder(configuration, "id", resultType, new ArrayList<>(0)).build());
-            } else {
-                addResultMapper(resultMaps, resultType,configuration);
+            //TODO 这里的写法需要优化下，解决第一次加载并发的问题
+            synchronized (this){
+                if (!configuration.hasStatement(mapperId, false)) {
+                    List<ResultMap> resultMaps = new ArrayList<>();
+                    if (Map.class == resultType) {
+                        resultMaps.add(new ResultMap.Builder(configuration, "id", resultType, new ArrayList<>(0)).build());
+                    } else {
+                        addResultMapper(resultMaps, resultType,configuration);
+                    }
+                    SqlSource sqlSource = languageDriver.createSqlSource(configuration, sql, Map.class);
+                    MappedStatement mappedStatement = new MappedStatement.Builder(configuration, mapperId, sqlSource, SqlCommandType.SELECT)
+                            .resultMaps(resultMaps)
+                            .build();
+                    configuration.addMappedStatement(mappedStatement);
+                }
             }
-            SqlSource sqlSource = languageDriver.createSqlSource(configuration, sql, Map.class);
-            MappedStatement mappedStatement = new MappedStatement.Builder(configuration, mapperId, sqlSource, SqlCommandType.SELECT)
-                    .resultMaps(resultMaps)
-                    .build();
-            configuration.addMappedStatement(mappedStatement);
         }
         List<E> objects = sqlSession.selectList(mapperId, params);
         return objects;
