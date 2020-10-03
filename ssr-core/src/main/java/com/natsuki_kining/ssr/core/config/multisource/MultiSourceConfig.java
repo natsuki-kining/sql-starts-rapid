@@ -5,6 +5,7 @@ import com.natsuki_kining.ssr.core.config.properties.SSRDruidProperties;
 import com.natsuki_kining.ssr.core.config.properties.SSRProperties;
 import com.natsuki_kining.ssr.core.utils.Constant;
 import com.natsuki_kining.ssr.core.utils.StringUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -13,14 +14,16 @@ import org.springframework.stereotype.Component;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 
 /**
- * TODO
+ * 多数据源配置
  *
  * @Author : natsuki_kining
  * @Date : 2020/9/4 22:25 multisource
  */
+@Slf4j
 @Component
 public class MultiSourceConfig {
 
@@ -109,14 +112,34 @@ public class MultiSourceConfig {
 
     /**
      * 新增数据源
-     * @param dataSourceName
-     * @param druidDataSource
+     * @param druidProperties
      */
-    public void addDataSource(String dataSourceName, DruidDataSource druidDataSource) {
+    public boolean addDataSource(SSRDruidProperties druidProperties) {
+        if (druidProperties == null || !druidProperties.check()) {
+            return false;
+        }
+        DruidDataSource druidDataSource = new DruidDataSource();
+        druidProperties.config(druidDataSource);
+        try {
+            druidDataSource.init();
+        } catch (SQLException e) {
+            log.error(e.getMessage(),e);
+            return false;
+        }
+        String dataSourceName = druidProperties.getDataSourceName();
         multiDruidDataSourceMap.put(dataSourceName,druidDataSource);
         dbTypeMap.put(dataSourceName, druidDataSource.getDbType());
         DynamicDataSource dynamicDatasource = applicationContext.getBean(DynamicDataSource.class);
         dynamicDatasource.setTargetDataSources(multiDruidDataSourceMap);
         dynamicDatasource.afterPropertiesSet();
+        return true;
+    }
+
+    /**
+     * 获取所有的数据源名称
+     * @return
+     */
+    public Set<Object> getDataSourceName(){
+        return multiDruidDataSourceMap.keySet();
     }
 }
