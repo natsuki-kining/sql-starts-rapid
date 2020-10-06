@@ -1,15 +1,12 @@
 package com.natsuki_kining.ssr.test.controller;
 
 import com.natsuki_kining.ssr.core.beans.QueryParams;
-import com.natsuki_kining.ssr.core.beans.SSRDynamicSQL;
 import com.natsuki_kining.ssr.core.data.cache.SSRCache;
 import com.natsuki_kining.ssr.core.query.Query;
-import com.natsuki_kining.ssr.test.service.SSRDynamicSQLService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * controller层

@@ -21,9 +21,6 @@ public class SSRUserController {
     @Autowired
     private SSRUserService userService;
 
-    @Autowired
-    private Query query;
-
     @GetMapping("get/{id}")
     public SSRUser get(@PathVariable("id") Integer id) {
         return userService.get(id);

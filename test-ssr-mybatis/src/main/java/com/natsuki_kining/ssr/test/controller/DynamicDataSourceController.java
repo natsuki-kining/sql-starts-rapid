@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * TODO
+ * 动态新增数据源测试Controller
  *
  * @Author : natsuki_kining
- * @Date : 2020/10/3 1:14
+ * @Date : 2020-10-7
  */
 @RestController
 @RequestMapping("dynamicDataSource")

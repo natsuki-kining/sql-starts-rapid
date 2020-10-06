@@ -263,6 +263,27 @@ ssr:
       ……
     ……
 ```
+
+#### 系统运行时添加数据源
+* 注入`DynamicDataSourceHandle`
+* 调用addDatasource方法，传入SSRDruidProperties即可。
+
+例如：
+```java
+@RestController
+@RequestMapping("dynamicDataSource")
+public class DynamicDataSourceController {
+
+    @Autowired
+    private DynamicDataSourceHandle dataSourceHandle;
+
+    @PostMapping("addDataSource")
+    public Object addDataSource(@RequestBody SSRDruidProperties druidProperties){
+        return dataSourceHandle.addDatasource(druidProperties);
+    }
+}
+``` 
+
 #### 多数据源使用
 * 数据库表     
 
