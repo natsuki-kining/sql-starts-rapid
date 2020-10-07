@@ -29,7 +29,15 @@ public class MultiSourceConfig {
     @Autowired
     private SSRDruidProperties SSRDruidProperties;
 
-    private Map<String,String> dbTypeMap = new HashMap<>();
+    /**
+     * 数据源名称，数据源类型
+     */
+    Map<String,String> dbTypeMap = new HashMap<>();
+
+    /**
+     * 数据源名称，数据源
+     */
+    Map<Object, Object> multiDruidDataSourceMap = new HashMap<>();
 
     /**
      * 主数据源
@@ -46,7 +54,6 @@ public class MultiSourceConfig {
     @Bean
     private DynamicDataSource multiDataSource() {
         DruidDataSource masterDataSource = masterDataSource();
-        Map<Object, Object> multiDruidDataSourceMap = new HashMap<>();
         multiDruidDataSourceMap.put(Constant.MultiDataSource.masterDataSourceName, masterDataSource);
         if (ssrProperties.getMultiDataSource() != null && ssrProperties.getMultiDataSource().size() > 0) {
             ssrProperties.getMultiDataSource().forEach((k, v) -> {

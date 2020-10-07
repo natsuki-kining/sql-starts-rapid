@@ -27,6 +27,23 @@ public class StringUtils {
         }
     }
 
+    /**
+     * 数组里的元素都为空则放回true
+     * @param str
+     * @return
+     */
+    public static boolean arrayHasBlank(String ... str) {
+        if (str == null){
+            return true;
+        }
+        for (String s : str) {
+            if (isBlank(s)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static boolean isNotEmpty(String str) {
         return !isEmpty(str);
     }

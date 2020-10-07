@@ -1,7 +1,7 @@
 package com.natsuki_kining.ssr.core.config.properties;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.alibaba.druid.util.JdbcConstants;
+import com.natsuki_kining.ssr.core.utils.StringUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -20,6 +20,11 @@ import java.sql.SQLException;
 @Component
 @ConfigurationProperties(prefix = "spring.datasource")
 public class SSRDruidProperties {
+
+    /**
+     * 数据源名称
+     */
+    private String dataSourceName;
 
     private String dbType;
 
@@ -102,8 +107,17 @@ public class SSRDruidProperties {
         try {
             dataSource.setFilters(filters);
         } catch (SQLException e) {
-            log.error(e.getMessage(),e);
+            log.error(e.getMessage(), e);
         }
+    }
+
+    /**
+     * 校验参数
+     * 通过返回true，不通过返回false
+     * @return
+     */
+    public boolean check() {
+        return !StringUtils.arrayHasBlank(dataSourceName, url, username, password, driverClassName);
     }
 
 }
