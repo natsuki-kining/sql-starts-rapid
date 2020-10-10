@@ -21,7 +21,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
     @Override
     protected Object determineCurrentLookupKey() {
         String dataSourceName = DataSourceContextHolder.getDataSourceName();
-        if (StringUtils.isNotBlank(dataSourceName) && !multiSourceConfig.multiDruidDataSourceMap.containsKey(dataSourceName)){
+        if (StringUtils.isNotBlank(dataSourceName) && !multiSourceConfig.containsDataSourceName(dataSourceName)){
             log.warn("没有找到数据源：{}，将使用默认数据源：{}。",dataSourceName,Constant.MultiDataSource.masterDataSourceName);
         }
         return dataSourceName;

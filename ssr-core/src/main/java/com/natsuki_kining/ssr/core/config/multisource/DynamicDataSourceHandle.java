@@ -4,7 +4,6 @@ import com.alibaba.druid.pool.DruidDataSource;
 import com.natsuki_kining.ssr.core.config.properties.SSRDruidProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
@@ -24,15 +23,10 @@ public class DynamicDataSourceHandle {
     @Autowired
     private MultiSourceConfig multiSourceConfig;
 
-    @Autowired
-    private ApplicationContext applicationContext;
-
     public boolean addDatasource(SSRDruidProperties druidProperties) {
         if (druidProperties == null || !druidProperties.check()) {
             return false;
         }
-        DynamicDataSource dynamicDatasource = applicationContext.getBean(DynamicDataSource.class);
-
         DruidDataSource druidDataSource = new DruidDataSource();
         druidProperties.config(druidDataSource);
         try {
@@ -41,10 +35,7 @@ public class DynamicDataSourceHandle {
             log.error(e.getMessage(),e);
             return false;
         }
-        multiSourceConfig.multiDruidDataSourceMap.put(druidProperties.getDataSourceName(), druidDataSource);
-        multiSourceConfig.dbTypeMap.put(druidProperties.getDataSourceName(), druidDataSource.getDbType());
-        dynamicDatasource.setTargetDataSources(multiSourceConfig.multiDruidDataSourceMap);
-        dynamicDatasource.afterPropertiesSet();
+        multiSourceConfig.addDataSource(druidProperties.getDataSourceName(), druidDataSource);
         return true;
     }
 }

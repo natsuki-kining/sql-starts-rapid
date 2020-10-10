@@ -6,6 +6,7 @@ import com.natsuki_kining.ssr.core.config.properties.SSRProperties;
 import com.natsuki_kining.ssr.core.utils.Constant;
 import com.natsuki_kining.ssr.core.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -29,15 +30,18 @@ public class MultiSourceConfig {
     @Autowired
     private SSRDruidProperties SSRDruidProperties;
 
+    @Autowired
+    private ApplicationContext applicationContext;
+
     /**
      * 数据源名称，数据源类型
      */
-    Map<String,String> dbTypeMap = new HashMap<>();
+    private Map<String,String> dbTypeMap = new HashMap<>();
 
     /**
      * 数据源名称，数据源
      */
-    Map<Object, Object> multiDruidDataSourceMap = new HashMap<>();
+    private Map<Object, Object> multiDruidDataSourceMap = new HashMap<>();
 
     /**
      * 主数据源
@@ -94,5 +98,25 @@ public class MultiSourceConfig {
         return dbTypeMap.get(dataSourceName);
     }
 
+    /**
+     * 是否已包含dataSourceName
+     * @param dataSourceName 数据源名称
+     * @return 包含返回true，否则false
+     */
+    public boolean containsDataSourceName(String dataSourceName){
+        return multiDruidDataSourceMap.containsKey(dataSourceName);
+    }
 
+    /**
+     * 新增数据源
+     * @param dataSourceName
+     * @param druidDataSource
+     */
+    public void addDataSource(String dataSourceName, DruidDataSource druidDataSource) {
+        multiDruidDataSourceMap.put(dataSourceName,druidDataSource);
+        dbTypeMap.put(dataSourceName, druidDataSource.getDbType());
+        DynamicDataSource dynamicDatasource = applicationContext.getBean(DynamicDataSource.class);
+        dynamicDatasource.setTargetDataSources(multiDruidDataSourceMap);
+        dynamicDatasource.afterPropertiesSet();
+    }
 }
