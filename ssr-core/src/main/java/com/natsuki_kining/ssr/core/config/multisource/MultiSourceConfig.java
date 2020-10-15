@@ -48,6 +48,7 @@ public class MultiSourceConfig {
 
     /**
      * 主数据源
+     * @return DruidDataSource
      */
     private DruidDataSource masterDataSource() {
         DruidDataSource dataSource = new DruidDataSource();
@@ -57,6 +58,7 @@ public class MultiSourceConfig {
 
     /**
      * 多数据源连接池配置
+     * @return DynamicDataSource
      */
     @Bean
     private DynamicDataSource multiDataSource() {
@@ -91,7 +93,7 @@ public class MultiSourceConfig {
 
     /**
      * 获取当前执行的数据类型
-     * @return
+     * @return 当前线程操作数据源的类型
      */
     public String getCurrentThreadDbType(){
         String dataSourceName = DataSourceContextHolder.getDataSourceName();
@@ -111,8 +113,9 @@ public class MultiSourceConfig {
     }
 
     /**
-     * 新增数据源
-     * @param druidProperties
+     * 动态新增数据源
+     * @param druidProperties 数据源配置
+     * @return 是否成功
      */
     public boolean addDataSource(SSRDruidProperties druidProperties) {
         if (druidProperties == null || !druidProperties.check()) {
@@ -136,8 +139,22 @@ public class MultiSourceConfig {
     }
 
     /**
+     * 动态移除数据源
+     * @param dataSourceName 数据源名称
+     * @return 是否成功
+     */
+    public boolean removeDataSource(String dataSourceName) {
+        multiDruidDataSourceMap.remove(dataSourceName);
+        dbTypeMap.remove(dataSourceName);
+        DynamicDataSource dynamicDatasource = applicationContext.getBean(DynamicDataSource.class);
+        dynamicDatasource.setTargetDataSources(multiDruidDataSourceMap);
+        dynamicDatasource.afterPropertiesSet();
+        return true;
+    }
+
+    /**
      * 获取所有的数据源名称
-     * @return
+     * @return 所有的数据源名称
      */
     public Set<Object> getDataSourceName(){
         return multiDruidDataSourceMap.keySet();
