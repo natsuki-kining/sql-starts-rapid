@@ -27,12 +27,6 @@ public class MapCache implements SSRCache {
     @Autowired
     private SSRProperties ssrProperties;
 
-    /**
-     * 缓存达到最大数时，一次移除不常用的数量
-     */
-    @Value("${ssr.cache.default.rarely:50}")
-    private int rarely;
-
     private Map<String, Object> cache;
     private List<QueryIndex> queryCountList;
 
@@ -60,7 +54,7 @@ public class MapCache implements SSRCache {
                     QueryIndex q = iterator.next();
                     cache.remove(q.getQueryCode());
                     iterator.remove();
-                    if (removeCount == rarely) {
+                    if (removeCount == ssrProperties.getCache().getMaxRarely()) {
                         break;
                     }
                 }

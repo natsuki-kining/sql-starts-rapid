@@ -2,6 +2,7 @@ package com.natsuki_kining.ssr.core.data.cache;
 
 import com.alibaba.fastjson.JSON;
 import com.natsuki_kining.ssr.core.beans.SSRDynamicSQL;
+import com.natsuki_kining.ssr.core.config.properties.SSRProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,8 +30,8 @@ public class RedisCache implements SSRCache {
     @Autowired
     private StringRedisTemplate redisTemplate;
 
-    @Value("${ssr.cache.redis.key:ssr-cache}")
-    private String cacheKey;
+    @Autowired
+    private SSRProperties ssrProperties;
 
     private HashOperations<String, String, String> operations;
 
@@ -41,13 +42,13 @@ public class RedisCache implements SSRCache {
 
     @Override
     public <T> T get(String code, Class<T> clazz) {
-        return JSON.parseObject(operations.get(cacheKey, code), clazz);
+        return JSON.parseObject(operations.get(ssrProperties.getCache().getRedisKey(), code), clazz);
     }
 
     @Override
     public boolean save(String code, Object object) {
         try {
-            operations.put(cacheKey, code, JSON.toJSONString(object));
+            operations.put(ssrProperties.getCache().getRedisKey(), code, JSON.toJSONString(object));
             return true;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -58,7 +59,7 @@ public class RedisCache implements SSRCache {
     @Override
     public boolean delete(String code) {
         try {
-            operations.delete(cacheKey, code);
+            operations.delete(ssrProperties.getCache().getRedisKey(), code);
             return true;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -68,7 +69,7 @@ public class RedisCache implements SSRCache {
 
     @Override
     public boolean clean() {
-        Set<String> keys = operations.keys(cacheKey);
+        Set<String> keys = operations.keys(ssrProperties.getCache().getRedisKey());
         keys.stream().forEach(this::delete);
         return true;
     }
