@@ -1,8 +1,10 @@
 package com.natsuki_kining.ssr.core.data.cache;
 
 import com.natsuki_kining.ssr.core.beans.SSRDynamicSQL;
+import com.natsuki_kining.ssr.core.config.properties.SSRProperties;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -22,11 +24,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @ConditionalOnProperty(prefix = "ssr", name = "cache.type", havingValue = "mapcache")
 public class MapCache implements SSRCache {
 
-    /**
-     * 缓存最大数量
-     */
-    @Value("${ssr.cache.default.length:500}")
-    private int maxLength;
+    @Autowired
+    private SSRProperties ssrProperties;
+
     /**
      * 缓存达到最大数时，一次移除不常用的数量
      */
@@ -38,7 +38,7 @@ public class MapCache implements SSRCache {
 
     @PostConstruct
     private void init() {
-        cache = new ConcurrentHashMap<>(maxLength);
+        cache = new ConcurrentHashMap<>(ssrProperties.getCache().getMaxLength());
         queryCountList = new ArrayList<>();
     }
 
@@ -52,7 +52,7 @@ public class MapCache implements SSRCache {
     public boolean save(String code, Object object) {
         try {
             //移除不常用
-            if (cache.size() == maxLength) {
+            if (cache.size() == ssrProperties.getCache().getMaxLength()) {
                 Iterator<QueryIndex> iterator = queryCountList.iterator();
                 int removeCount = 0;
                 while (iterator.hasNext()) {

@@ -1,7 +1,7 @@
 package com.natsuki_kining.ssr.core.config.properties;
 
 import com.natsuki_kining.ssr.core.utils.Constant;
-import lombok.Data;
+import lombok.Getter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +13,7 @@ import java.util.Map;
  * @Author : natsuki_kining
  * @Date : 2020/8/28 22:25
  */
-@Data
+@Getter
 @Component
 @ConfigurationProperties(prefix = "ssr",ignoreInvalidFields = true)
 public class SSRProperties {

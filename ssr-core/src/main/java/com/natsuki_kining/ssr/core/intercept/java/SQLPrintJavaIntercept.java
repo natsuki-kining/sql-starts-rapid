@@ -24,12 +24,9 @@ import java.util.Map;
 @QueryCode(Constant.Intercept.SSR_LAST_INTERCEPT)
 public class SQLPrintJavaIntercept extends AbstractQueryJavaIntercept {
 
-    @Value("${ssr.show-query-info.enable:true}")
-    private boolean showQueryInfo;
-
     @Override
     public void queryBefore(QueryParams queryParams, QueryInfo queryInfo, SSRDynamicSQL dynamicSql, Map<String, Object> preData) {
-        if (showQueryInfo) {
+        if (ssrProperties.getEnable().isShowQueryInfo()) {
             log.info("SQL:{}", queryInfo.getQuerySQL().getSimpleSQL());
             log.info("params:{}", JSON.toJSONString(queryParams));
         }
@@ -37,7 +34,7 @@ public class SQLPrintJavaIntercept extends AbstractQueryJavaIntercept {
 
     @Override
     public Object queryAfter(QueryParams queryParams, QueryInfo queryInfo, SSRDynamicSQL dynamicSql, Map<String, Object> preData, Object queryData) {
-        if (showQueryInfo) {
+        if (ssrProperties.getEnable().isShowQueryInfo()) {
             log.info("查询耗时：{}", (queryInfo.getQueryEndTime() - queryInfo.getQueryStartTime()));
         }
         return queryData;

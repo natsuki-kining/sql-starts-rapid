@@ -1,6 +1,6 @@
 package com.natsuki_kining.ssr.core.config.properties;
 
-import lombok.Data;
+import lombok.Getter;
 
 /**
  * 缓存参数配置类
@@ -8,7 +8,7 @@ import lombok.Data;
  * @Author : natsuki_kining
  * @Date : 2020/8/28 23:21
  */
-@Data
+@Getter
 public class CacheProperties {
 
     /**

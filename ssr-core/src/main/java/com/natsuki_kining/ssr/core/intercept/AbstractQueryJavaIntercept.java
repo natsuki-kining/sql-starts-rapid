@@ -3,6 +3,8 @@ package com.natsuki_kining.ssr.core.intercept;
 import com.natsuki_kining.ssr.core.beans.QueryInfo;
 import com.natsuki_kining.ssr.core.beans.QueryParams;
 import com.natsuki_kining.ssr.core.beans.SSRDynamicSQL;
+import com.natsuki_kining.ssr.core.config.properties.SSRProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
 
@@ -13,6 +15,9 @@ import java.util.Map;
  * @Date : 2020/4/18 20:55
  */
 public abstract class AbstractQueryJavaIntercept implements QueryIntercept {
+
+    @Autowired
+    protected SSRProperties ssrProperties;
 
     @Override
     public boolean preHandle(QueryParams queryParams) {

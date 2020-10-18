@@ -1,6 +1,6 @@
 package com.natsuki_kining.ssr.core.config.properties;
 
-import lombok.Data;
+import lombok.Getter;
 
 /**
  * 开关配置参数类
@@ -8,7 +8,7 @@ import lombok.Data;
  * @Author : natsuki_kining
  * @Date : 2020/8/28 23:20
  */
-@Data
+@Getter
 public class EnableProperties {
 
     /**
