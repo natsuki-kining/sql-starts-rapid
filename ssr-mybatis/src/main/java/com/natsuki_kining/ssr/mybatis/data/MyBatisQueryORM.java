@@ -93,6 +93,6 @@ public class MyBatisQueryORM extends AbstractQueryORM implements QueryORM {
 
     @Override
     protected String getQuerySSRDynamicSQL() {
-        return "SELECT QUERY_CODE,DATA_SOURCE_NAME,SQL_TEMPLATE,BEFORE_SCRIPT,AFTER_SCRIPT FROM "+dynamicSqlTableName+" SDS WHERE SDS.QUERY_CODE = #{code} limit 1";
+        return "SELECT QUERY_CODE,DATA_SOURCE_NAME,SQL_TEMPLATE,BEFORE_SCRIPT,AFTER_SCRIPT FROM "+ssrProperties.getDynamicSqlTableName()+" SDS WHERE SDS.QUERY_CODE = #{code} limit 1";
     }
 }

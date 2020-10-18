@@ -91,6 +91,6 @@ public class HibernateQueryORM extends AbstractQueryORM implements QueryORM {
 
     @Override
     protected String getQuerySSRDynamicSQL() {
-        return "SELECT QUERY_CODE \"queryCode\",DATA_SOURCE_NAME \"dataSourceName\",SQL_TEMPLATE \"sqlTemplate\",BEFORE_SCRIPT \"beforeScript\",AFTER_SCRIPT \"afterScript\" FROM "+dynamicSqlTableName+" SDS WHERE SDS.QUERY_CODE = :code";
+        return "SELECT QUERY_CODE \"queryCode\",DATA_SOURCE_NAME \"dataSourceName\",SQL_TEMPLATE \"sqlTemplate\",BEFORE_SCRIPT \"beforeScript\",AFTER_SCRIPT \"afterScript\" FROM "+ssrProperties.getDynamicSqlTableName()+" SDS WHERE SDS.QUERY_CODE = :code";
     }
 }

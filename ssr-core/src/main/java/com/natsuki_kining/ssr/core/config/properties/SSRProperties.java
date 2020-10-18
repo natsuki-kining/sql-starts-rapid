@@ -1,5 +1,6 @@
 package com.natsuki_kining.ssr.core.config.properties;
 
+import com.natsuki_kining.ssr.core.utils.Constant;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -36,6 +37,11 @@ public class SSRProperties {
      * 动态sql表表名
      */
     private String dynamicSqlTableName = "SSR_DYNAMIC_SQL";
+
+    /**
+     * 动态sql表所在的数据源
+     */
+    private String dynamicSqlTableDataSource = Constant.MultiDataSource.masterDataSourceName;
 
     /**
      * 多数据源属性

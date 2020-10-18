@@ -5,12 +5,14 @@ import com.natsuki_kining.ssr.core.beans.QueryResult;
 import com.natsuki_kining.ssr.core.beans.QuerySQL;
 import com.natsuki_kining.ssr.core.beans.SSRDynamicSQL;
 import com.natsuki_kining.ssr.core.config.multisource.DataSourceContextHolder;
+import com.natsuki_kining.ssr.core.config.properties.SSRProperties;
 import com.natsuki_kining.ssr.core.enums.QueryStatus;
 import com.natsuki_kining.ssr.core.exception.CodeNotFoundException;
 import com.natsuki_kining.ssr.core.exception.SSRException;
 import com.natsuki_kining.ssr.core.utils.Assert;
 import com.natsuki_kining.ssr.core.utils.Constant;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.HashMap;
@@ -26,11 +28,8 @@ import java.util.Map;
 @Slf4j
 public abstract class AbstractQueryORM implements QueryORM {
 
-    @Value("${ssr.dynamicSql.TableName:SSR_DYNAMIC_SQL}")
-    protected String dynamicSqlTableName;
-
-    @Value("${ssr.dynamicSql.TableDataSource:"+Constant.MultiDataSource.masterDataSourceName+"}")
-    protected String dynamicSqlTableDataSource;
+    @Autowired
+    protected SSRProperties ssrProperties;
 
     protected abstract String getQuerySSRDynamicSQL();
 
@@ -42,7 +41,7 @@ public abstract class AbstractQueryORM implements QueryORM {
 
     @Override
     public SSRDynamicSQL getSSRDynamicSQL(String code) {
-        DataSourceContextHolder.setDataSourceName(dynamicSqlTableDataSource);
+        DataSourceContextHolder.setDataSourceName(ssrProperties.getDynamicSqlTableDataSource());
         List<SSRDynamicSQL> list = selectList(getQuerySSRDynamicSQL(), getQuerySSRDynamicSQLParams(code), SSRDynamicSQL.class);
         DataSourceContextHolder.clearDataSourceName();
         if (list != null && list.size() > 0) {
