@@ -283,6 +283,16 @@ public class DynamicDataSourceController {
     }
 }
 ``` 
+发送的数据：  
+```json
+{
+    "dataSourceName":"数据源名称",
+    "url":"数据库连接",
+    "username":"用户名",
+    "password":"密码",
+    "driverClassName":"驱动类"
+}
+```
 
 #### 多数据源使用
 * 数据库表     
