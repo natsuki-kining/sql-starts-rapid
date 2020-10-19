@@ -2,7 +2,7 @@ package com.natsuki_kining.ssr.core.config.properties;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.natsuki_kining.ssr.core.utils.StringUtils;
-import lombok.Getter;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ import java.sql.SQLException;
  * @Author : natsuki_kining
  * @Date : 2020/8/28 23:09
  */
-@Getter
+@Data
 @Slf4j
 @Component
 @ConfigurationProperties(prefix = "spring.datasource")
