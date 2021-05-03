@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 打印查询信息：例如查询sql，查询参数，查询耗时等
@@ -26,7 +27,7 @@ public class SQLPrintJavaIntercept extends AbstractQueryJavaIntercept {
 
     @Override
     public void queryBefore(QueryParams queryParams, QueryInfo queryInfo, SSRDynamicSQL dynamicSql, Map<String, Object> preData) {
-        if (ssrProperties.getEnable().isShowQueryInfo()) {
+        if (!Objects.isNull(ssrProperties.getEnable()) && ssrProperties.getEnable().isShowQueryInfo()) {
             log.info("SQL:{}", queryInfo.getQuerySQL().getSimpleSQL());
             log.info("params:{}", JSON.toJSONString(queryParams));
         }
@@ -34,7 +35,7 @@ public class SQLPrintJavaIntercept extends AbstractQueryJavaIntercept {
 
     @Override
     public Object queryAfter(QueryParams queryParams, QueryInfo queryInfo, SSRDynamicSQL dynamicSql, Map<String, Object> preData, Object queryData) {
-        if (ssrProperties.getEnable().isShowQueryInfo()) {
+        if (!Objects.isNull(ssrProperties.getEnable()) && ssrProperties.getEnable().isShowQueryInfo()) {
             log.info("查询耗时：{}", (queryInfo.getQueryEndTime() - queryInfo.getQueryStartTime()));
         }
         return queryData;

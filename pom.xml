@@ -14,6 +14,10 @@
         <module>ssr-hibernate</module>
         <module>test-ssr-mybatis</module>
         <module>test-ssr-hibernate</module>
+        <module>ssr-mybatis-spring-boot-starter</module>
+        <module>ssr-hibernate-spring-boot-starter</module>
+        <module>test-ssr-mybatis-spring-boot-starter</module>
+        <module>test-ssr-hibernate-spring-boot-starter</module>
     </modules>
 
     <parent>

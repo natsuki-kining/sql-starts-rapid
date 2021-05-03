@@ -1,6 +1,7 @@
 package com.natsuki_kining.ssr.mybatis.data;
 
 import com.natsuki_kining.ssr.core.annotation.FieldName;
+import com.natsuki_kining.ssr.core.beans.SSRDynamicSQL;
 import com.natsuki_kining.ssr.core.data.orm.AbstractQueryORM;
 import com.natsuki_kining.ssr.core.data.orm.QueryORM;
 import com.natsuki_kining.ssr.core.utils.StringUtils;
@@ -51,7 +52,7 @@ public class MyBatisQueryORM extends AbstractQueryORM implements QueryORM {
         String mapperId = sql;
         if (!configuration.hasStatement(mapperId, false)) {
             //TODO 这里的写法需要优化下，解决第一次加载并发的问题
-            synchronized (this){
+            synchronized (MyBatisQueryORM.class){
                 if (!configuration.hasStatement(mapperId, false)) {
                     List<ResultMap> resultMaps = new ArrayList<>();
                     if (Map.class == resultType) {
@@ -92,7 +93,12 @@ public class MyBatisQueryORM extends AbstractQueryORM implements QueryORM {
     }
 
     @Override
-    protected String getQuerySSRDynamicSQL() {
-        return "SELECT QUERY_CODE,DATA_SOURCE_NAME,SQL_TEMPLATE,BEFORE_SCRIPT,AFTER_SCRIPT FROM "+ssrProperties.getDynamicSqlTableName()+" SDS WHERE SDS.QUERY_CODE = #{code} limit 1";
+    public String getQuerySSRDynamicSQL(boolean selectList) {
+        String listSQL = "SELECT QUERY_CODE,DATA_SOURCE_NAME,SQL_TEMPLATE,BEFORE_SCRIPT,AFTER_SCRIPT FROM "+ssrProperties.getDynamicSqlTableName();
+        if (selectList){
+            return listSQL;
+        }
+        return listSQL+" SDS WHERE SDS.QUERY_CODE = #{code} limit 1";
     }
+
 }

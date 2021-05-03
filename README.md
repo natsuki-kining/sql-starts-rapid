@@ -6,6 +6,7 @@
     * [简称ssr](#简称ssr)
     * [主要功能](#主要功能)
     * [使用场景](#使用场景)
+    * [目录结构](#目录结构)
     * [各版本主功能说明](#各版本主功能说明)
 * [使用说明](#使用说明)
     * [快速体验](#快速体验)
@@ -79,6 +80,19 @@
 * 可以快速的新增一个查询功能，而不用写任何代码。
 * 不用再每个查询都暴露一个api方法
 
+## 目录结构
+|模块名|介绍|
+|-----|---|
+|ssr-core|核心，主要实现|
+|ssr-hibernate|hibernate实现|
+|ssr-hibernate-spring-boot-starter|封装springboot hibernate starter|
+|ssr-mybatis|mybatis实现|
+|ssr-mybatis-spring-boot-starter|封装springboot mybatis实现 starter|
+|test-ssr-hibernate|测试模块|
+|test-ssr-hibernate-spring-boot-starter|测试模块|
+|test-ssr-mybatis|测试模块|
+|test-ssr-mybatis-spring-boot-starter|测试模块|
+
 ## 各版本主功能说明
 * 第1.0版：
     * 通过freemarker实现动态sql。
@@ -87,8 +101,7 @@
     * 缓存，sql查询效率，提供sql优化建议等工具。
     * 多code查询，用于处理内部有多查询的情况。
     * 多数据源，可以设置动态多数据源。
-* 第2.0版：
-    * sql查询计划解析，分析sql查询计划，记录慢sql，提出修改建议。
+    * 封装springboot starter
 
 # 使用说明
 
@@ -704,3 +717,11 @@ queryCode：[表名/类名]:[generateByTable/generateByEntity]:[数据源的名�
 
 
 ### [使用示例](https://gitee.com/natsuki_kining/ultra-rare)
+
+
+
+问题：
+    redis：数据一致问题
+    缓存击穿   布隆
+    缓存穿透  ——>不过期，不存在
+    缓存雪崩   ——>不过期，不存在

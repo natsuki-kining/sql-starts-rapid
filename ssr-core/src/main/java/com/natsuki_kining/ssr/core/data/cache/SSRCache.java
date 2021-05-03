@@ -42,4 +42,5 @@ public interface SSRCache extends SSRData {
      * @return
      */
     boolean clean();
+
 }

@@ -3,6 +3,7 @@ package com.natsuki_kining.ssr.core.data.cache;
 import com.alibaba.fastjson.JSON;
 import com.natsuki_kining.ssr.core.beans.SSRDynamicSQL;
 import com.natsuki_kining.ssr.core.config.properties.SSRProperties;
+import com.natsuki_kining.ssr.core.utils.CollectionUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +14,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -25,7 +27,7 @@ import java.util.Set;
 @Primary
 @Component
 @ConditionalOnProperty(prefix = "ssr", name = "cache.type", havingValue = "redis")
-public class RedisCache implements SSRCache {
+public class RedisCache extends AbstractCache implements SSRCache {
 
     @Autowired
     private StringRedisTemplate redisTemplate;
@@ -35,8 +37,8 @@ public class RedisCache implements SSRCache {
 
     private HashOperations<String, String, String> operations;
 
-    @PostConstruct
-    private void init() {
+    @Override
+    protected void initCache() {
         operations = redisTemplate.opsForHash();
     }
 

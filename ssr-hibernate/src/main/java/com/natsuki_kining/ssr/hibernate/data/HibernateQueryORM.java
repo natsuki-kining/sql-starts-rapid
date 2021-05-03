@@ -27,9 +27,9 @@ import java.util.regex.Pattern;
 @Component
 public class HibernateQueryORM extends AbstractQueryORM implements QueryORM {
 
-    private String aliasRegex = "^select\\s+[`?\\w+`?\\s+as?\\s+'?\"?\\w+'?\"?\\s{0,n},?]+\\s+from.*$";
+    private final String aliasRegex = "^select\\s+[`?\\w+`?\\s+as?\\s+'?\"?\\w+'?\"?\\s{0,n},?]+\\s+from.*$";
 
-    private Map<String, Boolean> aliasMap = new HashMap<>();
+    private final Map<String, Boolean> aliasMap = new HashMap<>();
 
     @Autowired
     private EntityManagerFactory entityManagerFactory;
@@ -88,9 +88,12 @@ public class HibernateQueryORM extends AbstractQueryORM implements QueryORM {
     }
 
 
-
     @Override
-    protected String getQuerySSRDynamicSQL() {
-        return "SELECT QUERY_CODE \"queryCode\",DATA_SOURCE_NAME \"dataSourceName\",SQL_TEMPLATE \"sqlTemplate\",BEFORE_SCRIPT \"beforeScript\",AFTER_SCRIPT \"afterScript\" FROM "+ssrProperties.getDynamicSqlTableName()+" SDS WHERE SDS.QUERY_CODE = :code";
+    public String getQuerySSRDynamicSQL(boolean selectList) {
+        String listSQL = "SELECT QUERY_CODE \"queryCode\",DATA_SOURCE_NAME \"dataSourceName\",SQL_TEMPLATE \"sqlTemplate\",BEFORE_SCRIPT \"beforeScript\",AFTER_SCRIPT \"afterScript\" FROM " + ssrProperties.getDynamicSqlTableName();
+        if (selectList) {
+            return listSQL;
+        }
+        return listSQL + " SDS WHERE SDS.QUERY_CODE = :code";
     }
 }

@@ -31,7 +31,7 @@ public abstract class AbstractQueryORM implements QueryORM {
     @Autowired
     protected SSRProperties ssrProperties;
 
-    protected abstract String getQuerySSRDynamicSQL();
+    public abstract String getQuerySSRDynamicSQL(boolean selectList);
 
     protected Map<String, Object> getQuerySSRDynamicSQLParams(String code) {
         Map<String, Object> params = new HashMap<>(1);
@@ -42,7 +42,7 @@ public abstract class AbstractQueryORM implements QueryORM {
     @Override
     public SSRDynamicSQL getSSRDynamicSQL(String code) {
         DataSourceContextHolder.setDataSourceName(ssrProperties.getDynamicSqlTableDataSource());
-        List<SSRDynamicSQL> list = selectList(getQuerySSRDynamicSQL(), getQuerySSRDynamicSQLParams(code), SSRDynamicSQL.class);
+        List<SSRDynamicSQL> list = selectList(getQuerySSRDynamicSQL(false), getQuerySSRDynamicSQLParams(code), SSRDynamicSQL.class);
         DataSourceContextHolder.clearDataSourceName();
         if (list != null && list.size() > 0) {
             SSRDynamicSQL ssrDynamicSql = list.get(0);
@@ -57,12 +57,12 @@ public abstract class AbstractQueryORM implements QueryORM {
         Object data;
         if (queryParams.isPageQuery()) {
             data = queryPage(querySQL, queryParams, returnType);
-        }else{
+        } else {
             data = selectList(querySQL.getExecuteSQL(), queryParams.getParams(), returnType);
         }
 
         //QueryResult
-        if (queryParams.isQueryResultModel()){
+        if (queryParams.isQueryResultModel()) {
             try {
                 return new QueryResult().setResult(data).setCode(QueryStatus.OK);
             } catch (IllegalArgumentException e) {
@@ -78,7 +78,7 @@ public abstract class AbstractQueryORM implements QueryORM {
                 log.error(e.getMessage(), e);
                 return new QueryResult(QueryStatus.INTERNAL_SERVER_ERROR, e.getMessage());
             }
-        }else{
+        } else {
             return data;
         }
     }

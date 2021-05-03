@@ -1,6 +1,7 @@
 package com.natsuki_kining.ssr.core.data.cache;
 
 import com.natsuki_kining.ssr.core.beans.SSRDynamicSQL;
+import com.natsuki_kining.ssr.core.utils.CollectionUtils;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
@@ -8,6 +9,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 
 /**
  * TODO
@@ -17,13 +19,13 @@ import javax.annotation.PostConstruct;
  */
 @Component
 @ConditionalOnProperty(prefix = "ssr", name = "cache.type", havingValue = "ehcache")
-public class Ehcache implements SSRCache {
+public class Ehcache extends AbstractCache implements SSRCache {
 
     private CacheManager cacheManager;
     private Cache cache;
 
-    @PostConstruct
-    private void init(){
+    @Override
+    protected void initCache(){
         cacheManager = CacheManager.getInstance();
         cache = cacheManager.getCache("queryCodeCache");
     }

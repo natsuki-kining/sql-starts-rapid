@@ -1,9 +1,14 @@
 package com.natsuki_kining.ssr.core.data;
 
+import com.google.common.base.Charsets;
+import com.google.common.hash.BloomFilter;
+import com.google.common.hash.Funnels;
 import com.natsuki_kining.ssr.core.beans.SSRDynamicSQL;
+import com.natsuki_kining.ssr.core.data.cache.AbstractCache;
 import com.natsuki_kining.ssr.core.data.cache.SSRCache;
 import com.natsuki_kining.ssr.core.data.orm.QueryORM;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,7 +21,7 @@ import org.springframework.stereotype.Component;
 public class SSRDataImpl implements SSRData {
 
     @Autowired(required=false)
-    private SSRCache cache;
+    private AbstractCache cache;
     @Autowired
     private QueryORM orm;
 
@@ -29,9 +34,22 @@ public class SSRDataImpl implements SSRData {
     @Override
     public SSRDynamicSQL getSSRDynamicSQL(String queryCode) {
         SSRDynamicSQL dynamicSQL;
-        if (cache == null || (dynamicSQL = cache.getSSRDynamicSQL(queryCode)) == null){
-            dynamicSQL = orm.getSSRDynamicSQL(queryCode);
+
+        if (cache == null){
+            return orm.getSSRDynamicSQL(queryCode);
         }
+
+        dynamicSQL = cache.getSSRDynamicSQL(queryCode);
+
+        //布隆过滤器判断
+        if (dynamicSQL == null && cache.bloomFilter.mightContain(queryCode)){
+            synchronized (SSRDataImpl.class){
+                if (dynamicSQL == null){
+                    dynamicSQL = orm.getSSRDynamicSQL(queryCode);
+                }
+            }
+        }
+
         return dynamicSQL;
     }
 }

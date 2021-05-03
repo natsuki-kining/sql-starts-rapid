@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @Component
 @ConditionalOnProperty(prefix = "ssr", name = "cache.type", havingValue = "mapcache")
-public class MapCache implements SSRCache {
+public class MapCache extends AbstractCache implements SSRCache {
 
     @Autowired
     private SSRProperties ssrProperties;
@@ -30,8 +30,8 @@ public class MapCache implements SSRCache {
     private Map<String, Object> cache;
     private List<QueryIndex> queryCountList;
 
-    @PostConstruct
-    private void init() {
+    @Override
+    protected void initCache() {
         cache = new ConcurrentHashMap<>(ssrProperties.getCache().getMaxLength());
         queryCountList = new ArrayList<>();
     }

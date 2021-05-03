@@ -33,8 +33,6 @@ mybatis:
   mapper-locations: classpath:mybatis/*Mapper.xml
   type-aliases-package: com.natsuki_kining
 
-
-
 # ssr
 ssr:
   enable:
